@@ -1,7 +1,4 @@
 {
-  "buildCommand": "turbo run build",
-  "installCommand": "npm install --prefix=../..",
-  "framework": "nextjs",
-  "rootDirectory": "apps/web"
+  "framework": "nextjs"
 }
 
