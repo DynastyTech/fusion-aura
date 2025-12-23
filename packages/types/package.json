@@ -4,7 +4,10 @@
   "main": "./index.ts",
   "types": "./index.ts",
   "scripts": {
-    "build": "tsc"
+    "build": "tsc --skipLibCheck"
+  },
+  "dependencies": {
+    "@fusionaura/db": "*"
   },
   "devDependencies": {
     "typescript": "^5.3.3"

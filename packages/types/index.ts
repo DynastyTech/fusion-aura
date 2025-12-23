@@ -1,5 +1,6 @@
 // Shared TypeScript types for FusionAura platform
-
+// Re-export types from @fusionaura/db (which exports from @prisma/client)
+// Note: This requires @fusionaura/db to build first (prisma generate)
 export type {
   User,
   Product,
