@@ -1,5 +1,4 @@
-import { prisma } from '@fusionaura/db';
-import { OrderStatus } from '@prisma/client';
+import { prisma, OrderStatus } from '@fusionaura/db';
 
 /**
  * Delete orders that have been completed, declined, or cancelled for more than 14 days
@@ -40,7 +39,7 @@ export async function cleanupOldOrders(): Promise<{ deleted: number; errors: num
     console.log(`Found ${ordersToDelete.length} orders to delete (older than 14 days)`);
 
     // Delete order items first (cascade should handle this, but being explicit)
-    const orderIds = ordersToDelete.map((o) => o.id);
+    const orderIds = ordersToDelete.map((o: { id: string; orderNumber: string }) => o.id);
     
     await prisma.orderItem.deleteMany({
       where: {

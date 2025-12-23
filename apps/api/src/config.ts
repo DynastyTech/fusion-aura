@@ -5,7 +5,7 @@ import path from 'path';
 dotenv.config({ path: path.resolve(__dirname, '../../../.env') });
 
 export const config = {
-  port: parseInt(process.env.API_PORT || '3001', 10),
+  port: parseInt(process.env.PORT || process.env.API_PORT || '3001', 10),
   nodeEnv: process.env.NODE_ENV || 'development',
   database: {
     url: process.env.DATABASE_URL || '',

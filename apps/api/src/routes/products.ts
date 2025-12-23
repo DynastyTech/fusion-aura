@@ -91,7 +91,7 @@ export async function productRoutes(fastify: FastifyInstance) {
 
         // Maintain search result order
         const orderedProducts = productIds
-          .map((id: string) => products.find((p) => p.id === id))
+          .map((id: string) => products.find((p: any) => p.id === id))
           .filter((p: any) => p !== undefined);
 
         return reply.send({
@@ -198,7 +198,7 @@ export async function productRoutes(fastify: FastifyInstance) {
       }
 
       // Create product with inventory in transaction
-      const result = await prisma.$transaction(async (tx) => {
+      const result = await prisma.$transaction(async (tx: any) => {
         const product = await tx.product.create({
           data: {
             name: body.name,

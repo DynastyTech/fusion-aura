@@ -20,7 +20,7 @@ export async function geocodingRoutes(fastify: FastifyInstance) {
           const url = `https://maps.googleapis.com/maps/api/geocode/json?latlng=${body.lat},${body.lng}&key=${apiKey}&result_type=street_address|premise|subpremise|route`;
           
           const response = await fetch(url);
-          const data = await response.json();
+          const data: any = await response.json();
 
           if (data.status === 'OK' && data.results && data.results.length > 0) {
             const result = data.results[0];
@@ -82,10 +82,11 @@ export async function geocodingRoutes(fastify: FastifyInstance) {
             'User-Agent': 'FusionAura-Ecommerce/1.0', // Required by Nominatim
           },
         });
-        const data = await response.json();
+        const data: any = await response.json();
 
         if (data && data.address) {
-          const addr = data.address;
+          const addr: any = data.address;
+          const displayName: string = data.display_name || '';
           
           // Extract address components from OpenStreetMap format
           const addressLine1 = [
@@ -102,12 +103,12 @@ export async function geocodingRoutes(fastify: FastifyInstance) {
           return reply.send({
             success: true,
             data: {
-              addressLine1: addressLine1 || data.display_name.split(',')[0],
+              addressLine1: addressLine1 || (displayName ? displayName.split(',')[0] : ''),
               city: city || '',
               province: province || '',
               postalCode: postalCode || '',
               country: country,
-              formattedAddress: data.display_name,
+              formattedAddress: displayName,
             },
           });
         }

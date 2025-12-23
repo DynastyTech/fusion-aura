@@ -76,7 +76,7 @@ export async function paymentRoutes(fastify: FastifyInstance) {
       const lineItems: Stripe.Checkout.SessionCreateParams.LineItem[] = [];
 
       for (const item of body.items) {
-        const product = products.find((p) => p.id === item.productId);
+        const product = products.find((p: any) => p.id === item.productId);
         if (!product) {
           return reply.status(400).send({
             success: false,

@@ -1,6 +1,6 @@
 import { MeiliSearch } from 'meilisearch';
 import { config } from '../config';
-import { Product } from '@prisma/client';
+import { Product } from '@fusionaura/db';
 
 let client: MeiliSearch | null = null;
 

@@ -34,7 +34,7 @@ export async function cartRoutes(fastify: FastifyInstance) {
       },
     });
 
-    const items = cartItems.map((item) => ({
+    const items = cartItems.map((item: any) => ({
       id: item.id,
       product: {
         id: item.product.id,
@@ -48,7 +48,7 @@ export async function cartRoutes(fastify: FastifyInstance) {
       subtotal: Number(item.product.price) * item.quantity,
     }));
 
-    const total = items.reduce((sum, item) => sum + item.subtotal, 0);
+    const total = items.reduce((sum: number, item: any) => sum + item.subtotal, 0);
 
     return reply.send({
       success: true,

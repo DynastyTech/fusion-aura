@@ -1,7 +1,6 @@
 import { FastifyInstance, FastifyRequest, FastifyReply } from 'fastify';
 import { z } from 'zod';
-import { prisma } from '@fusionaura/db';
-import { OrderStatus } from '@prisma/client';
+import { prisma, OrderStatus } from '@fusionaura/db';
 import { authenticate, AuthenticatedRequest } from '../middleware/auth';
 import { requireRole } from '../middleware/auth';
 import { sendOrderEmail, sendOrderStatusUpdateEmail } from '../utils/email';
@@ -107,7 +106,7 @@ export async function orderRoutes(fastify: FastifyInstance) {
       const orderItems: Array<{ productId: string; quantity: number; price: number; total: number }> = [];
 
       for (const item of body.items) {
-        const product = products.find((p) => p.id === item.productId);
+        const product = products.find((p: any) => p.id === item.productId);
         if (!product) {
           return reply.status(400).send({
             success: false,
@@ -195,7 +194,7 @@ export async function orderRoutes(fastify: FastifyInstance) {
             ? (user.firstName && user.lastName ? `${user.firstName} ${user.lastName}` : user.email)
             : body.shippingAddress.name,
           customerEmail: user?.email || body.shippingAddress.email || body.shippingAddress.phone || 'guest@fusionaura.com',
-          items: order.items.map((item) => ({
+          items: order.items.map((item: any) => ({
             name: item.product.name,
             quantity: item.quantity,
             price: Number(item.price),
@@ -228,7 +227,7 @@ export async function orderRoutes(fastify: FastifyInstance) {
               ? (user.firstName && user.lastName ? `${user.firstName} ${user.lastName}` : user.email)
               : body.shippingAddress.name,
             customerEmail: customerEmail,
-            items: order.items.map((item) => ({
+            items: order.items.map((item: any) => ({
               name: item.product.name,
               quantity: item.quantity,
               price: Number(item.price),
@@ -296,7 +295,7 @@ export async function orderRoutes(fastify: FastifyInstance) {
 
     console.log(`📋 Found ${orders.length} orders for userId: ${userId} (total: ${total})`);
     if (orders.length > 0) {
-      console.log(`   Order IDs: ${orders.map(o => o.id).join(', ')}`);
+      console.log(`   Order IDs: ${orders.map((o: any) => o.id).join(', ')}`);
     }
 
     return reply.send({
@@ -458,7 +457,7 @@ export async function orderRoutes(fastify: FastifyInstance) {
 
       console.log(`✅ Admin orders query - Found ${orders.length} orders (total: ${total})`);
       if (orders.length > 0) {
-        console.log(`   Order numbers: ${orders.map(o => o.orderNumber).join(', ')}`);
+        console.log(`   Order numbers: ${orders.map((o: any) => o.orderNumber).join(', ')}`);
       }
 
       return reply.send({
@@ -610,7 +609,7 @@ export async function orderRoutes(fastify: FastifyInstance) {
             customerEmail,
             customerPhone,
             status: updatedOrder.status,
-            items: updatedOrder.items.map((item) => ({
+            items: updatedOrder.items.map((item: any) => ({
               name: item.product.name,
               quantity: item.quantity,
               price: Number(item.price),
@@ -735,7 +734,7 @@ export async function orderRoutes(fastify: FastifyInstance) {
 
       // Check inventory availability
       for (const item of body.items) {
-        const product = products.find((p) => p.id === item.productId);
+        const product = products.find((p: any) => p.id === item.productId);
         if (!product || !product.inventory) {
           return reply.status(400).send({
             success: false,
@@ -745,7 +744,7 @@ export async function orderRoutes(fastify: FastifyInstance) {
 
         // Calculate current reserved quantity (excluding this order's items)
         const currentReserved = product.inventory.reserved;
-        const orderItemQuantity = order.items.find((oi) => oi.productId === item.productId)?.quantity || 0;
+        const orderItemQuantity = order.items.find((oi: any) => oi.productId === item.productId)?.quantity || 0;
         const availableReserved = currentReserved - orderItemQuantity;
         const availableQuantity = product.inventory.quantity + availableReserved;
 
