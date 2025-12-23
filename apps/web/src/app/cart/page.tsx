@@ -174,7 +174,7 @@ export default function CartPage() {
               {isGuest && (
                 <div className="bg-blue-50 border border-blue-200 rounded-lg p-4 mb-4">
                   <p className="text-blue-800 text-sm">
-                    💡 You're shopping as a guest. You can checkout without creating an account!
+                    💡 You&apos;re shopping as a guest. You can checkout without creating an account!
                   </p>
                 </div>
               )}

@@ -390,7 +390,7 @@ export default function CheckoutPage() {
                     placeholder="Your contact number (for delivery updates)"
                     className="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-primary-dark focus:border-primary-dark"
                   />
-                  <p className="mt-1 text-xs text-gray-500">We'll send order updates via SMS/WhatsApp</p>
+                  <p className="mt-1 text-xs text-gray-500">We&apos;ll send order updates via SMS/WhatsApp</p>
                 </div>
               </div>
 

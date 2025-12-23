@@ -1,6 +1,10 @@
 /** @type {import('next').NextConfig} */
 const nextConfig = {
   reactStrictMode: true,
+  eslint: {
+    // Don't fail build on ESLint warnings (only errors)
+    ignoreDuringBuilds: false,
+  },
   images: {
     domains: ['localhost'],
     remotePatterns: [

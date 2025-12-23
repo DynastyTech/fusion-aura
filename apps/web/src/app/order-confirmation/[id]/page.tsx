@@ -272,10 +272,10 @@ export default function OrderConfirmationPage() {
 
         {/* Next Steps */}
         <div className="bg-green-50 border border-green-200 rounded-lg p-6 mb-6">
-          <h3 className="text-lg font-semibold text-green-800 mb-2">What's Next?</h3>
+          <h3 className="text-lg font-semibold text-green-800 mb-2">What&apos;s Next?</h3>
           <ul className="text-green-700 space-y-1 text-sm">
             <li>• Your order is being reviewed by our team</li>
-            <li>• You'll receive updates via {order.shippingPhone ? 'SMS/WhatsApp' : 'email'} when your order status changes</li>
+            <li>• You&apos;ll receive updates via {order.shippingPhone ? 'SMS/WhatsApp' : 'email'} when your order status changes</li>
             <li>• Our delivery team will contact you before delivery</li>
             <li>• Payment will be collected upon delivery</li>
           </ul>
