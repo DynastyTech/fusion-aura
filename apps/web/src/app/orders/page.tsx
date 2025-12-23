@@ -1,6 +1,6 @@
 'use client';
 
-import { useEffect, useState } from 'react';
+import { useEffect, useState, useCallback } from 'react';
 import { useRouter } from 'next/navigation';
 import Link from 'next/link';
 import { apiRequest } from '@/lib/api';
@@ -90,9 +90,9 @@ export default function OrdersPage() {
     }
     
     fetchOrders();
-  }, [router, authLoading, isAuthenticated, user]);
+  }, [router, authLoading, isAuthenticated, user, fetchOrders]);
 
-  const fetchOrders = async () => {
+  const fetchOrders = useCallback(async () => {
     try {
       const response = await apiRequest<{ data: Order[] }>('/api/orders');
       
@@ -113,7 +113,11 @@ export default function OrdersPage() {
     } finally {
       setLoading(false);
     }
-  };
+  }, [router]);
+
+  useEffect(() => {
+    fetchOrders();
+  }, [fetchOrders]);
 
   const toNumber = (value: number | string): number => {
     return typeof value === 'string' ? parseFloat(value) : Number(value);

@@ -1,6 +1,6 @@
 'use client';
 
-import { useEffect, useState } from 'react';
+import { useEffect, useState, useCallback } from 'react';
 import { useRouter } from 'next/navigation';
 import Link from 'next/link';
 import { apiRequest } from '@/lib/api';
@@ -43,18 +43,7 @@ export default function CheckoutPage() {
     phone: '',
   });
 
-  useEffect(() => {
-    loadCart();
-  }, []);
-
-  useEffect(() => {
-    // Prefill name with "anonymous" for guest checkout
-    if (isGuest) {
-      setFormData(prev => ({ ...prev, name: 'anonymous' }));
-    }
-  }, [isGuest]);
-
-  const loadCart = async () => {
+  const loadCart = useCallback(async () => {
     const token = localStorage.getItem('token');
     
     if (token) {
@@ -95,7 +84,7 @@ export default function CheckoutPage() {
       setIsGuest(true);
       setLoading(false);
     }
-  };
+  }, [router]);
 
   const getCurrentLocation = async () => {
     if (!navigator.geolocation) {

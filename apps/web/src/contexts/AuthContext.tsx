@@ -86,7 +86,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     
     window.addEventListener('focus', handleFocus);
     return () => window.removeEventListener('focus', handleFocus);
-  }, []);
+  }, [user]);
 
   // Listen for storage changes (e.g., login from another tab or same tab)
   useEffect(() => {

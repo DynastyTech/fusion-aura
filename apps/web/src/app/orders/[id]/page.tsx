@@ -1,6 +1,6 @@
 'use client';
 
-import { useEffect, useState } from 'react';
+import { useEffect, useState, useCallback } from 'react';
 import { useRouter, useParams } from 'next/navigation';
 import Link from 'next/link';
 import Image from 'next/image';
@@ -89,12 +89,7 @@ export default function OrderDetailPage() {
   const [order, setOrder] = useState<Order | null>(null);
   const [loading, setLoading] = useState(true);
 
-  useEffect(() => {
-    // Allow both guests and authenticated users to view orders
-    fetchOrder();
-  }, [orderId]);
-
-  const fetchOrder = async () => {
+  const fetchOrder = useCallback(async () => {
     try {
       const response = await apiRequest<Order>(`/api/orders/${orderId}`);
       if (response.success && response.data) {
@@ -109,7 +104,12 @@ export default function OrderDetailPage() {
     } finally {
       setLoading(false);
     }
-  };
+  }, [orderId, router]);
+
+  useEffect(() => {
+    // Allow both guests and authenticated users to view orders
+    fetchOrder();
+  }, [fetchOrder]);
 
   const toNumber = (value: number | string): number => {
     return typeof value === 'string' ? parseFloat(value) : Number(value);

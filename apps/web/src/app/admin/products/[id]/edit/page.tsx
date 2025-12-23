@@ -1,6 +1,6 @@
 'use client';
 
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useCallback } from 'react';
 import { useRouter, useParams } from 'next/navigation';
 import Link from 'next/link';
 import { apiRequest } from '@/lib/api';
@@ -62,9 +62,9 @@ export default function EditProductPage() {
     }
 
     fetchData();
-  }, [router, productId]);
+  }, [router, productId, fetchData]);
 
-  const fetchData = async () => {
+  const fetchData = useCallback(async () => {
     try {
       setLoading(true);
       const [categoriesRes, productRes] = await Promise.all([
@@ -104,7 +104,7 @@ export default function EditProductPage() {
     } finally {
       setLoading(false);
     }
-  };
+  }, [router, productId]);
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();

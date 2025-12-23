@@ -43,25 +43,9 @@ export default function CartPage() {
       // Guest cart
       loadGuestCart();
     }
-  }, []);
+  }, [fetchCart, loadGuestCart]);
 
-  const fetchCart = async () => {
-    try {
-      const response = await apiRequest<CartData>('/api/cart');
-      if (response.success && response.data) {
-        setCart(response.data);
-        setIsGuest(false);
-      }
-    } catch (error) {
-      console.error('Error fetching cart:', error);
-      // Fallback to guest cart if API fails
-      loadGuestCart();
-    } finally {
-      setLoading(false);
-    }
-  };
-
-  const loadGuestCart = () => {
+  const loadGuestCart = useCallback(() => {
     const guestItems = getGuestCart();
     const total = getGuestCartTotal();
     
@@ -77,7 +61,23 @@ export default function CartPage() {
     });
     setIsGuest(true);
     setLoading(false);
-  };
+  }, []);
+
+  const fetchCart = useCallback(async () => {
+    try {
+      const response = await apiRequest<CartData>('/api/cart');
+      if (response.success && response.data) {
+        setCart(response.data);
+        setIsGuest(false);
+      }
+    } catch (error) {
+      console.error('Error fetching cart:', error);
+      // Fallback to guest cart if API fails
+      loadGuestCart();
+    } finally {
+      setLoading(false);
+    }
+  }, [loadGuestCart]);
 
   const updateQuantity = async (itemId: string, quantity: number) => {
     if (quantity < 1) return;

@@ -1,6 +1,7 @@
 'use client';
 
 import { useState } from 'react';
+import Image from 'next/image';
 import { apiRequest } from '@/lib/api';
 
 interface ImageUploadProps {
@@ -79,9 +80,11 @@ export default function ImageUpload({ images, onImagesChange, maxImages = 5 }: I
         <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
           {images.map((url, index) => (
             <div key={index} className="relative group">
-              <img
+              <Image
                 src={url}
                 alt={`Product image ${index + 1}`}
+                width={128}
+                height={128}
                 className="w-full h-32 object-cover rounded-lg border border-gray-300"
               />
               <button

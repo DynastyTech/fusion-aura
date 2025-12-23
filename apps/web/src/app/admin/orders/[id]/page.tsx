@@ -1,6 +1,6 @@
 'use client';
 
-import { useEffect, useState } from 'react';
+import { useEffect, useState, useCallback } from 'react';
 import { useRouter, useParams } from 'next/navigation';
 import Link from 'next/link';
 import Image from 'next/image';
@@ -123,9 +123,9 @@ export default function AdminOrderDetailPage() {
     }
 
     fetchOrder();
-  }, [router, orderId]);
+  }, [router, orderId, fetchOrder]);
 
-  const fetchOrder = async () => {
+  const fetchOrder = useCallback(async () => {
     try {
       const response = await apiRequest<Order>(`/api/orders/${orderId}`);
       if (response.success && response.data) {
@@ -140,7 +140,7 @@ export default function AdminOrderDetailPage() {
     } finally {
       setLoading(false);
     }
-  };
+  }, [router, orderId]);
 
   const updateOrderStatus = async (status: string) => {
     setUpdating(true);

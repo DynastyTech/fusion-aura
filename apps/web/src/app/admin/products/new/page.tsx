@@ -25,7 +25,7 @@ export default function NewProductPage() {
     price: '',
     compareAtPrice: '',
     categoryId: '',
-    images: [] as string[],
+    images: [] as string[] | string,
     isActive: true,
     isFeatured: false,
     initialQuantity: '0',
@@ -70,10 +70,12 @@ export default function NewProductPage() {
     try {
       const images = Array.isArray(formData.images)
         ? formData.images
-        : formData.images
+        : typeof formData.images === 'string'
+        ? formData.images
             .split(',')
             .map((url) => url.trim())
-            .filter((url) => url.length > 0);
+            .filter((url) => url.length > 0)
+        : [];
 
       const payload = {
         ...formData,
@@ -242,7 +244,7 @@ export default function NewProductPage() {
 
           <div>
             <ImageUpload
-              images={Array.isArray(formData.images) ? formData.images : formData.images.split(',').filter((url) => url.trim().length > 0)}
+              images={Array.isArray(formData.images) ? formData.images : typeof formData.images === 'string' ? formData.images.split(',').map(url => url.trim()).filter(url => url.length > 0) : []}
               onImagesChange={(images) => setFormData({ ...formData, images })}
               maxImages={5}
             />

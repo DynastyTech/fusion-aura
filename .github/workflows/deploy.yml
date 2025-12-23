@@ -2,7 +2,8 @@ name: Deploy to Railway and Vercel
 
 on:
   push:
-    branches: [main]
+    branches:
+      - main
   workflow_dispatch:
 
 jobs:
@@ -24,18 +25,12 @@ jobs:
 
       - name: Generate Prisma Client
         run: cd packages/db && npm run build
-        env:
-          DATABASE_URL: ${{ secrets.DATABASE_URL }}
 
       - name: Build API
         run: cd apps/api && npm run build
 
-      - name: Deploy to Railway
-        uses: bervProject/railway-deploy@v1.0.0
-        with:
-          railway_token: ${{ secrets.RAILWAY_TOKEN }}
-          service: api
-          detach: true
+      - name: Railway deployment
+        run: echo "Railway will auto-deploy from GitHub connection"
 
   deploy-vercel:
     name: Deploy Frontend to Vercel
@@ -51,16 +46,6 @@ jobs:
           node-version: '20'
           cache: 'npm'
 
-      - name: Install Vercel CLI
-        run: npm install -g vercel@latest
-
-      - name: Deploy to Vercel
-        # Note: Vercel auto-deploys from GitHub if repo is connected
-        # This step is optional - Vercel will deploy automatically
-        # If you want manual control, uncomment and configure Vercel token:
-        # run: |
-        #   vercel pull --yes --environment=production --token=${{ secrets.VERCEL_TOKEN }}
-        #   vercel build --prod --token=${{ secrets.VERCEL_TOKEN }}
-        #   vercel deploy --prebuilt --prod --token=${{ secrets.VERCEL_TOKEN }}
+      - name: Vercel deployment
         run: echo "Vercel will auto-deploy from GitHub connection"
 
