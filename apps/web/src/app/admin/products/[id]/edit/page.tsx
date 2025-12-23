@@ -41,7 +41,7 @@ export default function EditProductPage() {
     price: '',
     compareAtPrice: '',
     categoryId: '',
-    images: [] as string[],
+    images: [] as string[] | string,
     isActive: true,
     isFeatured: false,
   });
@@ -113,10 +113,12 @@ export default function EditProductPage() {
     try {
       const images = Array.isArray(formData.images)
         ? formData.images
-        : formData.images
+        : typeof formData.images === 'string'
+        ? formData.images
             .split(',')
             .map((url) => url.trim())
-            .filter((url) => url.length > 0);
+            .filter((url) => url.length > 0)
+        : [];
 
       const payload = {
         ...formData,
@@ -258,7 +260,7 @@ export default function EditProductPage() {
 
           <div>
             <ImageUpload
-              images={Array.isArray(formData.images) ? formData.images : []}
+              images={Array.isArray(formData.images) ? formData.images : typeof formData.images === 'string' ? formData.images.split(',').map(url => url.trim()).filter(url => url.length > 0) : []}
               onImagesChange={(images) => setFormData({ ...formData, images })}
               maxImages={5}
             />
