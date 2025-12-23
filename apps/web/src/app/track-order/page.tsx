@@ -80,7 +80,7 @@ export default function TrackOrderPage() {
 
     try {
       // Try to find order by order number (public endpoint)
-      const response = await apiRequest<{ data: Order }>(`/api/orders/${orderNumber}`);
+      const response = await apiRequest<Order>(`/api/orders/${orderNumber}`);
       
       if (response.success && response.data) {
         const foundOrder = response.data;

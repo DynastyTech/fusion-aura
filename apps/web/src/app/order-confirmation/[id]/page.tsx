@@ -96,10 +96,9 @@ export default function OrderConfirmationPage() {
   const fetchOrder = async () => {
     try {
       // Public endpoint - works for both guests and authenticated users
-      const response = await apiRequest<{ data: Order }>(`/api/orders/${orderId}`);
+      const response = await apiRequest<Order>(`/api/orders/${orderId}`);
       if (response.success && response.data) {
-        const orderData = response.data;
-        setOrder(orderData);
+        setOrder(response.data);
       } else {
         console.error('Failed to fetch order:', response.error);
         alert('Order not found');

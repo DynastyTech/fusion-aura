@@ -96,10 +96,10 @@ export default function OrderDetailPage() {
 
   const fetchOrder = async () => {
     try {
-      const response = await apiRequest<{ data: Order }>(`/api/orders/${orderId}`);
+      const response = await apiRequest<Order>(`/api/orders/${orderId}`);
       if (response.success && response.data) {
         // API returns { success: true, data: order }, so use response.data directly
-        setOrder(response.data as Order);
+        setOrder(response.data);
       } else {
         router.push('/orders');
       }
