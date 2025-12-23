@@ -1,0 +1,47 @@
+# Dependencies
+node_modules/
+.pnp
+.pnp.js
+
+# Testing
+coverage/
+*.log
+
+# Production
+dist/
+build/
+.next/
+out/
+
+# Environment
+.env
+.env.local
+.env*.local
+
+# IDE
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Prisma
+packages/db/migrations/
+
+# Docker
+*.pid
+*.seed
+*.pid.lock
+
+# Go
+services/order-processor/bin/
+services/order-processor/vendor/
+
+# Temporary
+tmp/
+temp/
+

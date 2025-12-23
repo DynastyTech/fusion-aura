@@ -1,0 +1,127 @@
+services:
+  postgres:
+    image: postgres:15-alpine
+    container_name: fusionaura-postgres
+    environment:
+      POSTGRES_USER: fusionaura
+      POSTGRES_PASSWORD: fusionaura_dev
+      POSTGRES_DB: fusionaura_db
+    ports:
+      - "5432:5432"
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U fusionaura -d fusionaura_db"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+  redis:
+    image: redis:7-alpine
+    container_name: fusionaura-redis
+    ports:
+      - "6379:6379"
+    volumes:
+      - redis_data:/data
+    healthcheck:
+      test: ["CMD", "redis-cli", "ping"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+  meilisearch:
+    image: getmeili/meilisearch:v1.5
+    container_name: fusionaura-meilisearch
+    environment:
+      MEILI_MASTER_KEY: fusionaura_meili_master_key_dev
+      MEILI_ENV: development
+    ports:
+      - "7700:7700"
+    volumes:
+      - meilisearch_data:/meili_data
+    healthcheck:
+      test: ["CMD", "wget", "--no-verbose", "--tries=1", "--spider", "http://localhost:7700/health"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+  minio:
+    image: minio/minio:latest
+    container_name: fusionaura-minio
+    environment:
+      MINIO_ROOT_USER: fusionaura_minio
+      MINIO_ROOT_PASSWORD: fusionaura_minio_dev
+    ports:
+      - "9000:9000"
+      - "9001:9001"
+    volumes:
+      - minio_data:/data
+    command: server /data --console-address ":9001"
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:9000/minio/health/live"]
+      interval: 30s
+      timeout: 20s
+      retries: 3
+
+  # Backend API
+  api:
+    build:
+      context: ..
+      dockerfile: apps/api/Dockerfile
+    container_name: fusionaura-api
+    environment:
+      NODE_ENV: development
+      DATABASE_URL: postgresql://fusionaura:fusionaura_dev@postgres:5432/fusionaura_db
+      REDIS_URL: redis://redis:6379
+      JWT_SECRET: ${JWT_SECRET:-fusionaura_jwt_secret_dev_change_in_production}
+      MEILISEARCH_HOST: http://meilisearch:7700
+      MEILISEARCH_MASTER_KEY: fusionaura_meili_master_key_dev
+      MINIO_ENDPOINT: minio
+      MINIO_PORT: 9000
+      MINIO_ACCESS_KEY: fusionaura_minio
+      MINIO_SECRET_KEY: fusionaura_minio_dev
+      MINIO_BUCKET: fusionaura-uploads
+      PORT: 3001
+    ports:
+      - "3001:3001"
+    depends_on:
+      postgres:
+        condition: service_healthy
+      redis:
+        condition: service_healthy
+      meilisearch:
+        condition: service_healthy
+      minio:
+        condition: service_healthy
+    volumes:
+      - ../apps/api:/app
+      - /app/node_modules
+
+  # Go Order Processor Service (Disabled - using COD, not Stripe)
+  # order-processor:
+  #   build:
+  #     context: ..
+  #     dockerfile: services/order-processor/Dockerfile
+  #   container_name: fusionaura-order-processor
+  #   environment:
+  #     DATABASE_URL: postgresql://fusionaura:fusionaura_dev@postgres:5432/fusionaura_db?sslmode=disable
+  #     REDIS_URL: redis://redis:6379
+  #     STRIPE_SECRET_KEY: ${STRIPE_SECRET_KEY}
+  #     STRIPE_WEBHOOK_SECRET: ${STRIPE_WEBHOOK_SECRET}
+  #     PORT: 8080
+  #   ports:
+  #     - "8080:8080"
+  #   depends_on:
+  #     postgres:
+  #       condition: service_healthy
+  #     redis:
+  #       condition: service_healthy
+  #   volumes:
+  #     - ../services/order-processor:/app
+
+volumes:
+  postgres_data:
+  redis_data:
+  meilisearch_data:
+  minio_data:
+

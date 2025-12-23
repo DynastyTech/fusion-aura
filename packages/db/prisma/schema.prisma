@@ -1,0 +1,294 @@
+// Prisma schema for FusionAura e-commerce platform
+// Tailored for South Africa (ZAR currency)
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+enum UserRole {
+  CUSTOMER
+  ADMIN
+}
+
+enum OrderStatus {
+  PENDING        // Order placed, awaiting admin approval
+  ACCEPTED       // Admin accepted the order
+  DECLINED       // Admin declined the order
+  PENDING_DELIVERY // Accepted, waiting for delivery
+  OUT_FOR_DELIVERY // Order is out for delivery
+  COMPLETED      // Order delivered and completed
+  CANCELLED      // Order cancelled
+}
+
+enum PaymentStatus {
+  PENDING
+  COMPLETED
+  FAILED
+  REFUNDED
+}
+
+enum PaymentMethod {
+  STRIPE_CHECKOUT
+  BANK_TRANSFER
+}
+
+enum ShipmentStatus {
+  PENDING
+  IN_TRANSIT
+  DELIVERED
+  RETURNED
+}
+
+model User {
+  id        String   @id @default(uuid())
+  email     String   @unique
+  password  String   // Hashed password
+  firstName String?
+  lastName  String?
+  phone     String?
+  role      UserRole @default(CUSTOMER)
+  
+  // Address fields (South Africa specific)
+  addressLine1 String?
+  addressLine2 String?
+  city         String?
+  province     String? // SA provinces
+  postalCode   String? // SA postal codes
+  country      String  @default("ZA")
+  
+  // Stripe
+  stripeCustomerId String? @unique
+  
+  // Timestamps
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+  deletedAt DateTime? // Soft delete
+  
+  // Relations
+  orders   Order[]
+  cart     CartItem[]
+  payments Payment[]
+  
+  @@index([email])
+  @@index([stripeCustomerId])
+  @@map("users")
+}
+
+model Category {
+  id          String   @id @default(uuid())
+  name        String
+  slug        String   @unique
+  description String?
+  image       String?
+  
+  // Nested categories
+  parentId String?
+  parent   Category?  @relation("CategoryTree", fields: [parentId], references: [id])
+  children Category[] @relation("CategoryTree")
+  
+  // Timestamps
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+  deletedAt DateTime?
+  
+  // Relations
+  products Product[]
+  
+  @@index([slug])
+  @@index([parentId])
+  @@map("categories")
+}
+
+model Product {
+  id          String   @id @default(uuid())
+  name        String
+  slug        String   @unique
+  description String?  @db.Text
+  shortDescription String?
+  
+  // Pricing (ZAR)
+  price       Decimal  @db.Decimal(10, 2)
+  compareAtPrice Decimal? @db.Decimal(10, 2) // For sale prices
+  
+  // Media
+  images      String[] // Array of image URLs
+  
+  // SEO
+  metaTitle       String?
+  metaDescription String?
+  
+  // Flags
+  isActive    Boolean  @default(true)
+  isFeatured  Boolean  @default(false)
+  
+  // Relations
+  categoryId  String
+  category    Category @relation(fields: [categoryId], references: [id])
+  inventory   Inventory?
+  orderItems  OrderItem[]
+  cartItems   CartItem[]
+  
+  // Timestamps
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+  deletedAt DateTime?
+  
+  @@index([slug])
+  @@index([categoryId])
+  @@index([isActive])
+  @@index([isFeatured])
+  @@map("products")
+}
+
+model Inventory {
+  id        String   @id @default(uuid())
+  productId String   @unique
+  product   Product  @relation(fields: [productId], references: [id], onDelete: Cascade)
+  
+  quantity  Int      @default(0)
+  reserved  Int      @default(0) // Reserved during checkout
+  
+  // Low stock threshold
+  lowStockThreshold Int @default(10)
+  
+  // Timestamps
+  updatedAt DateTime @updatedAt
+  
+  @@map("inventory")
+}
+
+model CartItem {
+  id        String   @id @default(uuid())
+  userId    String
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  productId String
+  product   Product  @relation(fields: [productId], references: [id], onDelete: Cascade)
+  
+  quantity  Int
+  
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+  
+  @@unique([userId, productId])
+  @@index([userId])
+  @@map("cart_items")
+}
+
+model Order {
+  id     String      @id @default(uuid())
+  orderNumber String @unique // Human-readable order number
+  
+  userId String? // Optional for guest orders
+  user   User?   @relation(fields: [userId], references: [id])
+  
+  status OrderStatus @default(PENDING)
+  
+  // Pricing (ZAR)
+  subtotal    Decimal @db.Decimal(10, 2)
+  tax         Decimal @db.Decimal(10, 2) @default(0) // VAT in SA
+  shipping    Decimal @db.Decimal(10, 2) @default(0)
+  discount    Decimal @db.Decimal(10, 2) @default(0)
+  total       Decimal @db.Decimal(10, 2)
+  
+  // Shipping address
+  shippingName        String
+  shippingAddressLine1 String
+  shippingAddressLine2 String?
+  shippingCity        String
+  shippingProvince    String?
+  shippingPostalCode  String
+  shippingCountry     String  @default("ZA")
+  shippingPhone       String?
+  
+  // Stripe
+  stripeSessionId    String? @unique
+  stripePaymentIntentId String? @unique
+  
+  // Relations
+  items    OrderItem[]
+  payments Payment[]
+  shipment Shipment?
+  
+  // Timestamps
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+  deletedAt DateTime? // Soft delete for archiving
+  
+  @@index([userId])
+  @@index([orderNumber])
+  @@index([status])
+  @@index([stripeSessionId])
+  @@index([stripePaymentIntentId])
+  @@index([deletedAt])
+  @@map("orders")
+}
+
+model OrderItem {
+  id        String   @id @default(uuid())
+  orderId   String
+  order     Order    @relation(fields: [orderId], references: [id], onDelete: Cascade)
+  productId String
+  product   Product  @relation(fields: [productId], references: [id])
+  
+  quantity  Int
+  price     Decimal  @db.Decimal(10, 2) // Price at time of purchase
+  total     Decimal  @db.Decimal(10, 2)
+  
+  @@index([orderId])
+  @@index([productId])
+  @@map("order_items")
+}
+
+model Payment {
+  id     String        @id @default(uuid())
+  orderId String
+  order  Order         @relation(fields: [orderId], references: [id])
+  userId String
+  user   User          @relation(fields: [userId], references: [id])
+  
+  amount      Decimal       @db.Decimal(10, 2)
+  currency    String        @default("ZAR")
+  status      PaymentStatus @default(PENDING)
+  method      PaymentMethod @default(STRIPE_CHECKOUT)
+  
+  // Stripe
+  stripePaymentIntentId String? @unique
+  stripeChargeId        String? @unique
+  
+  // Timestamps
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+  
+  @@index([orderId])
+  @@index([userId])
+  @@index([stripePaymentIntentId])
+  @@index([status])
+  @@map("payments")
+}
+
+model Shipment {
+  id      String         @id @default(uuid())
+  orderId String         @unique
+  order   Order          @relation(fields: [orderId], references: [id])
+  
+  status      ShipmentStatus @default(PENDING)
+  trackingNumber String?
+  carrier     String? // e.g., "PostNet", "FastWay", "The Courier Guy"
+  
+  // Timestamps
+  shippedAt   DateTime?
+  deliveredAt DateTime?
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+  
+  @@index([orderId])
+  @@index([trackingNumber])
+  @@index([status])
+  @@map("shipments")
+}
+

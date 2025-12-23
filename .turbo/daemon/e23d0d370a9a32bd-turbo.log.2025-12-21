@@ -1,0 +1,392 @@
+2025-12-21T20:16:04.277758Z  WARN turborepo_lib::package_changes_watcher: changed_files: {AnchoredSystemPathBuf("apps/api/src/routes/orders.ts")}
+2025-12-21T20:16:04.278898Z  WARN turborepo_lib::package_changes_watcher: changed_packages: Ok(Some({WorkspacePackage { name: Other("@fusionaura/api"), path: AnchoredSystemPathBuf("apps/api") }}))
+2025-12-21T20:16:26.378150Z  WARN turborepo_lib::package_changes_watcher: changed_files: {AnchoredSystemPathBuf("apps/web/src/app/orders/page.tsx")}
+2025-12-21T20:16:26.378171Z  WARN turborepo_lib::package_changes_watcher: changed_packages: Ok(Some({WorkspacePackage { name: Other("@fusionaura/web"), path: AnchoredSystemPathBuf("apps/web") }}))
+2025-12-21T20:16:45.676645Z  WARN turborepo_lib::package_changes_watcher: changed_files: {AnchoredSystemPathBuf("apps/web/src/lib/api.ts")}
+2025-12-21T20:16:45.676684Z  WARN turborepo_lib::package_changes_watcher: changed_packages: Ok(Some({WorkspacePackage { name: Other("@fusionaura/web"), path: AnchoredSystemPathBuf("apps/web") }}))
+2025-12-21T20:17:10.576081Z  WARN turborepo_lib::package_changes_watcher: changed_files: {AnchoredSystemPathBuf("apps/api/src/routes/orders.ts")}
+2025-12-21T20:17:10.576255Z  WARN turborepo_lib::package_changes_watcher: changed_packages: Ok(Some({WorkspacePackage { name: Other("@fusionaura/api"), path: AnchoredSystemPathBuf("apps/api") }}))
+2025-12-21T20:17:58.009831Z  WARN turborepo_lib::package_changes_watcher: changed_files: {AnchoredSystemPathBuf("apps/api/src/routes/orders.ts")}
+2025-12-21T20:17:58.032259Z  WARN turborepo_lib::package_changes_watcher: changed_packages: Ok(Some({WorkspacePackage { name: Other("@fusionaura/api"), path: AnchoredSystemPathBuf("apps/api") }}))
+2025-12-21T20:17:58.078051Z  WARN turborepo_lib::package_changes_watcher: changed_files: {AnchoredSystemPathBuf("apps/api/src/routes/orders.ts")}
+2025-12-21T20:17:58.078065Z  WARN turborepo_lib::package_changes_watcher: changed_packages: Ok(Some({WorkspacePackage { name: Other("@fusionaura/api"), path: AnchoredSystemPathBuf("apps/api") }}))
+2025-12-21T20:17:58.078162Z  WARN turborepo_lib::package_changes_watcher: hashes are the same, no need to rerun
+2025-12-21T20:18:31.278040Z  WARN turborepo_lib::package_changes_watcher: changed_files: {AnchoredSystemPathBuf("apps/api/src/routes/orders.ts")}
+2025-12-21T20:18:31.278061Z  WARN turborepo_lib::package_changes_watcher: changed_packages: Ok(Some({WorkspacePackage { name: Other("@fusionaura/api"), path: AnchoredSystemPathBuf("apps/api") }}))
+2025-12-21T20:19:00.720175Z  WARN turborepo_lib::package_changes_watcher: changed_files: {AnchoredSystemPathBuf("apps/web/src/app/orders/page.tsx"), AnchoredSystemPathBuf("apps/web/src/lib/api.ts"), AnchoredSystemPathBuf("apps/api/src/routes/orders.ts")}
+2025-12-21T20:19:00.720197Z  WARN turborepo_lib::package_changes_watcher: changed_packages: Ok(Some({WorkspacePackage { name: Other("@fusionaura/web"), path: AnchoredSystemPathBuf("apps/web") }, WorkspacePackage { name: Other("@fusionaura/api"), path: AnchoredSystemPathBuf("apps/api") }}))
+2025-12-21T20:19:00.935025Z  WARN turborepo_lib::package_changes_watcher: hashes are the same, no need to rerun
+2025-12-21T20:19:00.935147Z  WARN turborepo_lib::package_changes_watcher: hashes are the same, no need to rerun
+2025-12-21T20:19:30.577809Z  WARN turborepo_lib::package_changes_watcher: changed_files: {AnchoredSystemPathBuf("apps/web/src/app/layout.tsx")}
+2025-12-21T20:19:30.577828Z  WARN turborepo_lib::package_changes_watcher: changed_packages: Ok(Some({WorkspacePackage { name: Other("@fusionaura/web"), path: AnchoredSystemPathBuf("apps/web") }}))
+2025-12-21T20:19:30.611094Z  WARN turborepo_lib::package_changes_watcher: hashes are the same, no need to rerun
+2025-12-21T20:19:30.779012Z  WARN turborepo_lib::package_changes_watcher: changed_files: {AnchoredSystemPathBuf("apps/web/src/app/login/page.tsx")}
+2025-12-21T20:19:30.779034Z  WARN turborepo_lib::package_changes_watcher: changed_packages: Ok(Some({WorkspacePackage { name: Other("@fusionaura/web"), path: AnchoredSystemPathBuf("apps/web") }}))
+2025-12-21T20:19:30.784877Z  WARN turborepo_lib::package_changes_watcher: hashes are the same, no need to rerun
+2025-12-21T20:19:30.978672Z  WARN turborepo_lib::package_changes_watcher: changed_files: {AnchoredSystemPathBuf("apps/web/src/lib/api.ts"), AnchoredSystemPathBuf("apps/web/src/app/products/[slug]/page.tsx")}
+2025-12-21T20:19:30.978695Z  WARN turborepo_lib::package_changes_watcher: changed_packages: Ok(Some({WorkspacePackage { name: Other("@fusionaura/web"), path: AnchoredSystemPathBuf("apps/web") }}))
+2025-12-21T20:19:30.978769Z  WARN turborepo_lib::package_changes_watcher: hashes are the same, no need to rerun
+2025-12-21T20:24:48.985101Z  WARN turborepo_lib::package_changes_watcher: changed_files: {AnchoredSystemPathBuf("apps/web/src/app/admin/orders/page.tsx")}
+2025-12-21T20:24:48.985172Z  WARN turborepo_lib::package_changes_watcher: changed_packages: Ok(Some({WorkspacePackage { name: Other("@fusionaura/web"), path: AnchoredSystemPathBuf("apps/web") }}))
+2025-12-21T20:25:05.984084Z  WARN turborepo_lib::package_changes_watcher: changed_files: {AnchoredSystemPathBuf("apps/web/src/app/login/page.tsx")}
+2025-12-21T20:25:05.984105Z  WARN turborepo_lib::package_changes_watcher: changed_packages: Ok(Some({WorkspacePackage { name: Other("@fusionaura/web"), path: AnchoredSystemPathBuf("apps/web") }}))
+2025-12-21T20:25:25.084450Z  WARN turborepo_lib::package_changes_watcher: changed_files: {AnchoredSystemPathBuf("apps/web/src/app/products/page.tsx")}
+2025-12-21T20:25:25.084467Z  WARN turborepo_lib::package_changes_watcher: changed_packages: Ok(Some({WorkspacePackage { name: Other("@fusionaura/web"), path: AnchoredSystemPathBuf("apps/web") }}))
+2025-12-21T20:25:32.587066Z  WARN turborepo_lib::package_changes_watcher: changed_files: {AnchoredSystemPathBuf("apps/web/src/app/products/page.tsx")}
+2025-12-21T20:25:32.587090Z  WARN turborepo_lib::package_changes_watcher: changed_packages: Ok(Some({WorkspacePackage { name: Other("@fusionaura/web"), path: AnchoredSystemPathBuf("apps/web") }}))
+2025-12-21T20:25:59.185690Z  WARN turborepo_lib::package_changes_watcher: changed_files: {AnchoredSystemPathBuf("apps/web/src/app/products/[slug]/page.tsx")}
+2025-12-21T20:25:59.185761Z  WARN turborepo_lib::package_changes_watcher: changed_packages: Ok(Some({WorkspacePackage { name: Other("@fusionaura/web"), path: AnchoredSystemPathBuf("apps/web") }}))
+2025-12-21T20:26:10.285861Z  WARN turborepo_lib::package_changes_watcher: changed_files: {AnchoredSystemPathBuf("apps/web/src/app/products/[slug]/page.tsx")}
+2025-12-21T20:26:10.285879Z  WARN turborepo_lib::package_changes_watcher: changed_packages: Ok(Some({WorkspacePackage { name: Other("@fusionaura/web"), path: AnchoredSystemPathBuf("apps/web") }}))
+2025-12-21T20:26:25.185895Z  WARN turborepo_lib::package_changes_watcher: changed_files: {AnchoredSystemPathBuf("apps/web/src/app/cart/page.tsx")}
+2025-12-21T20:26:25.185920Z  WARN turborepo_lib::package_changes_watcher: changed_packages: Ok(Some({WorkspacePackage { name: Other("@fusionaura/web"), path: AnchoredSystemPathBuf("apps/web") }}))
+2025-12-21T20:26:47.986097Z  WARN turborepo_lib::package_changes_watcher: changed_files: {AnchoredSystemPathBuf("apps/web/src/contexts/AuthContext.tsx")}
+2025-12-21T20:26:47.986116Z  WARN turborepo_lib::package_changes_watcher: changed_packages: Ok(Some({WorkspacePackage { name: Other("@fusionaura/web"), path: AnchoredSystemPathBuf("apps/web") }}))
+2025-12-21T20:26:48.185935Z  WARN turborepo_lib::package_changes_watcher: changed_files: {AnchoredSystemPathBuf("apps/web/src/contexts/AuthContext.tsx")}
+2025-12-21T20:26:48.185958Z  WARN turborepo_lib::package_changes_watcher: changed_packages: Ok(Some({WorkspacePackage { name: Other("@fusionaura/web"), path: AnchoredSystemPathBuf("apps/web") }}))
+2025-12-21T20:26:48.186019Z  WARN turborepo_lib::package_changes_watcher: hashes are the same, no need to rerun
+2025-12-21T20:27:18.289017Z  WARN turborepo_lib::package_changes_watcher: changed_files: {AnchoredSystemPathBuf("apps/web/src/app/admin/orders/page.tsx")}
+2025-12-21T20:27:18.289060Z  WARN turborepo_lib::package_changes_watcher: changed_packages: Ok(Some({WorkspacePackage { name: Other("@fusionaura/web"), path: AnchoredSystemPathBuf("apps/web") }}))
+2025-12-21T20:27:38.386222Z  WARN turborepo_lib::package_changes_watcher: changed_files: {AnchoredSystemPathBuf("apps/api/src/routes/orders.ts")}
+2025-12-21T20:27:38.386273Z  WARN turborepo_lib::package_changes_watcher: changed_packages: Ok(Some({WorkspacePackage { name: Other("@fusionaura/api"), path: AnchoredSystemPathBuf("apps/api") }}))
+2025-12-21T20:28:13.388174Z  WARN turborepo_lib::package_changes_watcher: changed_files: {AnchoredSystemPathBuf("apps/web/src/app/cart/page.tsx")}
+2025-12-21T20:28:13.388196Z  WARN turborepo_lib::package_changes_watcher: changed_packages: Ok(Some({WorkspacePackage { name: Other("@fusionaura/web"), path: AnchoredSystemPathBuf("apps/web") }}))
+2025-12-21T20:28:42.292447Z  WARN turborepo_lib::package_changes_watcher: changed_files: {AnchoredSystemPathBuf("apps/web/src/app/products/[slug]/page.tsx"), AnchoredSystemPathBuf("apps/web/src/app/cart/page.tsx"), AnchoredSystemPathBuf("apps/web/src/app/admin/orders/page.tsx"), AnchoredSystemPathBuf("apps/web/src/app/products/page.tsx"), AnchoredSystemPathBuf("apps/web/src/contexts/AuthContext.tsx"), AnchoredSystemPathBuf("apps/web/src/app/login/page.tsx")}
+2025-12-21T20:28:42.293615Z  WARN turborepo_lib::package_changes_watcher: changed_packages: Ok(Some({WorkspacePackage { name: Other("@fusionaura/web"), path: AnchoredSystemPathBuf("apps/web") }}))
+2025-12-21T20:28:42.400343Z  WARN turborepo_lib::package_changes_watcher: hashes are the same, no need to rerun
+2025-12-21T20:28:42.400585Z  WARN turborepo_lib::package_changes_watcher: changed_files: {AnchoredSystemPathBuf("apps/web/src/app/products/[slug]/page.tsx"), AnchoredSystemPathBuf("apps/web/src/app/cart/page.tsx"), AnchoredSystemPathBuf("apps/api/src/routes/orders.ts"), AnchoredSystemPathBuf("apps/web/src/app/products/page.tsx"), AnchoredSystemPathBuf("apps/web/src/contexts/AuthContext.tsx")}
+2025-12-21T20:28:42.400597Z  WARN turborepo_lib::package_changes_watcher: changed_packages: Ok(Some({WorkspacePackage { name: Other("@fusionaura/web"), path: AnchoredSystemPathBuf("apps/web") }, WorkspacePackage { name: Other("@fusionaura/api"), path: AnchoredSystemPathBuf("apps/api") }}))
+2025-12-21T20:28:42.400696Z  WARN turborepo_lib::package_changes_watcher: hashes are the same, no need to rerun
+2025-12-21T20:28:42.402003Z  WARN turborepo_lib::package_changes_watcher: hashes are the same, no need to rerun
+2025-12-21T20:42:58.227084Z  WARN turborepo_lib::package_changes_watcher: changed_files: {AnchoredSystemPathBuf("apps/web/package.json")}
+2025-12-21T20:42:58.227353Z  WARN turborepo_lib::package_changes_watcher: changed_packages: Ok(Some({WorkspacePackage { name: Other("@fusionaura/web"), path: AnchoredSystemPathBuf("apps/web") }}))
+2025-12-21T20:43:03.345501Z  WARN turborepo_lib::package_changes_watcher: changed_files: {AnchoredSystemPathBuf("package-lock.json")}
+2025-12-21T20:43:03.345589Z  WARN turborepo_lib::package_changes_watcher: changed_packages: Ok(Some({WorkspacePackage { name: Root, path: AnchoredSystemPathBuf("") }}))
+2025-12-21T20:43:20.530843Z  WARN turborepo_lib::package_changes_watcher: changed_files: {AnchoredSystemPathBuf("apps/web/src/components/LoadingSpinner.tsx")}
+2025-12-21T20:43:20.531186Z  WARN turborepo_lib::package_changes_watcher: changed_packages: Ok(Some({WorkspacePackage { name: Other("@fusionaura/web"), path: AnchoredSystemPathBuf("apps/web") }}))
+2025-12-21T20:43:21.221821Z  WARN turborepo_lib::package_changes_watcher: changed_files: {AnchoredSystemPathBuf("apps/web/src/components/LoadingSpinner.tsx")}
+2025-12-21T20:43:21.221844Z  WARN turborepo_lib::package_changes_watcher: changed_packages: Ok(Some({WorkspacePackage { name: Other("@fusionaura/web"), path: AnchoredSystemPathBuf("apps/web") }}))
+2025-12-21T20:43:35.522201Z  WARN turborepo_lib::package_changes_watcher: changed_files: {AnchoredSystemPathBuf("apps/web/src/components/PageTransition.tsx")}
+2025-12-21T20:43:35.522220Z  WARN turborepo_lib::package_changes_watcher: changed_packages: Ok(Some({WorkspacePackage { name: Other("@fusionaura/web"), path: AnchoredSystemPathBuf("apps/web") }}))
+2025-12-21T20:43:36.521780Z  WARN turborepo_lib::package_changes_watcher: changed_files: {AnchoredSystemPathBuf("apps/web/src/components/PageTransition.tsx")}
+2025-12-21T20:43:36.521805Z  WARN turborepo_lib::package_changes_watcher: changed_packages: Ok(Some({WorkspacePackage { name: Other("@fusionaura/web"), path: AnchoredSystemPathBuf("apps/web") }}))
+2025-12-21T20:44:09.925343Z  WARN turborepo_lib::package_changes_watcher: changed_files: {AnchoredSystemPathBuf("apps/web/src/components/ProductCarousel.tsx")}
+2025-12-21T20:44:09.925441Z  WARN turborepo_lib::package_changes_watcher: changed_packages: Ok(Some({WorkspacePackage { name: Other("@fusionaura/web"), path: AnchoredSystemPathBuf("apps/web") }}))
+2025-12-21T20:44:10.822169Z  WARN turborepo_lib::package_changes_watcher: changed_files: {AnchoredSystemPathBuf("apps/web/src/components/ProductCarousel.tsx")}
+2025-12-21T20:44:10.822187Z  WARN turborepo_lib::package_changes_watcher: changed_packages: Ok(Some({WorkspacePackage { name: Other("@fusionaura/web"), path: AnchoredSystemPathBuf("apps/web") }}))
+2025-12-21T20:44:11.023525Z  WARN turborepo_lib::package_changes_watcher: changed_files: {AnchoredSystemPathBuf("apps/web/src/components/ProductCarousel.tsx")}
+2025-12-21T20:44:11.023539Z  WARN turborepo_lib::package_changes_watcher: changed_packages: Ok(Some({WorkspacePackage { name: Other("@fusionaura/web"), path: AnchoredSystemPathBuf("apps/web") }}))
+2025-12-21T20:44:11.025155Z  WARN turborepo_lib::package_changes_watcher: hashes are the same, no need to rerun
+2025-12-21T20:44:22.022254Z  WARN turborepo_lib::package_changes_watcher: changed_files: {AnchoredSystemPathBuf("apps/web/src/app/page.tsx")}
+2025-12-21T20:44:22.022458Z  WARN turborepo_lib::package_changes_watcher: changed_packages: Ok(Some({WorkspacePackage { name: Other("@fusionaura/web"), path: AnchoredSystemPathBuf("apps/web") }}))
+2025-12-21T20:44:32.422460Z  WARN turborepo_lib::package_changes_watcher: changed_files: {AnchoredSystemPathBuf("apps/web/src/app/page.tsx")}
+2025-12-21T20:44:32.422482Z  WARN turborepo_lib::package_changes_watcher: changed_packages: Ok(Some({WorkspacePackage { name: Other("@fusionaura/web"), path: AnchoredSystemPathBuf("apps/web") }}))
+2025-12-21T20:46:47.635682Z  WARN turborepo_lib::package_changes_watcher: changed_files: {AnchoredSystemPathBuf("apps/web/src/app/admin/orders/page.tsx")}
+2025-12-21T20:46:47.635774Z  WARN turborepo_lib::package_changes_watcher: changed_packages: Ok(Some({WorkspacePackage { name: Other("@fusionaura/web"), path: AnchoredSystemPathBuf("apps/web") }}))
+2025-12-21T20:46:59.536739Z  WARN turborepo_lib::package_changes_watcher: changed_files: {AnchoredSystemPathBuf("apps/web/src/app/admin/orders/page.tsx")}
+2025-12-21T20:46:59.536761Z  WARN turborepo_lib::package_changes_watcher: changed_packages: Ok(Some({WorkspacePackage { name: Other("@fusionaura/web"), path: AnchoredSystemPathBuf("apps/web") }}))
+2025-12-21T20:47:13.426674Z  WARN turborepo_lib::package_changes_watcher: changed_files: {AnchoredSystemPathBuf("apps/web/src/app/admin/orders/[id]/page.tsx")}
+2025-12-21T20:47:13.427368Z  WARN turborepo_lib::package_changes_watcher: changed_packages: Ok(Some({WorkspacePackage { name: Other("@fusionaura/web"), path: AnchoredSystemPathBuf("apps/web") }}))
+2025-12-21T20:47:13.526928Z  WARN turborepo_lib::package_changes_watcher: changed_files: {AnchoredSystemPathBuf("apps/web/src/app/admin/orders/[id]/page.tsx")}
+2025-12-21T20:47:13.526950Z  WARN turborepo_lib::package_changes_watcher: changed_packages: Ok(Some({WorkspacePackage { name: Other("@fusionaura/web"), path: AnchoredSystemPathBuf("apps/web") }}))
+2025-12-21T20:47:13.527014Z  WARN turborepo_lib::package_changes_watcher: hashes are the same, no need to rerun
+2025-12-21T20:47:19.526365Z  WARN turborepo_lib::package_changes_watcher: changed_files: {AnchoredSystemPathBuf("apps/web/src/app/admin/orders/[id]/page.tsx")}
+2025-12-21T20:47:19.526400Z  WARN turborepo_lib::package_changes_watcher: changed_packages: Ok(Some({WorkspacePackage { name: Other("@fusionaura/web"), path: AnchoredSystemPathBuf("apps/web") }}))
+2025-12-21T20:47:46.630053Z  WARN turborepo_lib::package_changes_watcher: changed_files: {AnchoredSystemPathBuf("apps/web/src/app/order-confirmation/[id]/page.tsx")}
+2025-12-21T20:47:46.630205Z  WARN turborepo_lib::package_changes_watcher: changed_packages: Ok(Some({WorkspacePackage { name: Other("@fusionaura/web"), path: AnchoredSystemPathBuf("apps/web") }}))
+2025-12-21T20:47:46.726511Z  WARN turborepo_lib::package_changes_watcher: changed_files: {AnchoredSystemPathBuf("apps/web/src/app/order-confirmation/[id]/page.tsx")}
+2025-12-21T20:47:46.726528Z  WARN turborepo_lib::package_changes_watcher: changed_packages: Ok(Some({WorkspacePackage { name: Other("@fusionaura/web"), path: AnchoredSystemPathBuf("apps/web") }}))
+2025-12-21T20:47:46.726598Z  WARN turborepo_lib::package_changes_watcher: hashes are the same, no need to rerun
+2025-12-21T20:48:25.927949Z  WARN turborepo_lib::package_changes_watcher: changed_files: {AnchoredSystemPathBuf("apps/web/src/app/checkout/cancel/page.tsx")}
+2025-12-21T20:48:25.927966Z  WARN turborepo_lib::package_changes_watcher: changed_packages: Ok(Some({WorkspacePackage { name: Other("@fusionaura/web"), path: AnchoredSystemPathBuf("apps/web") }}))
+2025-12-21T20:48:26.127623Z  WARN turborepo_lib::package_changes_watcher: changed_files: {AnchoredSystemPathBuf("apps/web/src/app/checkout/cancel/page.tsx")}
+2025-12-21T20:48:26.127635Z  WARN turborepo_lib::package_changes_watcher: changed_packages: Ok(Some({WorkspacePackage { name: Other("@fusionaura/web"), path: AnchoredSystemPathBuf("apps/web") }}))
+2025-12-21T20:48:26.127687Z  WARN turborepo_lib::package_changes_watcher: hashes are the same, no need to rerun
+2025-12-21T20:48:43.228585Z  WARN turborepo_lib::package_changes_watcher: changed_files: {AnchoredSystemPathBuf("apps/web/src/app/layout.tsx")}
+2025-12-21T20:48:43.228605Z  WARN turborepo_lib::package_changes_watcher: changed_packages: Ok(Some({WorkspacePackage { name: Other("@fusionaura/web"), path: AnchoredSystemPathBuf("apps/web") }}))
+2025-12-21T20:49:01.028316Z  WARN turborepo_lib::package_changes_watcher: changed_files: {AnchoredSystemPathBuf("apps/web/src/app/products/page.tsx")}
+2025-12-21T20:49:01.028349Z  WARN turborepo_lib::package_changes_watcher: changed_packages: Ok(Some({WorkspacePackage { name: Other("@fusionaura/web"), path: AnchoredSystemPathBuf("apps/web") }}))
+2025-12-21T20:49:27.729150Z  WARN turborepo_lib::package_changes_watcher: changed_files: {AnchoredSystemPathBuf("apps/web/src/app/orders/page.tsx")}
+2025-12-21T20:49:27.729176Z  WARN turborepo_lib::package_changes_watcher: changed_packages: Ok(Some({WorkspacePackage { name: Other("@fusionaura/web"), path: AnchoredSystemPathBuf("apps/web") }}))
+2025-12-21T20:50:16.529853Z  WARN turborepo_lib::package_changes_watcher: changed_files: {AnchoredSystemPathBuf("apps/web/src/app/layout.tsx")}
+2025-12-21T20:50:16.530139Z  WARN turborepo_lib::package_changes_watcher: changed_packages: Ok(Some({WorkspacePackage { name: Other("@fusionaura/web"), path: AnchoredSystemPathBuf("apps/web") }}))
+2025-12-21T20:50:30.530365Z  WARN turborepo_lib::package_changes_watcher: changed_files: {AnchoredSystemPathBuf("apps/web/src/app/checkout/page.tsx")}
+2025-12-21T20:50:30.530387Z  WARN turborepo_lib::package_changes_watcher: changed_packages: Ok(Some({WorkspacePackage { name: Other("@fusionaura/web"), path: AnchoredSystemPathBuf("apps/web") }}))
+2025-12-21T20:50:39.947734Z  WARN turborepo_lib::package_changes_watcher: changed_files: {AnchoredSystemPathBuf("apps/web/src/app/orders/[id]/page.tsx")}
+2025-12-21T20:50:39.947781Z  WARN turborepo_lib::package_changes_watcher: changed_packages: Ok(Some({WorkspacePackage { name: Other("@fusionaura/web"), path: AnchoredSystemPathBuf("apps/web") }}))
+2025-12-21T20:50:40.031265Z  WARN turborepo_lib::package_changes_watcher: changed_files: {AnchoredSystemPathBuf("apps/web/src/app/orders/[id]/page.tsx")}
+2025-12-21T20:50:40.031284Z  WARN turborepo_lib::package_changes_watcher: changed_packages: Ok(Some({WorkspacePackage { name: Other("@fusionaura/web"), path: AnchoredSystemPathBuf("apps/web") }}))
+2025-12-21T20:50:40.031341Z  WARN turborepo_lib::package_changes_watcher: hashes are the same, no need to rerun
+2025-12-21T20:51:17.033067Z  WARN turborepo_lib::package_changes_watcher: changed_files: {AnchoredSystemPathBuf("apps/web/src/app/admin/orders/[id]/page.tsx")}
+2025-12-21T20:51:17.033663Z  WARN turborepo_lib::package_changes_watcher: changed_packages: Ok(Some({WorkspacePackage { name: Other("@fusionaura/web"), path: AnchoredSystemPathBuf("apps/web") }}))
+2025-12-21T20:51:17.132069Z  WARN turborepo_lib::package_changes_watcher: changed_files: {AnchoredSystemPathBuf("apps/web/src/app/admin/orders/[id]/page.tsx")}
+2025-12-21T20:51:17.132088Z  WARN turborepo_lib::package_changes_watcher: changed_packages: Ok(Some({WorkspacePackage { name: Other("@fusionaura/web"), path: AnchoredSystemPathBuf("apps/web") }}))
+2025-12-21T20:51:17.135384Z  WARN turborepo_lib::package_changes_watcher: hashes are the same, no need to rerun
+2025-12-21T20:51:26.930751Z  WARN turborepo_lib::package_changes_watcher: changed_files: {AnchoredSystemPathBuf("apps/web/src/app/checkout/success/page.tsx")}
+2025-12-21T20:51:26.930768Z  WARN turborepo_lib::package_changes_watcher: changed_packages: Ok(Some({WorkspacePackage { name: Other("@fusionaura/web"), path: AnchoredSystemPathBuf("apps/web") }}))
+2025-12-21T20:51:55.332824Z  WARN turborepo_lib::package_changes_watcher: changed_files: {AnchoredSystemPathBuf("MULTIPLE_SESSIONS.md")}
+2025-12-21T20:51:55.332845Z  WARN turborepo_lib::package_changes_watcher: changed_packages: Ok(Some({WorkspacePackage { name: Root, path: AnchoredSystemPathBuf("") }}))
+2025-12-21T20:51:55.931817Z  WARN turborepo_lib::package_changes_watcher: changed_files: {AnchoredSystemPathBuf("MULTIPLE_SESSIONS.md")}
+2025-12-21T20:51:55.931843Z  WARN turborepo_lib::package_changes_watcher: changed_packages: Ok(Some({WorkspacePackage { name: Root, path: AnchoredSystemPathBuf("") }}))
+2025-12-21T20:52:12.433792Z  WARN turborepo_lib::package_changes_watcher: changed_files: {AnchoredSystemPathBuf("apps/web/src/components/RelatedProducts.tsx")}
+2025-12-21T20:52:12.433837Z  WARN turborepo_lib::package_changes_watcher: changed_packages: Ok(Some({WorkspacePackage { name: Other("@fusionaura/web"), path: AnchoredSystemPathBuf("apps/web") }}))
+2025-12-21T20:52:57.736947Z  WARN turborepo_lib::package_changes_watcher: changed_files: {AnchoredSystemPathBuf("apps/web/src/app/checkout/cancel/page.tsx")}
+2025-12-21T20:52:57.737128Z  WARN turborepo_lib::package_changes_watcher: changed_packages: Ok(Some({WorkspacePackage { name: Other("@fusionaura/web"), path: AnchoredSystemPathBuf("apps/web") }}))
+2025-12-21T20:53:22.340282Z  WARN turborepo_lib::package_changes_watcher: changed_files: {AnchoredSystemPathBuf("apps/web/src/app/layout.tsx"), AnchoredSystemPathBuf("apps/web/src/app/checkout/success/page.tsx"), AnchoredSystemPathBuf("apps/web/src/app/order-confirmation/[id]/page.tsx"), AnchoredSystemPathBuf("MULTIPLE_SESSIONS.md"), AnchoredSystemPathBuf("apps/web/src/app/checkout/cancel/page.tsx"), AnchoredSystemPathBuf("apps/web/src/app/admin/orders/[id]/page.tsx"), AnchoredSystemPathBuf("apps/web/src/app/orders/[id]/page.tsx"), AnchoredSystemPathBuf("apps/web/src/app/page.tsx"), AnchoredSystemPathBuf("apps/web/src/components/RelatedProducts.tsx"), AnchoredSystemPathBuf("apps/web/src/app/checkout/page.tsx"), AnchoredSystemPathBuf("apps/web/src/app/orders/page.tsx")}
+2025-12-21T20:53:22.340420Z  WARN turborepo_lib::package_changes_watcher: changed_packages: Ok(Some({WorkspacePackage { name: Root, path: AnchoredSystemPathBuf("") }, WorkspacePackage { name: Other("@fusionaura/web"), path: AnchoredSystemPathBuf("apps/web") }}))
+2025-12-21T20:53:22.433223Z  WARN turborepo_lib::package_changes_watcher: changed_files: {AnchoredSystemPathBuf("apps/web/src/app/admin/orders/[id]/page.tsx"), AnchoredSystemPathBuf("apps/web/src/components/PageTransition.tsx"), AnchoredSystemPathBuf("apps/web/src/app/page.tsx"), AnchoredSystemPathBuf("apps/web/src/app/checkout/cancel/page.tsx"), AnchoredSystemPathBuf("apps/web/src/app/checkout/page.tsx"), AnchoredSystemPathBuf("apps/web/src/components/LoadingSpinner.tsx"), AnchoredSystemPathBuf("apps/web/src/components/RelatedProducts.tsx"), AnchoredSystemPathBuf("apps/web/src/app/admin/orders/page.tsx"), AnchoredSystemPathBuf("apps/web/src/app/orders/page.tsx"), AnchoredSystemPathBuf("apps/web/src/app/products/page.tsx"), AnchoredSystemPathBuf("apps/web/src/app/checkout/success/page.tsx"), AnchoredSystemPathBuf("apps/web/src/app/order-confirmation/[id]/page.tsx"), AnchoredSystemPathBuf("apps/web/src/app/orders/[id]/page.tsx"), AnchoredSystemPathBuf("apps/web/src/components/ProductCarousel.tsx"), AnchoredSystemPathBuf("MULTIPLE_SESSIONS.md"), AnchoredSystemPathBuf("apps/web/src/app/layout.tsx")}
+2025-12-21T20:53:22.433241Z  WARN turborepo_lib::package_changes_watcher: changed_packages: Ok(Some({WorkspacePackage { name: Root, path: AnchoredSystemPathBuf("") }, WorkspacePackage { name: Other("@fusionaura/web"), path: AnchoredSystemPathBuf("apps/web") }}))
+2025-12-21T20:54:54.336485Z  WARN turborepo_lib::package_changes_watcher: changed_files: {AnchoredSystemPathBuf("apps/api/src/middleware/auth.ts")}
+2025-12-21T20:54:54.336769Z  WARN turborepo_lib::package_changes_watcher: changed_packages: Ok(Some({WorkspacePackage { name: Other("@fusionaura/api"), path: AnchoredSystemPathBuf("apps/api") }}))
+2025-12-21T20:55:26.436278Z  WARN turborepo_lib::package_changes_watcher: changed_files: {AnchoredSystemPathBuf("apps/web/src/app/admin/orders/page.tsx")}
+2025-12-21T20:55:26.436418Z  WARN turborepo_lib::package_changes_watcher: changed_packages: Ok(Some({WorkspacePackage { name: Other("@fusionaura/web"), path: AnchoredSystemPathBuf("apps/web") }}))
+2025-12-21T20:55:26.536116Z  WARN turborepo_lib::package_changes_watcher: changed_files: {AnchoredSystemPathBuf("apps/web/src/app/admin/orders/page.tsx")}
+2025-12-21T20:55:26.536211Z  WARN turborepo_lib::package_changes_watcher: changed_packages: Ok(Some({WorkspacePackage { name: Other("@fusionaura/web"), path: AnchoredSystemPathBuf("apps/web") }}))
+2025-12-21T20:55:26.536317Z  WARN turborepo_lib::package_changes_watcher: hashes are the same, no need to rerun
+2025-12-21T20:55:44.337176Z  WARN turborepo_lib::package_changes_watcher: changed_files: {AnchoredSystemPathBuf("apps/web/src/lib/api.ts")}
+2025-12-21T20:55:44.337217Z  WARN turborepo_lib::package_changes_watcher: changed_packages: Ok(Some({WorkspacePackage { name: Other("@fusionaura/web"), path: AnchoredSystemPathBuf("apps/web") }}))
+2025-12-21T20:56:11.439331Z  WARN turborepo_lib::package_changes_watcher: changed_files: {AnchoredSystemPathBuf("apps/web/src/app/admin/orders/page.tsx")}
+2025-12-21T20:56:11.439419Z  WARN turborepo_lib::package_changes_watcher: changed_packages: Ok(Some({WorkspacePackage { name: Other("@fusionaura/web"), path: AnchoredSystemPathBuf("apps/web") }}))
+2025-12-21T20:56:29.855097Z  WARN turborepo_lib::package_changes_watcher: changed_files: {AnchoredSystemPathBuf("apps/web/src/app/admin/orders/page.tsx"), AnchoredSystemPathBuf("apps/web/src/lib/api.ts"), AnchoredSystemPathBuf("apps/api/src/middleware/auth.ts")}
+2025-12-21T20:56:29.855162Z  WARN turborepo_lib::package_changes_watcher: changed_packages: Ok(Some({WorkspacePackage { name: Other("@fusionaura/web"), path: AnchoredSystemPathBuf("apps/web") }, WorkspacePackage { name: Other("@fusionaura/api"), path: AnchoredSystemPathBuf("apps/api") }}))
+2025-12-21T20:56:29.898818Z  WARN turborepo_lib::package_changes_watcher: hashes are the same, no need to rerun
+2025-12-21T20:56:29.898891Z  WARN turborepo_lib::package_changes_watcher: hashes are the same, no need to rerun
+2025-12-21T20:59:58.946576Z  WARN turborepo_lib::package_changes_watcher: changed_files: {AnchoredSystemPathBuf("apps/web/src/contexts/CartContext.tsx")}
+2025-12-21T20:59:58.946801Z  WARN turborepo_lib::package_changes_watcher: changed_packages: Ok(Some({WorkspacePackage { name: Other("@fusionaura/web"), path: AnchoredSystemPathBuf("apps/web") }}))
+2025-12-21T20:59:59.244330Z  WARN turborepo_lib::package_changes_watcher: changed_files: {AnchoredSystemPathBuf("apps/web/src/contexts/CartContext.tsx")}
+2025-12-21T20:59:59.244348Z  WARN turborepo_lib::package_changes_watcher: changed_packages: Ok(Some({WorkspacePackage { name: Other("@fusionaura/web"), path: AnchoredSystemPathBuf("apps/web") }}))
+2025-12-21T21:00:19.746634Z  WARN turborepo_lib::package_changes_watcher: changed_files: {AnchoredSystemPathBuf("apps/web/src/components/ProductCarousel.tsx")}
+2025-12-21T21:00:19.746675Z  WARN turborepo_lib::package_changes_watcher: changed_packages: Ok(Some({WorkspacePackage { name: Other("@fusionaura/web"), path: AnchoredSystemPathBuf("apps/web") }}))
+2025-12-21T21:00:35.546098Z  WARN turborepo_lib::package_changes_watcher: changed_files: {AnchoredSystemPathBuf("apps/web/src/components/HeaderNav.tsx")}
+2025-12-21T21:00:35.546119Z  WARN turborepo_lib::package_changes_watcher: changed_packages: Ok(Some({WorkspacePackage { name: Other("@fusionaura/web"), path: AnchoredSystemPathBuf("apps/web") }}))
+2025-12-21T21:00:50.244767Z  WARN turborepo_lib::package_changes_watcher: changed_files: {AnchoredSystemPathBuf("apps/web/src/app/layout.tsx")}
+2025-12-21T21:00:50.244832Z  WARN turborepo_lib::package_changes_watcher: changed_packages: Ok(Some({WorkspacePackage { name: Other("@fusionaura/web"), path: AnchoredSystemPathBuf("apps/web") }}))
+2025-12-21T21:01:02.446065Z  WARN turborepo_lib::package_changes_watcher: changed_files: {AnchoredSystemPathBuf("apps/web/src/app/layout.tsx")}
+2025-12-21T21:01:02.446083Z  WARN turborepo_lib::package_changes_watcher: changed_packages: Ok(Some({WorkspacePackage { name: Other("@fusionaura/web"), path: AnchoredSystemPathBuf("apps/web") }}))
+2025-12-21T21:01:12.046638Z  WARN turborepo_lib::package_changes_watcher: changed_files: {AnchoredSystemPathBuf("apps/web/src/app/page.tsx")}
+2025-12-21T21:01:12.046679Z  WARN turborepo_lib::package_changes_watcher: changed_packages: Ok(Some({WorkspacePackage { name: Other("@fusionaura/web"), path: AnchoredSystemPathBuf("apps/web") }}))
+2025-12-21T21:01:48.245826Z  WARN turborepo_lib::package_changes_watcher: changed_files: {AnchoredSystemPathBuf("apps/web/src/app/cart/page.tsx")}
+2025-12-21T21:01:48.245872Z  WARN turborepo_lib::package_changes_watcher: changed_packages: Ok(Some({WorkspacePackage { name: Other("@fusionaura/web"), path: AnchoredSystemPathBuf("apps/web") }}))
+2025-12-21T21:01:57.845475Z  WARN turborepo_lib::package_changes_watcher: changed_files: {AnchoredSystemPathBuf("apps/web/src/app/cart/page.tsx")}
+2025-12-21T21:01:57.845500Z  WARN turborepo_lib::package_changes_watcher: changed_packages: Ok(Some({WorkspacePackage { name: Other("@fusionaura/web"), path: AnchoredSystemPathBuf("apps/web") }}))
+2025-12-21T21:02:21.946951Z  WARN turborepo_lib::package_changes_watcher: changed_files: {AnchoredSystemPathBuf("apps/web/src/app/page.tsx")}
+2025-12-21T21:02:21.946991Z  WARN turborepo_lib::package_changes_watcher: changed_packages: Ok(Some({WorkspacePackage { name: Other("@fusionaura/web"), path: AnchoredSystemPathBuf("apps/web") }}))
+2025-12-21T21:02:48.857787Z  WARN turborepo_lib::package_changes_watcher: changed_files: {AnchoredSystemPathBuf("apps/web/src/components/AddToCartButton.tsx")}
+2025-12-21T21:02:48.857810Z  WARN turborepo_lib::package_changes_watcher: changed_packages: Ok(Some({WorkspacePackage { name: Other("@fusionaura/web"), path: AnchoredSystemPathBuf("apps/web") }}))
+2025-12-21T21:03:15.647759Z  WARN turborepo_lib::package_changes_watcher: changed_files: {AnchoredSystemPathBuf("apps/web/src/contexts/CartContext.tsx")}
+2025-12-21T21:03:15.647855Z  WARN turborepo_lib::package_changes_watcher: changed_packages: Ok(Some({WorkspacePackage { name: Other("@fusionaura/web"), path: AnchoredSystemPathBuf("apps/web") }}))
+2025-12-21T21:04:03.050717Z  WARN turborepo_lib::package_changes_watcher: changed_files: {AnchoredSystemPathBuf("apps/web/src/app/checkout/page.tsx")}
+2025-12-21T21:04:03.050806Z  WARN turborepo_lib::package_changes_watcher: changed_packages: Ok(Some({WorkspacePackage { name: Other("@fusionaura/web"), path: AnchoredSystemPathBuf("apps/web") }}))
+2025-12-21T21:04:03.150660Z  WARN turborepo_lib::package_changes_watcher: changed_files: {AnchoredSystemPathBuf("apps/web/src/app/checkout/page.tsx")}
+2025-12-21T21:04:03.150675Z  WARN turborepo_lib::package_changes_watcher: changed_packages: Ok(Some({WorkspacePackage { name: Other("@fusionaura/web"), path: AnchoredSystemPathBuf("apps/web") }}))
+2025-12-21T21:04:03.150852Z  WARN turborepo_lib::package_changes_watcher: hashes are the same, no need to rerun
+2025-12-21T21:04:32.397429Z  WARN turborepo_lib::package_changes_watcher: changed_files: {AnchoredSystemPathBuf("apps/web/src/app/layout.tsx"), AnchoredSystemPathBuf("apps/web/src/components/AddToCartButton.tsx"), AnchoredSystemPathBuf("apps/web/src/contexts/CartContext.tsx"), AnchoredSystemPathBuf("apps/web/src/app/page.tsx"), AnchoredSystemPathBuf("apps/web/src/components/HeaderNav.tsx")}
+2025-12-21T21:04:32.400079Z  WARN turborepo_lib::package_changes_watcher: changed_packages: Ok(Some({WorkspacePackage { name: Other("@fusionaura/web"), path: AnchoredSystemPathBuf("apps/web") }}))
+2025-12-21T21:04:32.501402Z  WARN turborepo_lib::package_changes_watcher: hashes are the same, no need to rerun
+2025-12-21T21:04:32.501711Z  WARN turborepo_lib::package_changes_watcher: changed_files: {AnchoredSystemPathBuf("apps/web/src/app/cart/page.tsx"), AnchoredSystemPathBuf("apps/web/src/components/HeaderNav.tsx"), AnchoredSystemPathBuf("apps/web/src/components/ProductCarousel.tsx"), AnchoredSystemPathBuf("apps/web/src/app/layout.tsx"), AnchoredSystemPathBuf("apps/web/src/components/AddToCartButton.tsx"), AnchoredSystemPathBuf("apps/web/src/contexts/CartContext.tsx"), AnchoredSystemPathBuf("apps/web/src/app/page.tsx"), AnchoredSystemPathBuf("apps/web/src/app/checkout/page.tsx")}
+2025-12-21T21:04:32.501725Z  WARN turborepo_lib::package_changes_watcher: changed_packages: Ok(Some({WorkspacePackage { name: Other("@fusionaura/web"), path: AnchoredSystemPathBuf("apps/web") }}))
+2025-12-21T21:04:32.501811Z  WARN turborepo_lib::package_changes_watcher: hashes are the same, no need to rerun
+2025-12-21T21:04:54.450202Z  WARN turborepo_lib::package_changes_watcher: changed_files: {AnchoredSystemPathBuf("apps/api/src/middleware/auth.ts")}
+2025-12-21T21:04:54.450261Z  WARN turborepo_lib::package_changes_watcher: changed_packages: Ok(Some({WorkspacePackage { name: Other("@fusionaura/api"), path: AnchoredSystemPathBuf("apps/api") }}))
+2025-12-21T21:04:54.461833Z  WARN turborepo_lib::package_changes_watcher: hashes are the same, no need to rerun
+2025-12-21T21:04:54.650861Z  WARN turborepo_lib::package_changes_watcher: changed_files: {AnchoredSystemPathBuf("apps/api/src/middleware/auth.ts")}
+2025-12-21T21:04:54.650883Z  WARN turborepo_lib::package_changes_watcher: changed_packages: Ok(Some({WorkspacePackage { name: Other("@fusionaura/api"), path: AnchoredSystemPathBuf("apps/api") }}))
+2025-12-21T21:04:54.650938Z  WARN turborepo_lib::package_changes_watcher: hashes are the same, no need to rerun
+2025-12-21T21:04:54.750067Z  WARN turborepo_lib::package_changes_watcher: changed_files: {AnchoredSystemPathBuf("apps/web/src/app/layout.tsx"), AnchoredSystemPathBuf("apps/web/src/app/page.tsx"), AnchoredSystemPathBuf("apps/web/src/app/checkout/success/page.tsx")}
+2025-12-21T21:04:54.750085Z  WARN turborepo_lib::package_changes_watcher: changed_packages: Ok(Some({WorkspacePackage { name: Other("@fusionaura/web"), path: AnchoredSystemPathBuf("apps/web") }}))
+2025-12-21T21:04:54.750220Z  WARN turborepo_lib::package_changes_watcher: hashes are the same, no need to rerun
+2025-12-21T21:04:54.849568Z  WARN turborepo_lib::package_changes_watcher: changed_files: {AnchoredSystemPathBuf("apps/web/src/app/checkout/cancel/page.tsx")}
+2025-12-21T21:04:54.849591Z  WARN turborepo_lib::package_changes_watcher: changed_packages: Ok(Some({WorkspacePackage { name: Other("@fusionaura/web"), path: AnchoredSystemPathBuf("apps/web") }}))
+2025-12-21T21:04:54.861264Z  WARN turborepo_lib::package_changes_watcher: hashes are the same, no need to rerun
+2025-12-21T21:04:55.449634Z  WARN turborepo_lib::package_changes_watcher: changed_files: {AnchoredSystemPathBuf("apps/web/src/lib/api.ts")}
+2025-12-21T21:04:55.449658Z  WARN turborepo_lib::package_changes_watcher: changed_packages: Ok(Some({WorkspacePackage { name: Other("@fusionaura/web"), path: AnchoredSystemPathBuf("apps/web") }}))
+2025-12-21T21:04:55.449729Z  WARN turborepo_lib::package_changes_watcher: hashes are the same, no need to rerun
+2025-12-21T21:04:55.550138Z  WARN turborepo_lib::package_changes_watcher: changed_files: {AnchoredSystemPathBuf("apps/web/src/app/checkout/page.tsx")}
+2025-12-21T21:04:55.550260Z  WARN turborepo_lib::package_changes_watcher: changed_packages: Ok(Some({WorkspacePackage { name: Other("@fusionaura/web"), path: AnchoredSystemPathBuf("apps/web") }}))
+2025-12-21T21:04:55.550333Z  WARN turborepo_lib::package_changes_watcher: hashes are the same, no need to rerun
+2025-12-21T21:04:55.649946Z  WARN turborepo_lib::package_changes_watcher: changed_files: {AnchoredSystemPathBuf("apps/web/src/app/orders/page.tsx"), AnchoredSystemPathBuf("apps/web/src/app/admin/orders/[id]/page.tsx"), AnchoredSystemPathBuf("apps/web/src/app/orders/[id]/page.tsx"), AnchoredSystemPathBuf("apps/web/src/components/AddToCartButton.tsx"), AnchoredSystemPathBuf("apps/web/src/components/HeaderNav.tsx")}
+2025-12-21T21:04:55.649969Z  WARN turborepo_lib::package_changes_watcher: changed_packages: Ok(Some({WorkspacePackage { name: Other("@fusionaura/web"), path: AnchoredSystemPathBuf("apps/web") }}))
+2025-12-21T21:04:55.650033Z  WARN turborepo_lib::package_changes_watcher: hashes are the same, no need to rerun
+2025-12-21T21:04:55.949732Z  WARN turborepo_lib::package_changes_watcher: changed_files: {AnchoredSystemPathBuf("apps/web/src/app/order-confirmation/[id]/page.tsx")}
+2025-12-21T21:04:55.949771Z  WARN turborepo_lib::package_changes_watcher: changed_packages: Ok(Some({WorkspacePackage { name: Other("@fusionaura/web"), path: AnchoredSystemPathBuf("apps/web") }}))
+2025-12-21T21:04:55.973019Z  WARN turborepo_lib::package_changes_watcher: hashes are the same, no need to rerun
+2025-12-21T21:04:56.249688Z  WARN turborepo_lib::package_changes_watcher: changed_files: {AnchoredSystemPathBuf("apps/web/src/components/RelatedProducts.tsx")}
+2025-12-21T21:04:56.249723Z  WARN turborepo_lib::package_changes_watcher: changed_packages: Ok(Some({WorkspacePackage { name: Other("@fusionaura/web"), path: AnchoredSystemPathBuf("apps/web") }}))
+2025-12-21T21:04:56.249839Z  WARN turborepo_lib::package_changes_watcher: hashes are the same, no need to rerun
+2025-12-21T21:10:14.359127Z  WARN turborepo_lib::package_changes_watcher: changed_files: {AnchoredSystemPathBuf("apps/web/src/components/ProductCarousel.tsx")}
+2025-12-21T21:10:14.359288Z  WARN turborepo_lib::package_changes_watcher: changed_packages: Ok(Some({WorkspacePackage { name: Other("@fusionaura/web"), path: AnchoredSystemPathBuf("apps/web") }}))
+2025-12-21T21:10:34.271478Z  WARN turborepo_lib::package_changes_watcher: changed_files: {AnchoredSystemPathBuf("apps/web/src/components/PageTransition.tsx")}
+2025-12-21T21:10:34.271515Z  WARN turborepo_lib::package_changes_watcher: changed_packages: Ok(Some({WorkspacePackage { name: Other("@fusionaura/web"), path: AnchoredSystemPathBuf("apps/web") }}))
+2025-12-21T21:10:57.358518Z  WARN turborepo_lib::package_changes_watcher: changed_files: {AnchoredSystemPathBuf("apps/web/src/components/PageTransition.tsx"), AnchoredSystemPathBuf("apps/web/src/components/ProductCarousel.tsx")}
+2025-12-21T21:10:57.359472Z  WARN turborepo_lib::package_changes_watcher: changed_packages: Ok(Some({WorkspacePackage { name: Other("@fusionaura/web"), path: AnchoredSystemPathBuf("apps/web") }}))
+2025-12-21T21:10:57.367726Z  WARN turborepo_lib::package_changes_watcher: hashes are the same, no need to rerun
+2025-12-21T21:10:57.457262Z  WARN turborepo_lib::package_changes_watcher: changed_files: {AnchoredSystemPathBuf("apps/web/src/components/PageTransition.tsx"), AnchoredSystemPathBuf("apps/web/src/components/ProductCarousel.tsx")}
+2025-12-21T21:10:57.457280Z  WARN turborepo_lib::package_changes_watcher: changed_packages: Ok(Some({WorkspacePackage { name: Other("@fusionaura/web"), path: AnchoredSystemPathBuf("apps/web") }}))
+2025-12-21T21:10:57.459599Z  WARN turborepo_lib::package_changes_watcher: hashes are the same, no need to rerun
+2025-12-21T21:13:13.166487Z  WARN turborepo_lib::package_changes_watcher: changed_files: {AnchoredSystemPathBuf("apps/web/src/components/ProductCarousel.tsx")}
+2025-12-21T21:13:13.166586Z  WARN turborepo_lib::package_changes_watcher: changed_packages: Ok(Some({WorkspacePackage { name: Other("@fusionaura/web"), path: AnchoredSystemPathBuf("apps/web") }}))
+2025-12-21T21:13:32.260283Z  WARN turborepo_lib::package_changes_watcher: changed_files: {AnchoredSystemPathBuf("apps/web/src/components/ProductCarousel.tsx")}
+2025-12-21T21:13:32.260300Z  WARN turborepo_lib::package_changes_watcher: changed_packages: Ok(Some({WorkspacePackage { name: Other("@fusionaura/web"), path: AnchoredSystemPathBuf("apps/web") }}))
+2025-12-21T21:13:32.460730Z  WARN turborepo_lib::package_changes_watcher: changed_files: {AnchoredSystemPathBuf("apps/web/src/components/ProductCarousel.tsx")}
+2025-12-21T21:13:32.460752Z  WARN turborepo_lib::package_changes_watcher: changed_packages: Ok(Some({WorkspacePackage { name: Other("@fusionaura/web"), path: AnchoredSystemPathBuf("apps/web") }}))
+2025-12-21T21:13:32.460823Z  WARN turborepo_lib::package_changes_watcher: hashes are the same, no need to rerun
+2025-12-21T21:14:03.870520Z  WARN turborepo_lib::package_changes_watcher: changed_files: {AnchoredSystemPathBuf("apps/web/src/components/ProductCarousel.tsx")}
+2025-12-21T21:14:03.870694Z  WARN turborepo_lib::package_changes_watcher: changed_packages: Ok(Some({WorkspacePackage { name: Other("@fusionaura/web"), path: AnchoredSystemPathBuf("apps/web") }}))
+2025-12-21T21:14:03.959396Z  WARN turborepo_lib::package_changes_watcher: changed_files: {AnchoredSystemPathBuf("apps/web/src/components/ProductCarousel.tsx")}
+2025-12-21T21:14:03.959417Z  WARN turborepo_lib::package_changes_watcher: changed_packages: Ok(Some({WorkspacePackage { name: Other("@fusionaura/web"), path: AnchoredSystemPathBuf("apps/web") }}))
+2025-12-21T21:14:03.959520Z  WARN turborepo_lib::package_changes_watcher: hashes are the same, no need to rerun
+2025-12-21T21:14:16.860754Z  WARN turborepo_lib::package_changes_watcher: changed_files: {AnchoredSystemPathBuf("apps/web/src/components/ProductCarousel.tsx")}
+2025-12-21T21:14:16.860804Z  WARN turborepo_lib::package_changes_watcher: changed_packages: Ok(Some({WorkspacePackage { name: Other("@fusionaura/web"), path: AnchoredSystemPathBuf("apps/web") }}))
+2025-12-21T21:14:16.958956Z  WARN turborepo_lib::package_changes_watcher: changed_files: {AnchoredSystemPathBuf("apps/web/src/components/ProductCarousel.tsx")}
+2025-12-21T21:14:16.958972Z  WARN turborepo_lib::package_changes_watcher: changed_packages: Ok(Some({WorkspacePackage { name: Other("@fusionaura/web"), path: AnchoredSystemPathBuf("apps/web") }}))
+2025-12-21T21:14:16.959043Z  WARN turborepo_lib::package_changes_watcher: hashes are the same, no need to rerun
+2025-12-21T21:14:38.160912Z  WARN turborepo_lib::package_changes_watcher: changed_files: {AnchoredSystemPathBuf("apps/web/src/components/ProductCarousel.tsx")}
+2025-12-21T21:14:38.160949Z  WARN turborepo_lib::package_changes_watcher: changed_packages: Ok(Some({WorkspacePackage { name: Other("@fusionaura/web"), path: AnchoredSystemPathBuf("apps/web") }}))
+2025-12-21T21:14:38.235678Z  WARN turborepo_lib::package_changes_watcher: hashes are the same, no need to rerun
+2025-12-21T21:14:38.258629Z  WARN turborepo_lib::package_changes_watcher: changed_files: {AnchoredSystemPathBuf("apps/web/src/components/ProductCarousel.tsx")}
+2025-12-21T21:14:38.258644Z  WARN turborepo_lib::package_changes_watcher: changed_packages: Ok(Some({WorkspacePackage { name: Other("@fusionaura/web"), path: AnchoredSystemPathBuf("apps/web") }}))
+2025-12-21T21:14:38.258706Z  WARN turborepo_lib::package_changes_watcher: hashes are the same, no need to rerun
+2025-12-21T21:16:10.960472Z  WARN turborepo_lib::package_changes_watcher: changed_files: {AnchoredSystemPathBuf("apps/web/src/app/page.tsx")}
+2025-12-21T21:16:10.960615Z  WARN turborepo_lib::package_changes_watcher: changed_packages: Ok(Some({WorkspacePackage { name: Other("@fusionaura/web"), path: AnchoredSystemPathBuf("apps/web") }}))
+2025-12-21T21:16:25.862777Z  WARN turborepo_lib::package_changes_watcher: changed_files: {AnchoredSystemPathBuf("apps/web/src/app/page.tsx")}
+2025-12-21T21:16:25.862799Z  WARN turborepo_lib::package_changes_watcher: changed_packages: Ok(Some({WorkspacePackage { name: Other("@fusionaura/web"), path: AnchoredSystemPathBuf("apps/web") }}))
+2025-12-21T21:19:22.779116Z  WARN turborepo_lib::package_changes_watcher: changed_files: {AnchoredSystemPathBuf("apps/web/src/app/page.tsx")}
+2025-12-21T21:19:22.779398Z  WARN turborepo_lib::package_changes_watcher: changed_packages: Ok(Some({WorkspacePackage { name: Other("@fusionaura/web"), path: AnchoredSystemPathBuf("apps/web") }}))
+2025-12-21T21:19:22.804734Z  WARN turborepo_lib::package_changes_watcher: hashes are the same, no need to rerun
+2025-12-21T21:28:05.775842Z  WARN turborepo_lib::package_changes_watcher: changed_files: {AnchoredSystemPathBuf("apps/web/src/app/admin/orders/page.tsx")}
+2025-12-21T21:28:05.775990Z  WARN turborepo_lib::package_changes_watcher: changed_packages: Ok(Some({WorkspacePackage { name: Other("@fusionaura/web"), path: AnchoredSystemPathBuf("apps/web") }}))
+2025-12-21T21:28:05.875347Z  WARN turborepo_lib::package_changes_watcher: changed_files: {AnchoredSystemPathBuf("apps/web/src/app/admin/orders/page.tsx")}
+2025-12-21T21:28:05.875363Z  WARN turborepo_lib::package_changes_watcher: changed_packages: Ok(Some({WorkspacePackage { name: Other("@fusionaura/web"), path: AnchoredSystemPathBuf("apps/web") }}))
+2025-12-21T21:28:05.875459Z  WARN turborepo_lib::package_changes_watcher: hashes are the same, no need to rerun
+2025-12-21T21:28:30.698949Z  WARN turborepo_lib::package_changes_watcher: changed_files: {AnchoredSystemPathBuf("apps/web/src/app/admin/orders/page.tsx")}
+2025-12-21T21:28:30.699023Z  WARN turborepo_lib::package_changes_watcher: changed_packages: Ok(Some({WorkspacePackage { name: Other("@fusionaura/web"), path: AnchoredSystemPathBuf("apps/web") }}))
+2025-12-21T21:28:30.740042Z  WARN turborepo_lib::package_changes_watcher: hashes are the same, no need to rerun
+2025-12-21T21:28:30.775784Z  WARN turborepo_lib::package_changes_watcher: changed_files: {AnchoredSystemPathBuf("apps/web/src/app/admin/orders/page.tsx")}
+2025-12-21T21:28:30.775794Z  WARN turborepo_lib::package_changes_watcher: changed_packages: Ok(Some({WorkspacePackage { name: Other("@fusionaura/web"), path: AnchoredSystemPathBuf("apps/web") }}))
+2025-12-21T21:28:30.775853Z  WARN turborepo_lib::package_changes_watcher: hashes are the same, no need to rerun
+2025-12-21T21:49:51.590886Z  WARN turborepo_lib::package_changes_watcher: changed_files: {AnchoredSystemPathBuf("apps/web/src/app/orders/[id]/page.tsx")}
+2025-12-21T21:49:51.590939Z  WARN turborepo_lib::package_changes_watcher: changed_packages: Ok(Some({WorkspacePackage { name: Other("@fusionaura/web"), path: AnchoredSystemPathBuf("apps/web") }}))
+2025-12-21T21:50:04.691836Z  WARN turborepo_lib::package_changes_watcher: changed_files: {AnchoredSystemPathBuf("apps/web/src/app/admin/orders/[id]/page.tsx")}
+2025-12-21T21:50:04.691897Z  WARN turborepo_lib::package_changes_watcher: changed_packages: Ok(Some({WorkspacePackage { name: Other("@fusionaura/web"), path: AnchoredSystemPathBuf("apps/web") }}))
+2025-12-21T21:50:18.502975Z  WARN turborepo_lib::package_changes_watcher: changed_files: {AnchoredSystemPathBuf("apps/web/src/app/orders/[id]/page.tsx")}
+2025-12-21T21:50:18.503093Z  WARN turborepo_lib::package_changes_watcher: changed_packages: Ok(Some({WorkspacePackage { name: Other("@fusionaura/web"), path: AnchoredSystemPathBuf("apps/web") }}))
+2025-12-21T21:50:29.183846Z  WARN turborepo_lib::package_changes_watcher: changed_files: {AnchoredSystemPathBuf("packages/db/prisma/schema.prisma")}
+2025-12-21T21:50:29.183886Z  WARN turborepo_lib::package_changes_watcher: changed_packages: Ok(Some({WorkspacePackage { name: Other("@fusionaura/db"), path: AnchoredSystemPathBuf("packages/db") }}))
+2025-12-21T21:50:44.183131Z  WARN turborepo_lib::package_changes_watcher: changed_files: {AnchoredSystemPathBuf("apps/api/src/routes/orders.ts")}
+2025-12-21T21:50:44.183191Z  WARN turborepo_lib::package_changes_watcher: changed_packages: Ok(Some({WorkspacePackage { name: Other("@fusionaura/api"), path: AnchoredSystemPathBuf("apps/api") }}))
+2025-12-21T21:51:50.226261Z  WARN turborepo_lib::package_changes_watcher: changed_files: {AnchoredSystemPathBuf("apps/api/src/routes/orders.ts")}
+2025-12-21T21:51:50.227440Z  WARN turborepo_lib::package_changes_watcher: changed_packages: Ok(Some({WorkspacePackage { name: Other("@fusionaura/api"), path: AnchoredSystemPathBuf("apps/api") }}))
+2025-12-21T21:51:50.285627Z  WARN turborepo_lib::package_changes_watcher: changed_files: {AnchoredSystemPathBuf("apps/api/src/routes/orders.ts")}
+2025-12-21T21:51:50.285644Z  WARN turborepo_lib::package_changes_watcher: changed_packages: Ok(Some({WorkspacePackage { name: Other("@fusionaura/api"), path: AnchoredSystemPathBuf("apps/api") }}))
+2025-12-21T21:51:50.367671Z  WARN turborepo_lib::package_changes_watcher: hashes are the same, no need to rerun
+2025-12-21T21:52:11.985097Z  WARN turborepo_lib::package_changes_watcher: changed_files: {AnchoredSystemPathBuf("apps/api/src/routes/orders.ts")}
+2025-12-21T21:52:11.985226Z  WARN turborepo_lib::package_changes_watcher: changed_packages: Ok(Some({WorkspacePackage { name: Other("@fusionaura/api"), path: AnchoredSystemPathBuf("apps/api") }}))
+2025-12-21T21:52:47.088131Z  WARN turborepo_lib::package_changes_watcher: changed_files: {AnchoredSystemPathBuf("apps/web/src/app/admin/orders/[id]/page.tsx")}
+2025-12-21T21:52:47.088153Z  WARN turborepo_lib::package_changes_watcher: changed_packages: Ok(Some({WorkspacePackage { name: Other("@fusionaura/web"), path: AnchoredSystemPathBuf("apps/web") }}))
+2025-12-21T21:53:29.087428Z  WARN turborepo_lib::package_changes_watcher: changed_files: {AnchoredSystemPathBuf("apps/web/src/app/admin/orders/[id]/page.tsx")}
+2025-12-21T21:53:29.087555Z  WARN turborepo_lib::package_changes_watcher: changed_packages: Ok(Some({WorkspacePackage { name: Other("@fusionaura/web"), path: AnchoredSystemPathBuf("apps/web") }}))
+2025-12-21T21:53:57.087956Z  WARN turborepo_lib::package_changes_watcher: changed_files: {AnchoredSystemPathBuf("apps/web/src/app/admin/orders/[id]/page.tsx")}
+2025-12-21T21:53:57.088062Z  WARN turborepo_lib::package_changes_watcher: changed_packages: Ok(Some({WorkspacePackage { name: Other("@fusionaura/web"), path: AnchoredSystemPathBuf("apps/web") }}))
+2025-12-21T21:53:57.187929Z  WARN turborepo_lib::package_changes_watcher: changed_files: {AnchoredSystemPathBuf("apps/web/src/app/admin/orders/[id]/page.tsx")}
+2025-12-21T21:53:57.188068Z  WARN turborepo_lib::package_changes_watcher: changed_packages: Ok(Some({WorkspacePackage { name: Other("@fusionaura/web"), path: AnchoredSystemPathBuf("apps/web") }}))
+2025-12-21T21:53:57.188175Z  WARN turborepo_lib::package_changes_watcher: hashes are the same, no need to rerun
+2025-12-21T21:54:18.293422Z  WARN turborepo_lib::package_changes_watcher: changed_files: {AnchoredSystemPathBuf("apps/web/src/app/admin/orders/[id]/page.tsx")}
+2025-12-21T21:54:18.293446Z  WARN turborepo_lib::package_changes_watcher: changed_packages: Ok(Some({WorkspacePackage { name: Other("@fusionaura/web"), path: AnchoredSystemPathBuf("apps/web") }}))
+2025-12-21T21:55:12.291518Z  WARN turborepo_lib::package_changes_watcher: changed_files: {AnchoredSystemPathBuf("apps/web/src/app/admin/orders/[id]/page.tsx")}
+2025-12-21T21:55:12.291645Z  WARN turborepo_lib::package_changes_watcher: changed_packages: Ok(Some({WorkspacePackage { name: Other("@fusionaura/web"), path: AnchoredSystemPathBuf("apps/web") }}))
+2025-12-21T21:55:30.188301Z  WARN turborepo_lib::package_changes_watcher: changed_files: {AnchoredSystemPathBuf("apps/web/src/app/admin/orders/[id]/page.tsx")}
+2025-12-21T21:55:30.188322Z  WARN turborepo_lib::package_changes_watcher: changed_packages: Ok(Some({WorkspacePackage { name: Other("@fusionaura/web"), path: AnchoredSystemPathBuf("apps/web") }}))
+2025-12-21T21:55:30.289048Z  WARN turborepo_lib::package_changes_watcher: changed_files: {AnchoredSystemPathBuf("apps/web/src/app/admin/orders/[id]/page.tsx")}
+2025-12-21T21:55:30.289070Z  WARN turborepo_lib::package_changes_watcher: changed_packages: Ok(Some({WorkspacePackage { name: Other("@fusionaura/web"), path: AnchoredSystemPathBuf("apps/web") }}))
+2025-12-21T21:55:30.290054Z  WARN turborepo_lib::package_changes_watcher: hashes are the same, no need to rerun
+2025-12-21T21:56:20.788621Z  WARN turborepo_lib::package_changes_watcher: changed_files: {AnchoredSystemPathBuf("apps/api/src/routes/orders.ts")}
+2025-12-21T21:56:20.788641Z  WARN turborepo_lib::package_changes_watcher: changed_packages: Ok(Some({WorkspacePackage { name: Other("@fusionaura/api"), path: AnchoredSystemPathBuf("apps/api") }}))
+2025-12-21T21:56:21.089373Z  WARN turborepo_lib::package_changes_watcher: changed_files: {AnchoredSystemPathBuf("apps/api/src/routes/orders.ts")}
+2025-12-21T21:56:21.089396Z  WARN turborepo_lib::package_changes_watcher: changed_packages: Ok(Some({WorkspacePackage { name: Other("@fusionaura/api"), path: AnchoredSystemPathBuf("apps/api") }}))
+2025-12-21T21:56:21.089455Z  WARN turborepo_lib::package_changes_watcher: hashes are the same, no need to rerun
+2025-12-21T21:57:02.690581Z  WARN turborepo_lib::package_changes_watcher: changed_files: {AnchoredSystemPathBuf("apps/api/src/routes/orders.ts")}
+2025-12-21T21:57:02.690666Z  WARN turborepo_lib::package_changes_watcher: changed_packages: Ok(Some({WorkspacePackage { name: Other("@fusionaura/api"), path: AnchoredSystemPathBuf("apps/api") }}))
+2025-12-21T21:57:02.990105Z  WARN turborepo_lib::package_changes_watcher: changed_files: {AnchoredSystemPathBuf("apps/api/src/routes/orders.ts")}
+2025-12-21T21:57:02.990119Z  WARN turborepo_lib::package_changes_watcher: changed_packages: Ok(Some({WorkspacePackage { name: Other("@fusionaura/api"), path: AnchoredSystemPathBuf("apps/api") }}))
+2025-12-21T21:57:02.990165Z  WARN turborepo_lib::package_changes_watcher: hashes are the same, no need to rerun
+2025-12-21T21:57:24.990261Z  WARN turborepo_lib::package_changes_watcher: changed_files: {AnchoredSystemPathBuf("apps/api/src/routes/orders.ts")}
+2025-12-21T21:57:24.990283Z  WARN turborepo_lib::package_changes_watcher: changed_packages: Ok(Some({WorkspacePackage { name: Other("@fusionaura/api"), path: AnchoredSystemPathBuf("apps/api") }}))
+2025-12-21T21:57:47.890394Z  WARN turborepo_lib::package_changes_watcher: changed_files: {AnchoredSystemPathBuf("apps/api/src/routes/orders.ts")}
+2025-12-21T21:57:47.890474Z  WARN turborepo_lib::package_changes_watcher: changed_packages: Ok(Some({WorkspacePackage { name: Other("@fusionaura/api"), path: AnchoredSystemPathBuf("apps/api") }}))
+2025-12-21T21:57:47.993875Z  WARN turborepo_lib::package_changes_watcher: changed_files: {AnchoredSystemPathBuf("apps/api/src/routes/orders.ts")}
+2025-12-21T21:57:47.993979Z  WARN turborepo_lib::package_changes_watcher: changed_packages: Ok(Some({WorkspacePackage { name: Other("@fusionaura/api"), path: AnchoredSystemPathBuf("apps/api") }}))
+2025-12-21T21:57:47.994142Z  WARN turborepo_lib::package_changes_watcher: hashes are the same, no need to rerun
+2025-12-21T21:58:16.290852Z  WARN turborepo_lib::package_changes_watcher: changed_files: {AnchoredSystemPathBuf("apps/api/src/routes/orders.ts")}
+2025-12-21T21:58:16.290872Z  WARN turborepo_lib::package_changes_watcher: changed_packages: Ok(Some({WorkspacePackage { name: Other("@fusionaura/api"), path: AnchoredSystemPathBuf("apps/api") }}))
+2025-12-21T21:58:36.126381Z  WARN turborepo_lib::package_changes_watcher: changed_files: {AnchoredSystemPathBuf("apps/api/src/routes/orders.ts")}
+2025-12-21T21:58:36.126411Z  WARN turborepo_lib::package_changes_watcher: changed_packages: Ok(Some({WorkspacePackage { name: Other("@fusionaura/api"), path: AnchoredSystemPathBuf("apps/api") }}))
+2025-12-21T21:58:58.093496Z  WARN turborepo_lib::package_changes_watcher: changed_files: {AnchoredSystemPathBuf("apps/api/src/routes/orders.ts")}
+2025-12-21T21:58:58.093513Z  WARN turborepo_lib::package_changes_watcher: changed_packages: Ok(Some({WorkspacePackage { name: Other("@fusionaura/api"), path: AnchoredSystemPathBuf("apps/api") }}))
+2025-12-21T21:59:18.092849Z  WARN turborepo_lib::package_changes_watcher: changed_files: {AnchoredSystemPathBuf("apps/api/src/routes/orders.ts")}
+2025-12-21T21:59:18.092912Z  WARN turborepo_lib::package_changes_watcher: changed_packages: Ok(Some({WorkspacePackage { name: Other("@fusionaura/api"), path: AnchoredSystemPathBuf("apps/api") }}))
+2025-12-21T22:01:01.995450Z  WARN turborepo_lib::package_changes_watcher: changed_files: {AnchoredSystemPathBuf("apps/api/src/routes/orders.ts")}
+2025-12-21T22:01:01.995524Z  WARN turborepo_lib::package_changes_watcher: changed_packages: Ok(Some({WorkspacePackage { name: Other("@fusionaura/api"), path: AnchoredSystemPathBuf("apps/api") }}))
+2025-12-21T22:01:30.595286Z  WARN turborepo_lib::package_changes_watcher: changed_files: {AnchoredSystemPathBuf("packages/db/prisma/schema.prisma"), AnchoredSystemPathBuf("apps/api/src/routes/orders.ts"), AnchoredSystemPathBuf("apps/web/src/app/orders/[id]/page.tsx"), AnchoredSystemPathBuf("apps/web/src/app/admin/orders/[id]/page.tsx")}
+2025-12-21T22:01:30.595314Z  WARN turborepo_lib::package_changes_watcher: changed_packages: Ok(Some({WorkspacePackage { name: Other("@fusionaura/api"), path: AnchoredSystemPathBuf("apps/api") }, WorkspacePackage { name: Other("@fusionaura/web"), path: AnchoredSystemPathBuf("apps/web") }, WorkspacePackage { name: Other("@fusionaura/db"), path: AnchoredSystemPathBuf("packages/db") }}))
+2025-12-21T22:01:30.597737Z  WARN turborepo_lib::package_changes_watcher: hashes are the same, no need to rerun
+2025-12-21T22:01:30.613570Z  WARN turborepo_lib::package_changes_watcher: hashes are the same, no need to rerun
+2025-12-21T22:01:30.613621Z  WARN turborepo_lib::package_changes_watcher: hashes are the same, no need to rerun
+2025-12-21T22:06:36.000327Z  WARN turborepo_lib::package_changes_watcher: changed_files: {AnchoredSystemPathBuf("apps/web/src/app/admin/orders/page.tsx")}
+2025-12-21T22:06:36.000427Z  WARN turborepo_lib::package_changes_watcher: changed_packages: Ok(Some({WorkspacePackage { name: Other("@fusionaura/web"), path: AnchoredSystemPathBuf("apps/web") }}))
+2025-12-21T22:06:50.594469Z  WARN turborepo_lib::package_changes_watcher: changed_files: {AnchoredSystemPathBuf("apps/web/src/app/admin/orders/page.tsx")}
+2025-12-21T22:06:50.594580Z  WARN turborepo_lib::package_changes_watcher: changed_packages: Ok(Some({WorkspacePackage { name: Other("@fusionaura/web"), path: AnchoredSystemPathBuf("apps/web") }}))
+2025-12-21T22:07:06.395419Z  WARN turborepo_lib::package_changes_watcher: changed_files: {AnchoredSystemPathBuf("apps/web/src/app/admin/orders/page.tsx")}
+2025-12-21T22:07:06.395825Z  WARN turborepo_lib::package_changes_watcher: changed_packages: Ok(Some({WorkspacePackage { name: Other("@fusionaura/web"), path: AnchoredSystemPathBuf("apps/web") }}))
+2025-12-21T22:07:31.596170Z  WARN turborepo_lib::package_changes_watcher: changed_files: {AnchoredSystemPathBuf("apps/web/src/app/admin/orders/page.tsx")}
+2025-12-21T22:07:31.596190Z  WARN turborepo_lib::package_changes_watcher: changed_packages: Ok(Some({WorkspacePackage { name: Other("@fusionaura/web"), path: AnchoredSystemPathBuf("apps/web") }}))
+2025-12-21T22:07:46.994095Z  WARN turborepo_lib::package_changes_watcher: changed_files: {AnchoredSystemPathBuf("apps/web/src/app/admin/orders/page.tsx")}
+2025-12-21T22:07:46.994143Z  WARN turborepo_lib::package_changes_watcher: changed_packages: Ok(Some({WorkspacePackage { name: Other("@fusionaura/web"), path: AnchoredSystemPathBuf("apps/web") }}))
+2025-12-21T22:07:47.003823Z  WARN turborepo_lib::package_changes_watcher: hashes are the same, no need to rerun
+2025-12-21T22:14:30.847862Z  WARN turborepo_lib::package_changes_watcher: changed_files: {AnchoredSystemPathBuf("apps/web/src/app/checkout/page.tsx")}
+2025-12-21T22:14:30.847985Z  WARN turborepo_lib::package_changes_watcher: changed_packages: Ok(Some({WorkspacePackage { name: Other("@fusionaura/web"), path: AnchoredSystemPathBuf("apps/web") }}))
+2025-12-21T22:14:30.907265Z  WARN turborepo_lib::package_changes_watcher: changed_files: {AnchoredSystemPathBuf("apps/web/src/app/checkout/page.tsx")}
+2025-12-21T22:14:30.907280Z  WARN turborepo_lib::package_changes_watcher: changed_packages: Ok(Some({WorkspacePackage { name: Other("@fusionaura/web"), path: AnchoredSystemPathBuf("apps/web") }}))
+2025-12-21T22:14:30.907352Z  WARN turborepo_lib::package_changes_watcher: hashes are the same, no need to rerun
+2025-12-21T22:15:08.702657Z  WARN turborepo_lib::package_changes_watcher: changed_files: {AnchoredSystemPathBuf("apps/api/src/routes/orders.ts")}
+2025-12-21T22:15:08.702680Z  WARN turborepo_lib::package_changes_watcher: changed_packages: Ok(Some({WorkspacePackage { name: Other("@fusionaura/api"), path: AnchoredSystemPathBuf("apps/api") }}))
+2025-12-21T22:15:50.802779Z  WARN turborepo_lib::package_changes_watcher: changed_files: {AnchoredSystemPathBuf("apps/web/src/app/checkout/page.tsx"), AnchoredSystemPathBuf("apps/api/src/routes/orders.ts")}
+2025-12-21T22:15:50.803030Z  WARN turborepo_lib::package_changes_watcher: changed_packages: Ok(Some({WorkspacePackage { name: Other("@fusionaura/api"), path: AnchoredSystemPathBuf("apps/api") }, WorkspacePackage { name: Other("@fusionaura/web"), path: AnchoredSystemPathBuf("apps/web") }}))
+2025-12-21T22:15:50.803206Z  WARN turborepo_lib::package_changes_watcher: hashes are the same, no need to rerun
+2025-12-21T22:15:50.803483Z  WARN turborepo_lib::package_changes_watcher: hashes are the same, no need to rerun
+2025-12-21T22:19:59.805706Z  WARN turborepo_lib::package_changes_watcher: changed_files: {AnchoredSystemPathBuf("apps/web/src/app/order-confirmation/[id]/page.tsx")}
+2025-12-21T22:19:59.805785Z  WARN turborepo_lib::package_changes_watcher: changed_packages: Ok(Some({WorkspacePackage { name: Other("@fusionaura/web"), path: AnchoredSystemPathBuf("apps/web") }}))
+2025-12-21T22:20:33.611042Z  WARN turborepo_lib::package_changes_watcher: changed_files: {AnchoredSystemPathBuf("apps/web/src/app/order-confirmation/[id]/page.tsx")}
+2025-12-21T22:20:33.611102Z  WARN turborepo_lib::package_changes_watcher: changed_packages: Ok(Some({WorkspacePackage { name: Other("@fusionaura/web"), path: AnchoredSystemPathBuf("apps/web") }}))
+2025-12-21T22:20:33.643429Z  WARN turborepo_lib::package_changes_watcher: hashes are the same, no need to rerun
+2025-12-21T22:20:33.806635Z  WARN turborepo_lib::package_changes_watcher: changed_files: {AnchoredSystemPathBuf("apps/web/src/app/order-confirmation/[id]/page.tsx")}
+2025-12-21T22:20:33.806656Z  WARN turborepo_lib::package_changes_watcher: changed_packages: Ok(Some({WorkspacePackage { name: Other("@fusionaura/web"), path: AnchoredSystemPathBuf("apps/web") }}))
+2025-12-21T22:20:33.806729Z  WARN turborepo_lib::package_changes_watcher: hashes are the same, no need to rerun
+2025-12-21T22:26:01.107999Z  WARN turborepo_lib::package_changes_watcher: changed_files: {AnchoredSystemPathBuf("apps/web/src/app/admin/orders/page.tsx")}
+2025-12-21T22:26:01.108120Z  WARN turborepo_lib::package_changes_watcher: changed_packages: Ok(Some({WorkspacePackage { name: Other("@fusionaura/web"), path: AnchoredSystemPathBuf("apps/web") }}))
+2025-12-21T22:26:01.205280Z  WARN turborepo_lib::package_changes_watcher: changed_files: {AnchoredSystemPathBuf("apps/web/src/app/admin/orders/page.tsx")}
+2025-12-21T22:26:01.205382Z  WARN turborepo_lib::package_changes_watcher: changed_packages: Ok(Some({WorkspacePackage { name: Other("@fusionaura/web"), path: AnchoredSystemPathBuf("apps/web") }}))
+2025-12-21T22:26:01.205856Z  WARN turborepo_lib::package_changes_watcher: hashes are the same, no need to rerun
+2025-12-21T22:26:26.102960Z  WARN turborepo_lib::package_changes_watcher: changed_files: {AnchoredSystemPathBuf("apps/web/src/app/admin/orders/page.tsx")}
+2025-12-21T22:26:26.103429Z  WARN turborepo_lib::package_changes_watcher: changed_packages: Ok(Some({WorkspacePackage { name: Other("@fusionaura/web"), path: AnchoredSystemPathBuf("apps/web") }}))
+2025-12-21T22:26:26.106803Z  WARN turborepo_lib::package_changes_watcher: hashes are the same, no need to rerun
+2025-12-21T22:29:55.708918Z  WARN turborepo_lib::package_changes_watcher: changed_files: {AnchoredSystemPathBuf("apps/web/src/app/admin/orders/page.tsx")}
+2025-12-21T22:29:55.709041Z  WARN turborepo_lib::package_changes_watcher: changed_packages: Ok(Some({WorkspacePackage { name: Other("@fusionaura/web"), path: AnchoredSystemPathBuf("apps/web") }}))
+2025-12-21T22:30:20.905309Z  WARN turborepo_lib::package_changes_watcher: changed_files: {AnchoredSystemPathBuf("apps/web/src/app/admin/orders/page.tsx")}
+2025-12-21T22:30:20.905495Z  WARN turborepo_lib::package_changes_watcher: changed_packages: Ok(Some({WorkspacePackage { name: Other("@fusionaura/web"), path: AnchoredSystemPathBuf("apps/web") }}))
+2025-12-21T22:30:20.925514Z  WARN turborepo_lib::package_changes_watcher: hashes are the same, no need to rerun
+2025-12-21T22:33:39.402823Z  WARN turborepo_lib::package_changes_watcher: changed_files: {AnchoredSystemPathBuf("apps/api/src/routes/orders.ts")}
+2025-12-21T22:33:39.402984Z  WARN turborepo_lib::package_changes_watcher: changed_packages: Ok(Some({WorkspacePackage { name: Other("@fusionaura/api"), path: AnchoredSystemPathBuf("apps/api") }}))
+2025-12-21T22:34:12.102683Z  WARN turborepo_lib::package_changes_watcher: changed_files: {AnchoredSystemPathBuf("apps/api/src/routes/orders.ts")}
+2025-12-21T22:34:12.102709Z  WARN turborepo_lib::package_changes_watcher: changed_packages: Ok(Some({WorkspacePackage { name: Other("@fusionaura/api"), path: AnchoredSystemPathBuf("apps/api") }}))
+2025-12-21T22:34:12.183831Z  WARN turborepo_lib::package_changes_watcher: hashes are the same, no need to rerun
+2025-12-21T22:34:12.403936Z  WARN turborepo_lib::package_changes_watcher: changed_files: {AnchoredSystemPathBuf("apps/api/src/routes/orders.ts")}
+2025-12-21T22:34:12.403963Z  WARN turborepo_lib::package_changes_watcher: changed_packages: Ok(Some({WorkspacePackage { name: Other("@fusionaura/api"), path: AnchoredSystemPathBuf("apps/api") }}))
+2025-12-21T22:34:12.404013Z  WARN turborepo_lib::package_changes_watcher: hashes are the same, no need to rerun
+2025-12-21T22:39:10.624021Z  WARN turborepo_lib::package_changes_watcher: changed_files: {AnchoredSystemPathBuf("apps/web/src/components/HeaderNav.tsx")}
+2025-12-21T22:39:10.624248Z  WARN turborepo_lib::package_changes_watcher: changed_packages: Ok(Some({WorkspacePackage { name: Other("@fusionaura/web"), path: AnchoredSystemPathBuf("apps/web") }}))
+2025-12-21T22:39:10.724271Z  WARN turborepo_lib::package_changes_watcher: changed_files: {AnchoredSystemPathBuf("apps/web/src/components/HeaderNav.tsx")}
+2025-12-21T22:39:10.724284Z  WARN turborepo_lib::package_changes_watcher: changed_packages: Ok(Some({WorkspacePackage { name: Other("@fusionaura/web"), path: AnchoredSystemPathBuf("apps/web") }}))
+2025-12-21T22:39:10.735159Z  WARN turborepo_lib::package_changes_watcher: hashes are the same, no need to rerun
+2025-12-21T22:39:39.725860Z  WARN turborepo_lib::package_changes_watcher: changed_files: {AnchoredSystemPathBuf("apps/web/src/components/HeaderNav.tsx")}
+2025-12-21T22:39:39.725917Z  WARN turborepo_lib::package_changes_watcher: changed_packages: Ok(Some({WorkspacePackage { name: Other("@fusionaura/web"), path: AnchoredSystemPathBuf("apps/web") }}))
+2025-12-21T22:39:39.726023Z  WARN turborepo_lib::package_changes_watcher: hashes are the same, no need to rerun

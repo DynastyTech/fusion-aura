@@ -1,0 +1,33 @@
+{
+  "name": "fusionaura-ecommerce",
+  "version": "1.0.0",
+  "private": true,
+  "description": "FusionAura - Sustainable Life, Timeless Remedies, Trusted Care",
+  "workspaces": [
+    "apps/*",
+    "packages/*"
+  ],
+  "scripts": {
+    "dev": "turbo run dev",
+    "dev:api": "cd apps/api && npm run dev",
+    "dev:web": "cd apps/web && npm run dev",
+    "dev:all": "turbo run dev --parallel",
+    "build": "turbo run build",
+    "lint": "turbo run lint",
+    "test": "turbo run test",
+    "db:generate": "cd packages/db && prisma generate",
+    "db:migrate": "cd packages/db && prisma migrate dev",
+    "db:studio": "cd packages/db && prisma studio",
+    "docker:up": "cd infra && docker-compose up -d",
+    "docker:down": "cd infra && docker-compose down",
+    "docker:logs": "cd infra && docker-compose logs -f"
+  },
+  "devDependencies": {
+    "turbo": "^1.11.2",
+    "typescript": "^5.3.3"
+  },
+  "engines": {
+    "node": ">=18.0.0"
+  }
+}
+
