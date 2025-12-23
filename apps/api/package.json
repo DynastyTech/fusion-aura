@@ -4,10 +4,15 @@
   "main": "./dist/index.js",
   "scripts": {
     "dev": "tsx watch src/index.ts",
+    "prebuild": "cd ../../packages/db && npm run build",
     "build": "tsc",
     "start": "node dist/index.js",
     "lint": "eslint src --ext .ts",
     "test": "vitest"
+  },
+  "engines": {
+    "node": ">=18.0.0 <22.0.0",
+    "npm": ">=9.0.0"
   },
   "dependencies": {
     "@fastify/cors": "^8.4.0",

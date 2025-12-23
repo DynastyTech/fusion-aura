@@ -761,7 +761,7 @@ export async function orderRoutes(fastify: FastifyInstance) {
       const orderItems = [];
 
       for (const item of body.items) {
-        const product = products.find((p) => p.id === item.productId)!;
+        const product = products.find((p: any) => p.id === item.productId)!;
         const itemPrice = Number(product.price);
         const itemTotal = itemPrice * item.quantity;
         subtotal += itemTotal;
@@ -797,7 +797,7 @@ export async function orderRoutes(fastify: FastifyInstance) {
 
       // Reserve new items
       for (const item of body.items) {
-        const product = products.find((p) => p.id === item.productId)!;
+        const product = products.find((p: any) => p.id === item.productId)!;
         if (product.inventory) {
           await prisma.inventory.update({
             where: { productId: item.productId },

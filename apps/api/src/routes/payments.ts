@@ -151,7 +151,7 @@ export async function paymentRoutes(fastify: FastifyInstance) {
           shippingPhone: body.shippingAddress?.phone || user.phone || null,
           items: {
             create: body.items.map((item) => {
-              const product = products.find((p) => p.id === item.productId)!;
+              const product = products.find((p: any) => p.id === item.productId)!;
               const price = Number(product.price);
               return {
                 productId: item.productId,
