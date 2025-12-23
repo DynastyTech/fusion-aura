@@ -32,6 +32,9 @@ function toNumber(value: number | string | null | undefined): number {
   return typeof value === 'string' ? parseFloat(value) : Number(value);
 }
 
+// Mark page as dynamic to allow no-store fetches
+export const dynamic = 'force-dynamic';
+
 async function getProduct(slug: string): Promise<Product | null> {
   const apiUrl = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:3001';
   
