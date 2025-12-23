@@ -14,6 +14,7 @@ interface Order {
   createdAt: string;
   shippingName: string;
   shippingCity: string;
+  shippingPhone: string | null;
   items: Array<{
     product: {
       name: string;

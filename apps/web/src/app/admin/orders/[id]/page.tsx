@@ -107,24 +107,6 @@ export default function AdminOrderDetailPage() {
   const [products, setProducts] = useState<Product[]>([]);
   const [editItems, setEditItems] = useState<Array<{ productId: string; quantity: number }>>([]);
 
-  useEffect(() => {
-    const token = localStorage.getItem('token');
-    const userStr = localStorage.getItem('user');
-    
-    if (!token || !userStr) {
-      router.push('/login');
-      return;
-    }
-
-    const userData = JSON.parse(userStr);
-    if (userData.role !== 'ADMIN') {
-      router.push('/products');
-      return;
-    }
-
-    fetchOrder();
-  }, [router, orderId, fetchOrder]);
-
   const fetchOrder = useCallback(async () => {
     try {
       const response = await apiRequest<Order>(`/api/orders/${orderId}`);
@@ -141,6 +123,24 @@ export default function AdminOrderDetailPage() {
       setLoading(false);
     }
   }, [router, orderId]);
+
+  useEffect(() => {
+    const token = localStorage.getItem('token');
+    const userStr = localStorage.getItem('user');
+    
+    if (!token || !userStr) {
+      router.push('/login');
+      return;
+    }
+
+    const userData = JSON.parse(userStr);
+    if (userData.role !== 'ADMIN') {
+      router.push('/products');
+      return;
+    }
+
+    fetchOrder();
+  }, [fetchOrder, router]);
 
   const updateOrderStatus = async (status: string) => {
     setUpdating(true);

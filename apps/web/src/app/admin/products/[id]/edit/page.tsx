@@ -46,24 +46,6 @@ export default function EditProductPage() {
     isFeatured: false,
   });
 
-  useEffect(() => {
-    const token = localStorage.getItem('token');
-    const userStr = localStorage.getItem('user');
-    
-    if (!token || !userStr) {
-      router.push('/login');
-      return;
-    }
-
-    const userData = JSON.parse(userStr);
-    if (userData.role !== 'ADMIN') {
-      router.push('/products');
-      return;
-    }
-
-    fetchData();
-  }, [router, productId, fetchData]);
-
   const fetchData = useCallback(async () => {
     try {
       setLoading(true);
@@ -105,6 +87,24 @@ export default function EditProductPage() {
       setLoading(false);
     }
   }, [router, productId]);
+
+  useEffect(() => {
+    const token = localStorage.getItem('token');
+    const userStr = localStorage.getItem('user');
+    
+    if (!token || !userStr) {
+      router.push('/login');
+      return;
+    }
+
+    const userData = JSON.parse(userStr);
+    if (userData.role !== 'ADMIN') {
+      router.push('/products');
+      return;
+    }
+
+    fetchData();
+  }, [fetchData, router]);
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();

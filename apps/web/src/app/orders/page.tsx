@@ -81,17 +81,6 @@ export default function OrdersPage() {
   const [orders, setOrders] = useState<Order[]>([]);
   const [loading, setLoading] = useState(true);
 
-  useEffect(() => {
-    if (authLoading) return; // Wait for auth to load
-    
-    if (!isAuthenticated || !user) {
-      router.push('/login');
-      return;
-    }
-    
-    fetchOrders();
-  }, [router, authLoading, isAuthenticated, user, fetchOrders]);
-
   const fetchOrders = useCallback(async () => {
     try {
       const response = await apiRequest<{ data: Order[] }>('/api/orders');
@@ -116,8 +105,15 @@ export default function OrdersPage() {
   }, [router]);
 
   useEffect(() => {
+    if (authLoading) return; // Wait for auth to load
+    
+    if (!isAuthenticated || !user) {
+      router.push('/login');
+      return;
+    }
+    
     fetchOrders();
-  }, [fetchOrders]);
+  }, [fetchOrders, router, authLoading, isAuthenticated, user]);
 
   const toNumber = (value: number | string): number => {
     return typeof value === 'string' ? parseFloat(value) : Number(value);

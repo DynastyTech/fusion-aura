@@ -8,7 +8,7 @@ const createProductSchema = z.object({
   name: z.string().min(1),
   slug: z.string().min(1),
   description: z.string().optional(),
-  shortDescription: z.string(anal).optional(),
+  shortDescription: z.string().optional(),
   price: z.number().positive(),
   compareAtPrice: z.number().positive().optional(),
   images: z.array(z.string().url()).default([]),

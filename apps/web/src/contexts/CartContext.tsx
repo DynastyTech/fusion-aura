@@ -20,7 +20,12 @@ export function CartProvider({ children }: { children: ReactNode }) {
       
       if (token) {
         // Authenticated user - fetch from API
-        const response = await apiRequest<{ data: { items: any[]; itemCount?: number } }>('/api/cart');
+        interface CartData {
+          items: Array<{ quantity: number }>;
+          itemCount?: number;
+        }
+        
+        const response = await apiRequest<CartData>('/api/cart');
         if (response.success && response.data) {
           // Calculate total quantity (sum of all item quantities)
           const items = response.data.items || [];

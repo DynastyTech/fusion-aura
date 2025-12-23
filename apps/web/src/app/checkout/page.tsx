@@ -184,7 +184,12 @@ export default function CheckoutPage() {
         }));
       }
 
-      const response = await apiRequest('/api/orders', {
+      interface OrderResponse {
+        id: string;
+        orderNumber: string;
+      }
+      
+      const response = await apiRequest<OrderResponse>('/api/orders', {
         method: 'POST',
         body: JSON.stringify({
           items,

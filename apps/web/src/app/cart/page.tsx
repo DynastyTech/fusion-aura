@@ -1,6 +1,6 @@
 'use client';
 
-import { useEffect, useState } from 'react';
+import { useEffect, useState, useCallback } from 'react';
 import { useRouter } from 'next/navigation';
 import Link from 'next/link';
 import Image from 'next/image';
@@ -35,16 +35,6 @@ export default function CartPage() {
   const [updating, setUpdating] = useState<string | null>(null);
   const [isGuest, setIsGuest] = useState(false);
 
-  useEffect(() => {
-    const token = localStorage.getItem('token');
-    if (token) {
-      fetchCart();
-    } else {
-      // Guest cart
-      loadGuestCart();
-    }
-  }, [fetchCart, loadGuestCart]);
-
   const loadGuestCart = useCallback(() => {
     const guestItems = getGuestCart();
     const total = getGuestCartTotal();
@@ -78,6 +68,16 @@ export default function CartPage() {
       setLoading(false);
     }
   }, [loadGuestCart]);
+
+  useEffect(() => {
+    const token = localStorage.getItem('token');
+    if (token) {
+      fetchCart();
+    } else {
+      // Guest cart
+      loadGuestCart();
+    }
+  }, [fetchCart, loadGuestCart]);
 
   const updateQuantity = async (itemId: string, quantity: number) => {
     if (quantity < 1) return;
