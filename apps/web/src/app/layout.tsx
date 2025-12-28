@@ -1,4 +1,5 @@
 import type { Metadata } from 'next';
+import { Suspense } from 'react';
 import { Outfit, Space_Grotesk } from 'next/font/google';
 import './globals.css';
 import { AuthProvider } from '@/contexts/AuthContext';
@@ -6,6 +7,7 @@ import { CartProvider } from '@/contexts/CartContext';
 import { ThemeProvider } from '@/contexts/ThemeContext';
 import Header from '@/components/Header';
 import Footer from '@/components/Footer';
+import PageLoader from '@/components/PageLoader';
 
 const outfit = Outfit({ 
   subsets: ['latin'],
@@ -46,6 +48,9 @@ export default function RootLayout({
         <ThemeProvider>
           <AuthProvider>
             <CartProvider>
+              <Suspense fallback={null}>
+                <PageLoader />
+              </Suspense>
               <div className="flex min-h-screen flex-col">
                 <Header />
                 <main className="flex-1">

@@ -219,7 +219,7 @@ export default function Footer() {
           <p className="text-center text-xs text-[rgb(var(--muted-foreground))]">
             Designed & Developed by{' '}
             <a
-              href="https://github.com/DynastyTech"
+              href="https://dynastytech.github.io/lionel-portfolio/"
               target="_blank"
               rel="noopener noreferrer"
               className="font-semibold text-primary-dark hover:text-primary-light transition-colors"
