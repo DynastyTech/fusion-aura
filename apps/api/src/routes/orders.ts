@@ -43,7 +43,18 @@ export async function orderRoutes(fastify: FastifyInstance) {
   fastify.post(
     '/',
     async (request: FastifyRequest, reply: FastifyReply) => {
-      const body = createOrderSchema.parse(request.body);
+      // Validate request body
+      let body;
+      try {
+        body = createOrderSchema.parse(request.body);
+      } catch (validationError: any) {
+        console.error('❌ Order validation error:', validationError.errors || validationError.message);
+        return reply.status(400).send({
+          success: false,
+          error: 'Invalid order data',
+          details: validationError.errors || validationError.message,
+        });
+      }
       
       // Try to get user from token (optional for guest checkout)
       let userId: string | null = null;
@@ -169,22 +180,32 @@ export async function orderRoutes(fastify: FastifyInstance) {
       }
 
       // Create order in database
-      const order = await prisma.order.create({
-        data: orderData,
-        include: {
-          items: {
-            include: {
-              product: true,
+      let order;
+      try {
+        order = await prisma.order.create({
+          data: orderData,
+          include: {
+            items: {
+              include: {
+                product: true,
+              },
             },
           },
-        },
-      });
+        });
 
-      // Log order creation for debugging
-      console.log(`✅ Order created successfully: ${order.orderNumber} (ID: ${order.id})`);
-      console.log(`   Status: ${order.status}, Total: R${total.toFixed(2)}, Items: ${order.items.length}`);
-      console.log(`   UserId: ${order.userId || 'NULL (Guest order)'}`);
-      console.log(`   UserId: ${order.userId || 'NULL (Guest order)'}`);
+        // Log order creation for debugging
+        console.log(`✅ Order created successfully: ${order.orderNumber} (ID: ${order.id})`);
+        console.log(`   Status: ${order.status}, Total: R${total.toFixed(2)}, Items: ${order.items.length}`);
+        console.log(`   UserId: ${order.userId || 'NULL (Guest order)'}`);
+      } catch (dbError: any) {
+        console.error('❌ Database error creating order:', dbError.message);
+        console.error('   Full error:', dbError);
+        return reply.status(500).send({
+          success: false,
+          error: 'Failed to create order in database',
+          details: dbError.message,
+        });
+      }
 
       // Send email to admin
       try {
