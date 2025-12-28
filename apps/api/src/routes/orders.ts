@@ -181,6 +181,12 @@ export async function orderRoutes(fastify: FastifyInstance) {
 
       // Create order in database
       let order;
+      console.log('📝 Creating order with data:');
+      console.log('   Items:', JSON.stringify(orderItems, null, 2));
+      console.log('   User ID:', userId || 'Guest');
+      console.log('   Shipping:', body.shippingAddress.name, body.shippingAddress.city);
+      console.log('   Total:', total);
+      
       try {
         order = await prisma.order.create({
           data: orderData,
@@ -199,11 +205,16 @@ export async function orderRoutes(fastify: FastifyInstance) {
         console.log(`   UserId: ${order.userId || 'NULL (Guest order)'}`);
       } catch (dbError: any) {
         console.error('❌ Database error creating order:', dbError.message);
-        console.error('   Full error:', dbError);
+        console.error('   Error code:', dbError.code);
+        console.error('   Error meta:', JSON.stringify(dbError.meta, null, 2));
+        console.error('   Stack trace:', dbError.stack);
+        console.error('   Order data being saved:', JSON.stringify(orderData, null, 2));
         return reply.status(500).send({
           success: false,
           error: 'Failed to create order in database',
           details: dbError.message,
+          code: dbError.code,
+          meta: dbError.meta,
         });
       }
 
