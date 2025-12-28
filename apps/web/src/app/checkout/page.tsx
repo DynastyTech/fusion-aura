@@ -48,13 +48,49 @@ export default function CheckoutPage() {
     if (token) {
       // Authenticated user
       try {
-        const response = await apiRequest<CartData>('/api/cart');
-        if (response.success && response.data) {
-          setCart(response.data);
+        // Fetch cart and user profile in parallel
+        interface UserProfile {
+          firstName?: string;
+          lastName?: string;
+          email?: string;
+          phone?: string;
+          addressLine1?: string;
+          addressLine2?: string;
+          city?: string;
+          province?: string;
+          postalCode?: string;
+        }
+        
+        const [cartResponse, userResponse] = await Promise.all([
+          apiRequest<CartData>('/api/cart'),
+          apiRequest<UserProfile>('/api/auth/me'),
+        ]);
+        
+        if (cartResponse.success && cartResponse.data) {
+          setCart(cartResponse.data);
           setIsGuest(false);
-          if (response.data.items.length === 0) {
+          if (cartResponse.data.items.length === 0) {
             router.push('/cart');
+            return;
           }
+        }
+        
+        // Pre-fill form with user profile data
+        if (userResponse.success && userResponse.data) {
+          const user = userResponse.data;
+          setFormData((prev) => ({
+            ...prev,
+            name: user.firstName && user.lastName 
+              ? `${user.firstName} ${user.lastName}` 
+              : user.firstName || prev.name,
+            email: user.email || prev.email,
+            phone: user.phone || prev.phone,
+            addressLine1: user.addressLine1 || prev.addressLine1,
+            addressLine2: user.addressLine2 || prev.addressLine2,
+            city: user.city || prev.city,
+            province: user.province || prev.province,
+            postalCode: user.postalCode || prev.postalCode,
+          }));
         }
       } catch (error) {
         console.error('Error fetching cart:', error);
