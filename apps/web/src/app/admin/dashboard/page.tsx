@@ -137,7 +137,7 @@ export default function AdminDashboard() {
             Welcome back, {user?.firstName || 'Admin'}! 👋
           </h1>
           <p className="text-[rgb(var(--muted-foreground))] mt-1">
-            Here's what's happening with your store today.
+            Here&apos;s what&apos;s happening with your store today.
           </p>
         </div>
 

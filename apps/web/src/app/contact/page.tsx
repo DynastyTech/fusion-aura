@@ -82,7 +82,7 @@ export default function ContactPage() {
           </h1>
           <p className="text-lg text-[rgb(var(--muted-foreground))] max-w-2xl mx-auto animate-fade-in-up"
              style={{ animationDelay: '0.1s' }}>
-            Have a question or feedback? We'd love to hear from you. 
+            Have a question or feedback? We&apos;d love to hear from you. 
             Reach out through any of the channels below.
           </p>
         </div>
@@ -214,7 +214,7 @@ export default function ContactPage() {
                     Message Sent!
                   </h3>
                   <p className="text-[rgb(var(--muted-foreground))] mb-6">
-                    Thank you for reaching out. We'll get back to you within 24 hours.
+                    Thank you for reaching out. We&apos;ll get back to you within 24 hours.
                   </p>
                   <button
                     onClick={() => {

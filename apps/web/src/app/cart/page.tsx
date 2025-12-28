@@ -178,7 +178,7 @@ export default function CartPage() {
               Your cart is empty
             </h2>
             <p className="text-[rgb(var(--muted-foreground))] mb-6">
-              Looks like you haven't added anything yet
+              Looks like you haven&apos;t added anything yet
             </p>
             <Link href="/products" className="btn-primary">
               <HiShoppingBag className="w-5 h-5" />
@@ -194,7 +194,7 @@ export default function CartPage() {
                               border border-blue-200 dark:border-blue-800">
                   <HiInformationCircle className="w-5 h-5 text-blue-600 flex-shrink-0 mt-0.5" />
                   <p className="text-sm text-blue-800 dark:text-blue-300">
-                    You're shopping as a guest. You can checkout without creating an account!
+                    You&apos;re shopping as a guest. You can checkout without creating an account!
                   </p>
                 </div>
               )}

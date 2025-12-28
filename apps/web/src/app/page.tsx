@@ -238,7 +238,7 @@ export default async function Home() {
               Why Choose FusionAura?
             </h2>
             <p className="text-lg text-[rgb(var(--muted-foreground))]">
-              We're committed to bringing you the best in natural wellness
+              We&apos;re committed to bringing you the best in natural wellness
             </p>
           </div>
 
