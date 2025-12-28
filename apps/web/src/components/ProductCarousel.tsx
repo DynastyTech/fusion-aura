@@ -8,6 +8,8 @@ import { Navigation, Pagination, Autoplay, EffectCoverflow } from 'swiper/module
 import { motion } from 'framer-motion';
 import { FaLeaf, FaShoppingCart } from 'react-icons/fa';
 import { useCart } from '@/contexts/CartContext';
+import { addToGuestCart } from '@/lib/guestCart';
+import { apiRequest } from '@/lib/api';
 
 // Import Swiper styles
 import 'swiper/css';
@@ -42,7 +44,7 @@ function toNumber(value: number | string | null | undefined): number {
 }
 
 export default function ProductCarousel({ products }: ProductCarouselProps) {
-  const { addItem } = useCart();
+  const { refreshCart } = useCart();
   const [addingToCart, setAddingToCart] = useState<string | null>(null);
 
   if (products.length === 0) return null;
@@ -50,13 +52,37 @@ export default function ProductCarousel({ products }: ProductCarouselProps) {
   const handleAddToCart = async (product: Product) => {
     setAddingToCart(product.id);
     try {
-      addItem({
-        id: product.id,
-        name: product.name,
-        price: toNumber(product.price),
-        image: product.images?.[0] || '',
-        quantity: 1,
-      });
+      const token = typeof window !== 'undefined' ? localStorage.getItem('token') : null;
+      
+      if (token) {
+        // Authenticated user - use API
+        await apiRequest('/api/cart/items', {
+          method: 'POST',
+          body: JSON.stringify({
+            productId: product.id,
+            quantity: 1,
+          }),
+        });
+      } else {
+        // Guest user - use localStorage
+        addToGuestCart(
+          {
+            id: product.id,
+            name: product.name,
+            slug: product.slug,
+            price: product.price,
+            images: product.images,
+          },
+          1
+        );
+      }
+      
+      // Refresh cart count
+      await refreshCart();
+      
+      // Dispatch cart updated event
+      window.dispatchEvent(new Event('cartUpdated'));
+      
       setTimeout(() => setAddingToCart(null), 1000);
     } catch (error) {
       console.error('Failed to add to cart:', error);
