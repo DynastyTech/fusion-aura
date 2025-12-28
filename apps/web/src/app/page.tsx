@@ -166,30 +166,7 @@ export default async function Home() {
           </div>
       </section>
 
-      {/* Benefits Bar */}
-      <section className="py-6 border-y border-[rgb(var(--border))] bg-[rgb(var(--muted))]/50">
-        <div className="container mx-auto px-4">
-          <div className="grid grid-cols-2 md:grid-cols-4 gap-4 md:gap-8">
-            {benefits.map((benefit, index) => (
-              <div 
-                key={benefit.title}
-                className="flex items-center gap-3 justify-center md:justify-start animate-fade-in"
-                style={{ animationDelay: `${index * 0.1}s` }}
-              >
-                <benefit.icon className="w-6 h-6 text-primary-dark flex-shrink-0" />
-                <div>
-                  <p className="font-semibold text-[rgb(var(--foreground))] text-sm md:text-base">
-                    {benefit.title}
-                  </p>
-                  <p className="text-xs text-[rgb(var(--muted-foreground))] hidden md:block">
-                    {benefit.description}
-                  </p>
-                </div>
-              </div>
-            ))}
-          </div>
-        </div>
-      </section>
+      
 
       {/* Featured Products Carousel */}
       {featuredProducts.length > 0 && (
@@ -220,9 +197,34 @@ export default async function Home() {
             <h2 className="text-3xl sm:text-4xl font-bold text-[rgb(var(--foreground))] mb-4">
               Why Choose FusionAura?
             </h2>
+
             <p className="text-lg text-[rgb(var(--muted-foreground))]">
               We&apos;re committed to bringing you the best in natural wellness
             </p>
+            {/* Benefits Bar */}
+      <section className="py-6 border-y border-[rgb(var(--border))] bg-[rgb(var(--muted))]/50">
+        <div className="container mx-auto px-4">
+          <div className="grid grid-cols-2 md:grid-cols-4 gap-4 md:gap-8">
+            {benefits.map((benefit, index) => (
+              <div 
+                key={benefit.title}
+                className="flex items-center gap-3 justify-center md:justify-start animate-fade-in"
+                style={{ animationDelay: `${index * 0.1}s` }}
+              >
+                <benefit.icon className="w-6 h-6 text-primary-dark flex-shrink-0" />
+                <div>
+                  <p className="font-semibold text-[rgb(var(--foreground))] text-sm md:text-base">
+                    {benefit.title}
+                  </p>
+                  <p className="text-xs text-[rgb(var(--muted-foreground))] hidden md:block">
+                    {benefit.description}
+                  </p>
+                </div>
+              </div>
+            ))}
+          </div>
+        </div>
+      </section>
           </div>
 
           <div className="grid grid-cols-1 md:grid-cols-3 gap-6 lg:gap-8">
