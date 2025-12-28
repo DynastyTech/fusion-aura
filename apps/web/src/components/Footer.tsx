@@ -212,6 +212,23 @@ export default function Footer() {
           </div>
         </div>
       </div>
+
+      {/* Developer Signature */}
+      <div className="border-t border-[rgb(var(--border))] bg-[rgb(var(--muted))]/30">
+        <div className="container mx-auto px-4 sm:px-6 lg:px-8 py-4">
+          <p className="text-center text-xs text-[rgb(var(--muted-foreground))]">
+            Designed & Developed by{' '}
+            <a
+              href="https://github.com/DynastyTech"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="font-semibold text-primary-dark hover:text-primary-light transition-colors"
+            >
+              DynastyTech
+            </a>
+          </p>
+        </div>
+      </div>
     </footer>
   );
 }
