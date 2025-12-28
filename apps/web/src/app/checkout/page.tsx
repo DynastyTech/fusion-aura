@@ -258,11 +258,17 @@ export default function CheckoutPage() {
         const orderId = response.data.id || response.data.orderNumber;
         router.push(`/order-confirmation/${orderId}`);
       } else {
-        alert(response.error || 'Failed to place order');
+        // Show detailed error info for debugging
+        const errorDetails = (response as any).details || '';
+        const errorCode = (response as any).code || '';
+        const errorMeta = (response as any).meta ? JSON.stringify((response as any).meta) : '';
+        console.error('Order error:', { error: response.error, details: errorDetails, code: errorCode, meta: errorMeta });
+        alert(`${response.error || 'Failed to place order'}${errorDetails ? `\n\nDetails: ${errorDetails}` : ''}${errorCode ? `\nCode: ${errorCode}` : ''}`);
         setProcessing(false);
       }
-    } catch (error) {
-      alert('Error processing order');
+    } catch (error: any) {
+      console.error('Order processing error:', error);
+      alert(`Error processing order: ${error.message || 'Unknown error'}`);
       setProcessing(false);
     }
   };
