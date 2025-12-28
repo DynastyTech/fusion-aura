@@ -75,6 +75,7 @@ export async function apiRequest<T>(
         success: false,
         error: data.error || 'An error occurred',
         message: data.message,
+        ...data, // Pass through all additional fields like details, code, meta
       };
     }
 
