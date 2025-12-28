@@ -6,7 +6,6 @@ import Link from 'next/link';
 import { apiRequest } from '@/lib/api';
 import { getGuestCart, getGuestCartTotal, clearGuestCart } from '@/lib/guestCart';
 import { HiCurrencyDollar } from 'react-icons/hi2';
-import Logo from '@/components/Logo';
 
 interface CartItem {
   id: string;
@@ -85,6 +84,11 @@ export default function CheckoutPage() {
       setLoading(false);
     }
   }, [router]);
+
+  // Load cart on component mount
+  useEffect(() => {
+    loadCart();
+  }, [loadCart]);
 
   const getCurrentLocation = async () => {
     if (!navigator.geolocation) {
@@ -229,34 +233,31 @@ export default function CheckoutPage() {
 
   if (loading) {
     return (
-      <div className="min-h-screen bg-white flex items-center justify-center">
-        <div className="text-center">Loading...</div>
+      <div className="min-h-screen bg-[rgb(var(--background))] flex items-center justify-center">
+        <div className="text-center">
+          <div className="inline-block w-8 h-8 border-4 border-primary-dark border-t-transparent
+                        rounded-full animate-spin mb-4" />
+          <p className="text-[rgb(var(--muted-foreground))]">Loading checkout...</p>
+        </div>
       </div>
     );
   }
 
   return (
-    <div className="min-h-screen bg-gray-50">
-      {/* Header */}
-      <header className="sticky top-0 z-50 bg-white shadow-sm">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-4">
-          <div className="flex justify-between items-center">
-            <Logo href="/" width={180} height={60} />
-            <Link href="/cart" className="text-gray-600 hover:text-primary-dark">
-              ← Back to Cart
-            </Link>
-          </div>
-        </div>
-      </header>
-
+    <div className="min-h-screen bg-[rgb(var(--background))]">
       {/* Checkout Content */}
-      <main className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
-        <h1 className="text-3xl font-bold mb-8">Checkout - Cash on Delivery</h1>
+      <main className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+        <div className="flex items-center justify-between mb-8">
+          <h1 className="text-2xl sm:text-3xl font-bold text-[rgb(var(--foreground))]">Checkout</h1>
+          <Link href="/cart" className="text-primary-dark hover:underline text-sm font-medium">
+            ← Back to Cart
+          </Link>
+        </div>
 
         {isGuest && (
-          <div className="bg-blue-50 border border-blue-200 rounded-lg p-4 mb-6">
-            <p className="text-blue-800 font-semibold">🛒 Guest Checkout</p>
-            <p className="text-blue-700 text-sm mt-1">
+          <div className="bg-blue-500/10 border border-blue-500/30 rounded-xl p-4 mb-6">
+            <p className="text-blue-400 font-semibold">🛒 Guest Checkout</p>
+            <p className="text-blue-300 text-sm mt-1">
               You can complete your purchase without creating an account. Just provide your delivery details below.
             </p>
           </div>
@@ -265,133 +266,133 @@ export default function CheckoutPage() {
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
           {/* Shipping Form */}
           <div className="lg:col-span-2">
-            <form onSubmit={handleCheckout} className="bg-white rounded-lg shadow p-6 space-y-6">
-              <div className="bg-green-50 border border-green-200 rounded-lg p-4 mb-6">
+            <form onSubmit={handleCheckout} className="card p-6 space-y-6">
+              <div className="bg-primary-dark/10 border border-primary-dark/30 rounded-xl p-4">
                 <div className="flex items-center gap-2">
-                  <HiCurrencyDollar className="w-5 h-5 text-green-800" />
-                  <p className="text-green-800 font-semibold">Cash on Delivery</p>
+                  <HiCurrencyDollar className="w-5 h-5 text-primary-dark" />
+                  <p className="text-primary-dark font-semibold">Cash on Delivery</p>
                 </div>
-                <p className="text-green-700 text-sm mt-1">
+                <p className="text-[rgb(var(--muted-foreground))] text-sm mt-1">
                   You will pay when your order is delivered. No online payment required.
                 </p>
               </div>
 
-              <h2 className="text-xl font-bold mb-4">Delivery Information</h2>
+              <h2 className="text-xl font-bold text-[rgb(var(--foreground))]">Delivery Information</h2>
 
               {isGuest && (
                 <div>
-                  <label className="block text-sm font-medium text-gray-700">Name</label>
+                  <label className="block text-sm font-medium text-[rgb(var(--foreground))] mb-1">Name</label>
                   <input
                     type="text"
                     value={formData.name}
                     onChange={(e) => setFormData({ ...formData, name: e.target.value })}
-                    className="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-primary-dark focus:border-primary-dark bg-gray-50"
+                    className="input-field bg-[rgb(var(--muted))]/50"
                     readOnly
                   />
-                  <p className="mt-1 text-xs text-gray-500">Guest orders are anonymous</p>
+                  <p className="mt-1 text-xs text-[rgb(var(--muted-foreground))]">Guest orders are anonymous</p>
                 </div>
               )}
 
               {!isGuest && (
                 <div>
-                  <label className="block text-sm font-medium text-gray-700">Full Name *</label>
+                  <label className="block text-sm font-medium text-[rgb(var(--foreground))] mb-1">Full Name *</label>
                   <input
                     type="text"
                     required
                     value={formData.name}
                     onChange={(e) => setFormData({ ...formData, name: e.target.value })}
-                    className="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-primary-dark focus:border-primary-dark"
+                    className="input-field"
                   />
                 </div>
               )}
 
               <div>
-                <label className="block text-sm font-medium text-gray-700">Delivery Address *</label>
-                <div className="mt-2 flex space-x-2">
+                <label className="block text-sm font-medium text-[rgb(var(--foreground))] mb-1">Delivery Address *</label>
+                <div className="flex flex-col sm:flex-row gap-2">
                   <input
                     type="text"
                     required
                     value={formData.addressLine1}
                     onChange={(e) => setFormData({ ...formData, addressLine1: e.target.value })}
                     placeholder="Street address"
-                    className="flex-1 px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-primary-dark focus:border-primary-dark"
+                    className="input-field flex-1"
                   />
                   <button
                     type="button"
                     onClick={getCurrentLocation}
                     disabled={gettingLocation}
-                    className="px-4 py-2 bg-gray-100 text-gray-700 rounded-md hover:bg-gray-200 text-sm whitespace-nowrap disabled:opacity-50 disabled:cursor-not-allowed"
+                    className="btn-secondary whitespace-nowrap"
                   >
-                    {gettingLocation ? '📍 Getting Location...' : '📍 Use Current Location'}
+                    {gettingLocation ? '📍 Getting...' : '📍 Use Location'}
                   </button>
                 </div>
               </div>
 
               <div>
-                <label className="block text-sm font-medium text-gray-700">Address Line 2</label>
+                <label className="block text-sm font-medium text-[rgb(var(--foreground))] mb-1">Address Line 2</label>
                 <input
                   type="text"
                   value={formData.addressLine2}
                   onChange={(e) => setFormData({ ...formData, addressLine2: e.target.value })}
                   placeholder="Apartment, suite, etc. (optional)"
-                  className="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-primary-dark focus:border-primary-dark"
+                  className="input-field"
                 />
               </div>
 
-              <div className="grid grid-cols-2 gap-4">
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                 <div>
-                  <label className="block text-sm font-medium text-gray-700">City *</label>
+                  <label className="block text-sm font-medium text-[rgb(var(--foreground))] mb-1">City *</label>
                   <input
                     type="text"
                     required
                     value={formData.city}
                     onChange={(e) => setFormData({ ...formData, city: e.target.value })}
-                    className="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-primary-dark focus:border-primary-dark"
+                    className="input-field"
                   />
                 </div>
 
                 <div>
-                  <label className="block text-sm font-medium text-gray-700">Province</label>
+                  <label className="block text-sm font-medium text-[rgb(var(--foreground))] mb-1">Province</label>
                   <input
                     type="text"
                     value={formData.province}
                     onChange={(e) => setFormData({ ...formData, province: e.target.value })}
-                    placeholder="e.g., Gauteng, Western Cape"
-                    className="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-primary-dark focus:border-primary-dark"
+                    placeholder="e.g., Gauteng"
+                    className="input-field"
                   />
                 </div>
               </div>
 
-              <div className="grid grid-cols-2 gap-4">
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                 <div>
-                  <label className="block text-sm font-medium text-gray-700">Postal Code *</label>
+                  <label className="block text-sm font-medium text-[rgb(var(--foreground))] mb-1">Postal Code *</label>
                   <input
                     type="text"
                     required
                     value={formData.postalCode}
                     onChange={(e) => setFormData({ ...formData, postalCode: e.target.value })}
-                    className="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-primary-dark focus:border-primary-dark"
+                    className="input-field"
                   />
                 </div>
 
                 <div>
-                  <label className="block text-sm font-medium text-gray-700">Contact Number *</label>
+                  <label className="block text-sm font-medium text-[rgb(var(--foreground))] mb-1">Contact Number *</label>
                   <input
                     type="tel"
                     required
                     value={formData.phone}
                     onChange={(e) => setFormData({ ...formData, phone: e.target.value })}
-                    placeholder="Your contact number (for delivery updates)"
-                    className="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-primary-dark focus:border-primary-dark"
+                    placeholder="Your phone number"
+                    className="input-field"
                   />
-                  <p className="mt-1 text-xs text-gray-500">We&apos;ll send order updates via SMS/WhatsApp</p>
+                  <p className="mt-1 text-xs text-[rgb(var(--muted-foreground))]">For delivery updates</p>
                 </div>
               </div>
 
               <button
                 type="submit"
                 disabled={processing}
-                className="w-full bg-primary-dark text-white py-3 rounded-lg hover:bg-primary-dark/90 font-semibold disabled:opacity-50"
+                className="btn-primary w-full py-4 text-lg"
               >
                 {processing ? 'Placing Order...' : 'Place Order (Cash on Delivery)'}
               </button>
@@ -400,27 +401,27 @@ export default function CheckoutPage() {
 
           {/* Order Summary */}
           <div className="lg:col-span-1">
-            <div className="bg-white rounded-lg shadow p-6 sticky top-4">
-              <h2 className="text-xl font-bold mb-4">Order Summary</h2>
-              <div className="space-y-2 mb-4">
+            <div className="card p-6 sticky top-24">
+              <h2 className="text-xl font-bold text-[rgb(var(--foreground))] mb-4">Order Summary</h2>
+              <div className="space-y-3 mb-4">
                 {cart?.items.map((item) => (
-                  <div key={item.id} className="flex justify-between text-sm">
-                    <span>{item.product.name} x{item.quantity}</span>
-                    <span>R{item.subtotal.toFixed(2)}</span>
+                  <div key={item.id} className="flex justify-between text-sm text-[rgb(var(--foreground))]">
+                    <span className="flex-1">{item.product.name} x{item.quantity}</span>
+                    <span className="font-medium">R{item.subtotal.toFixed(2)}</span>
                   </div>
                 ))}
-                <div className="border-t pt-2 mt-2">
-                  <div className="flex justify-between mb-2">
+                <div className="border-t border-[rgb(var(--border))] pt-3 mt-3 space-y-2">
+                  <div className="flex justify-between text-[rgb(var(--muted-foreground))]">
                     <span>Subtotal</span>
                     <span>R{cart?.total.toFixed(2)}</span>
                   </div>
-                  <div className="flex justify-between mb-2">
+                  <div className="flex justify-between text-[rgb(var(--muted-foreground))]">
                     <span>VAT (15%)</span>
                     <span>R{((cart?.total || 0) * 0.15).toFixed(2)}</span>
                   </div>
-                  <div className="flex justify-between font-bold text-lg border-t pt-2 mt-2">
+                  <div className="flex justify-between font-bold text-xl text-[rgb(var(--foreground))] border-t border-[rgb(var(--border))] pt-3 mt-3">
                     <span>Total</span>
-                    <span>R{((cart?.total || 0) * 1.15).toFixed(2)}</span>
+                    <span className="text-primary-dark">R{((cart?.total || 0) * 1.15).toFixed(2)}</span>
                   </div>
                 </div>
               </div>
