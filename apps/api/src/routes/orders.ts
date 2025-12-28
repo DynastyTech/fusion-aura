@@ -134,6 +134,16 @@ export async function orderRoutes(fastify: FastifyInstance) {
         }
 
         const price = Number(product.price);
+        
+        // Validate price is a valid number
+        if (isNaN(price) || !isFinite(price) || price < 0) {
+          console.error(`❌ Invalid price for product ${product.name}: ${product.price}`);
+          return reply.status(400).send({
+            success: false,
+            error: `Invalid price for product ${product.name}`,
+          });
+        }
+        
         subtotal += price * item.quantity;
 
         orderItems.push({
@@ -148,6 +158,15 @@ export async function orderRoutes(fastify: FastifyInstance) {
       const tax = subtotal * 0.15;
       const shipping = 0;
       const total = subtotal + tax + shipping;
+      
+      // Validate all totals are valid numbers
+      if (isNaN(subtotal) || isNaN(tax) || isNaN(total)) {
+        console.error(`❌ Invalid totals calculated: subtotal=${subtotal}, tax=${tax}, total=${total}`);
+        return reply.status(400).send({
+          success: false,
+          error: 'Error calculating order totals',
+        });
+      }
 
       // Create order in database (userId is optional for guest orders)
       const orderData: any = {
