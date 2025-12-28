@@ -4,7 +4,8 @@ import { useState } from 'react';
 import { useRouter } from 'next/navigation';
 import Link from 'next/link';
 import { login, register } from '@/lib/api';
-import { HiSparkles, HiArrowLeft, HiEye, HiEyeSlash, HiEnvelope, HiLockClosed, HiUser, HiMapPin, HiPhone } from 'react-icons/hi2';
+import { HiArrowLeft, HiEye, HiEyeSlash, HiEnvelope, HiLockClosed, HiUser, HiMapPin, HiPhone } from 'react-icons/hi2';
+import { FaLeaf } from 'react-icons/fa';
 
 export default function LoginPage() {
   const router = useRouter();
@@ -76,7 +77,7 @@ export default function LoginPage() {
                               rounded-xl blur-lg opacity-50 group-hover:opacity-75 transition-opacity" />
                 <div className="relative bg-gradient-to-r from-primary-light to-primary-dark 
                               p-2 rounded-xl">
-                  <HiSparkles className="w-5 h-5 text-white" />
+                  <FaLeaf className="w-5 h-5 text-white" />
                 </div>
               </div>
               <span className="text-xl font-bold">

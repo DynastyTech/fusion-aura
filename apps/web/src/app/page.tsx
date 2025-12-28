@@ -2,7 +2,6 @@ import Link from 'next/link';
 import Image from 'next/image';
 import ProductCarousel from '@/components/ProductCarousel';
 import { 
-  HiSparkles, 
   HiClock, 
   HiShieldCheck,
   HiArrowRight,
@@ -10,6 +9,7 @@ import {
   HiCurrencyDollar,
   HiHeart,
 } from 'react-icons/hi2';
+import { FaLeaf } from 'react-icons/fa';
 
 interface Product {
   id: string;
@@ -58,7 +58,7 @@ async function getFeaturedProducts(): Promise<Product[]> {
 
 const features = [
   {
-    icon: HiSparkles,
+    icon: FaLeaf,
     title: 'Sustainable',
     description: 'Eco-friendly products for a better tomorrow',
     gradient: 'from-emerald-400 to-green-500',
@@ -163,13 +163,7 @@ export default async function Home() {
             </Link>
           </div>
 
-          {/* Scroll Indicator */}
-          <div className="absolute bottom-10 left-1/2 -translate-x-1/2 animate-bounce-gentle">
-            <div className="w-6 h-10 rounded-full border-2 border-[rgb(var(--muted-foreground))]/30 flex items-start justify-center p-2">
-              <div className="w-1.5 h-3 bg-primary-dark rounded-full animate-[bounce_1.5s_infinite]" />
-            </div>
           </div>
-        </div>
       </section>
 
       {/* Benefits Bar */}

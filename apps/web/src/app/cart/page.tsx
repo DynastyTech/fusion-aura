@@ -15,6 +15,7 @@ import {
   HiShoppingBag,
   HiInformationCircle,
 } from 'react-icons/hi2';
+import BackButton from '@/components/BackButton';
 
 interface CartItem {
   id: string;
@@ -155,6 +156,9 @@ export default function CartPage() {
   return (
     <div className="min-h-screen bg-[rgb(var(--background))]">
       <div className="container mx-auto px-4 sm:px-6 lg:px-8 py-6 lg:py-8">
+        {/* Back Button */}
+        <BackButton fallbackHref="/products" className="mb-4" />
+        
         {/* Header */}
         <div className="mb-6 lg:mb-8">
           <h1 className="text-2xl sm:text-3xl font-bold text-[rgb(var(--foreground))] flex items-center gap-3">

@@ -174,30 +174,21 @@ export default function HeaderNav() {
         </button>
       </div>
 
-      {/* Mobile Menu Overlay */}
-      {mobileMenuOpen && (
-        <div 
-          className="fixed inset-0 bg-black/50 backdrop-blur-sm z-40 md:hidden"
-          onClick={() => setMobileMenuOpen(false)}
-        />
-      )}
-
-      {/* Mobile Menu Drawer */}
+      {/* Full-Screen Mobile Menu */}
       <div
-        className={`fixed top-0 right-0 h-full w-[280px] bg-[rgb(var(--card))] z-50 
-                    transform transition-transform duration-300 ease-out md:hidden
-                    shadow-2xl safe-top safe-bottom
-                    ${mobileMenuOpen ? 'translate-x-0' : 'translate-x-full'}`}
+        className={`fixed inset-0 bg-[rgb(var(--background))] z-50 
+                    transform transition-all duration-300 ease-out md:hidden
+                    ${mobileMenuOpen ? 'opacity-100 visible' : 'opacity-0 invisible pointer-events-none'}`}
       >
-        <div className="flex flex-col h-full">
+        <div className="flex flex-col h-full safe-top safe-bottom">
           {/* Header */}
           <div className="flex items-center justify-between p-4 border-b border-[rgb(var(--border))]">
-            <span className="font-bold text-lg gradient-text">Menu</span>
+            <span className="font-bold text-xl gradient-text">Menu</span>
             <button
               onClick={() => setMobileMenuOpen(false)}
-              className="p-2 rounded-xl hover:bg-[rgb(var(--muted))] transition-colors"
+              className="p-3 rounded-xl hover:bg-[rgb(var(--muted))] transition-colors"
             >
-              <HiXMark className="w-6 h-6" />
+              <HiXMark className="w-7 h-7" />
             </button>
           </div>
 
@@ -218,16 +209,18 @@ export default function HeaderNav() {
           )}
 
           {/* Navigation Links */}
-          <nav className="flex-1 overflow-y-auto p-4 space-y-1">
+          <nav className="flex-1 overflow-y-auto p-6 space-y-2">
             <Link
               href="/"
               onClick={() => setMobileMenuOpen(false)}
-              className="flex items-center gap-3 px-4 py-3 rounded-xl
+              className="flex items-center gap-4 px-6 py-4 rounded-2xl
                          text-[rgb(var(--foreground))] hover:bg-[rgb(var(--muted))]
-                         transition-all duration-200"
+                         transition-all duration-200 text-lg"
             >
-              <HiHome className="w-5 h-5 text-primary-dark" />
-              <span className="font-medium">Home</span>
+              <div className="p-2 rounded-xl bg-primary-light/20">
+                <HiHome className="w-6 h-6 text-primary-dark" />
+              </div>
+              <span className="font-semibold">Home</span>
             </Link>
 
             {navLinks.map((link) => (
@@ -235,12 +228,14 @@ export default function HeaderNav() {
                 key={link.href}
                 href={link.href}
                 onClick={() => setMobileMenuOpen(false)}
-                className="flex items-center gap-3 px-4 py-3 rounded-xl
+                className="flex items-center gap-4 px-6 py-4 rounded-2xl
                            text-[rgb(var(--foreground))] hover:bg-[rgb(var(--muted))]
-                           transition-all duration-200"
+                           transition-all duration-200 text-lg"
               >
-                <link.icon className="w-5 h-5 text-primary-dark" />
-                <span className="font-medium">{link.label}</span>
+                <div className="p-2 rounded-xl bg-primary-light/20">
+                  <link.icon className="w-6 h-6 text-primary-dark" />
+                </div>
+                <span className="font-semibold">{link.label}</span>
               </Link>
             ))}
 
@@ -248,15 +243,17 @@ export default function HeaderNav() {
               <Link
                 href="/cart"
                 onClick={() => setMobileMenuOpen(false)}
-                className="flex items-center gap-3 px-4 py-3 rounded-xl
+                className="flex items-center gap-4 px-6 py-4 rounded-2xl
                            text-[rgb(var(--foreground))] hover:bg-[rgb(var(--muted))]
-                           transition-all duration-200"
+                           transition-all duration-200 text-lg"
               >
-                <HiShoppingCart className="w-5 h-5 text-primary-dark" />
-                <span className="font-medium">Cart</span>
+                <div className="p-2 rounded-xl bg-primary-light/20">
+                  <HiShoppingCart className="w-6 h-6 text-primary-dark" />
+                </div>
+                <span className="font-semibold">Cart</span>
                 {itemCount > 0 && (
-                  <span className="ml-auto bg-primary-dark text-white text-xs 
-                                 font-bold px-2 py-0.5 rounded-full">
+                  <span className="ml-auto bg-primary-dark text-white text-sm 
+                                 font-bold px-3 py-1 rounded-full">
                     {itemCount}
                   </span>
                 )}
@@ -265,29 +262,29 @@ export default function HeaderNav() {
           </nav>
 
           {/* Footer Actions */}
-          <div className="p-4 border-t border-[rgb(var(--border))] space-y-2">
+          <div className="p-6 border-t border-[rgb(var(--border))] space-y-3">
             {user ? (
               <button
                 onClick={() => {
                   logout();
                   setMobileMenuOpen(false);
                 }}
-                className="w-full flex items-center justify-center gap-2 px-4 py-3 
-                           rounded-xl bg-red-500/10 text-red-500 font-medium
+                className="w-full flex items-center justify-center gap-3 px-6 py-4 
+                           rounded-2xl bg-red-500/10 text-red-500 font-semibold text-lg
                            hover:bg-red-500/20 transition-all duration-200"
               >
-                <HiArrowRightOnRectangle className="w-5 h-5" />
+                <HiArrowRightOnRectangle className="w-6 h-6" />
                 Logout
               </button>
             ) : (
               <Link
                 href="/login"
                 onClick={() => setMobileMenuOpen(false)}
-                className="w-full flex items-center justify-center gap-2 px-4 py-3 
-                           rounded-xl bg-primary-dark text-white font-medium
+                className="w-full flex items-center justify-center gap-3 px-6 py-4 
+                           rounded-2xl bg-primary-dark text-white font-semibold text-lg
                            hover:bg-primary-dark/90 transition-all duration-200"
               >
-                <HiUser className="w-5 h-5" />
+                <HiUser className="w-6 h-6" />
                 Login / Sign Up
               </Link>
             )}

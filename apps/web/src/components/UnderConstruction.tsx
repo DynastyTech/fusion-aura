@@ -2,7 +2,6 @@
 
 import Link from 'next/link';
 import { FaLeaf, FaTools, FaArrowLeft } from 'react-icons/fa';
-import { HiSparkles } from 'react-icons/hi2';
 
 interface UnderConstructionProps {
   pageName: string;
@@ -38,9 +37,9 @@ export default function UnderConstruction({ pageName }: UnderConstructionProps) 
         {/* Message */}
         <div className="space-y-3 mb-8 animate-fade-in-up" style={{ animationDelay: '0.1s' }}>
           <p className="text-xl text-primary-dark font-semibold flex items-center justify-center gap-2">
-            <HiSparkles className="w-5 h-5" />
+            <FaLeaf className="w-5 h-5" />
             Under Maintenance
-            <HiSparkles className="w-5 h-5" />
+            <FaLeaf className="w-5 h-5" />
           </p>
           <p className="text-[rgb(var(--muted-foreground))]">
             We&apos;re working hard to bring you something amazing. 

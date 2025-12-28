@@ -21,8 +21,9 @@ import {
   HiArrowPath,
   HiCurrencyDollar,
   HiClock,
-  HiSparkles,
+  HiShoppingBag,
 } from 'react-icons/hi2';
+import { FaLeaf } from 'react-icons/fa';
 
 interface OrderItem {
   id: string;
@@ -556,7 +557,7 @@ export default function AdminOrderDetailPage() {
           <div className="lg:col-span-2 space-y-6">
             <div className="card p-4 sm:p-6">
               <h2 className="text-lg sm:text-xl font-bold text-[rgb(var(--foreground))] mb-4 flex items-center gap-2">
-                <HiSparkles className="w-5 h-5 text-primary-dark" />
+                <HiShoppingBag className="w-5 h-5 text-primary-dark" />
                 Order Items ({order.items.length})
               </h2>
               <div className="space-y-4">
@@ -573,7 +574,7 @@ export default function AdminOrderDetailPage() {
                       </div>
                     ) : (
                       <div className="w-16 h-16 sm:w-20 sm:h-20 bg-[rgb(var(--muted))] rounded-xl flex-shrink-0 flex items-center justify-center">
-                        <HiSparkles className="w-6 h-6 text-[rgb(var(--muted-foreground))]/30" />
+                        <FaLeaf className="w-6 h-6 text-[rgb(var(--muted-foreground))]/30" />
                       </div>
                     )}
                     <div className="flex-1 min-w-0">
@@ -602,7 +603,7 @@ export default function AdminOrderDetailPage() {
               <div className="space-y-3">
                 <div className="flex items-center gap-3">
                   <div className="p-2 rounded-lg bg-primary-dark/10">
-                    <HiSparkles className="w-4 h-4 text-primary-dark" />
+                    <FaLeaf className="w-4 h-4 text-primary-dark" />
                   </div>
                   <p className="text-[rgb(var(--foreground))]">
                     {order.user?.firstName && order.user?.lastName

@@ -3,7 +3,8 @@
 import { useState, useEffect, useCallback } from 'react';
 import Link from 'next/link';
 import Image from 'next/image';
-import { HiChevronLeft, HiChevronRight, HiSparkles } from 'react-icons/hi2';
+import { HiChevronLeft, HiChevronRight } from 'react-icons/hi2';
+import { FaLeaf } from 'react-icons/fa';
 
 interface Product {
   id: string;
@@ -160,7 +161,7 @@ export default function ProductCarousel({ products }: ProductCarouselProps) {
                       />
                     ) : (
                       <div className="w-full h-full flex items-center justify-center">
-                        <HiSparkles className="w-16 h-16 text-[rgb(var(--muted-foreground))]/30" />
+                        <FaLeaf className="w-16 h-16 text-[rgb(var(--muted-foreground))]/30" />
                       </div>
                     )}
                     <div className="absolute top-3 right-3 sm:top-4 sm:right-4 bg-primary-dark text-white 

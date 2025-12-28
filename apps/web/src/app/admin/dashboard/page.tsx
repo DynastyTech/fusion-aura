@@ -10,12 +10,12 @@ import {
   HiPlus, 
   HiMagnifyingGlass,
   HiClipboardDocumentList,
-  HiSparkles,
   HiCheckCircle,
   HiXCircle,
   HiCube,
   HiCurrencyDollar,
 } from 'react-icons/hi2';
+import { FaLeaf } from 'react-icons/fa';
 
 interface Product {
   id: string;
@@ -174,7 +174,7 @@ export default function AdminDashboard() {
           <div className="card p-4 lg:p-6">
             <div className="flex items-center gap-3 mb-2">
               <div className="p-2 rounded-xl bg-blue-100 dark:bg-blue-900/20">
-                <HiSparkles className="w-5 h-5 text-blue-600" />
+                <FaLeaf className="w-5 h-5 text-blue-600" />
               </div>
               <span className="text-xs lg:text-sm text-[rgb(var(--muted-foreground))]">
                 Featured

@@ -1,6 +1,7 @@
 import Link from 'next/link';
 import Image from 'next/image';
-import { HiSparkles, HiMagnifyingGlass, HiAdjustmentsHorizontal } from 'react-icons/hi2';
+import { HiMagnifyingGlass, HiAdjustmentsHorizontal, HiArrowLeft } from 'react-icons/hi2';
+import { FaLeaf } from 'react-icons/fa';
 
 interface Product {
   id: string;
@@ -64,6 +65,17 @@ export default async function ProductsPage() {
         <div className="absolute inset-0 bg-gradient-to-br from-primary-light/10 via-transparent to-primary-dark/5" />
         
         <div className="container relative mx-auto px-4 sm:px-6 lg:px-8">
+          {/* Back Button */}
+          <Link 
+            href="/"
+            className="inline-flex items-center gap-2 px-4 py-2 rounded-xl mb-6
+                     text-[rgb(var(--muted-foreground))] hover:text-[rgb(var(--foreground))]
+                     hover:bg-[rgb(var(--muted))] transition-all duration-200 font-medium"
+          >
+            <HiArrowLeft className="w-5 h-5" />
+            Back
+          </Link>
+          
           <div className="text-center max-w-3xl mx-auto">
             <span className="inline-block px-4 py-1.5 rounded-full text-sm font-medium 
                            bg-primary-dark/10 text-primary-dark mb-4 animate-fade-in">
@@ -125,7 +137,7 @@ export default async function ProductsPage() {
                       />
                     ) : (
                       <div className="w-full h-full flex items-center justify-center">
-                        <HiSparkles className="w-12 h-12 text-[rgb(var(--muted-foreground))]/30" />
+                        <FaLeaf className="w-12 h-12 text-[rgb(var(--muted-foreground))]/30" />
                       </div>
                     )}
                     
