@@ -203,7 +203,7 @@ export default function HeaderNav() {
                     bg-[rgb(var(--background))] z-[999] md:hidden
                     transform transition-transform duration-300 ease-out
                     ${mobileMenuOpen ? 'translate-x-0' : 'translate-x-full'}`}
-        style={{ minHeight: '100vh', minHeight: '100dvh' }}
+        style={{ minHeight: '100dvh' }}
       >
         <div className="flex flex-col h-full min-h-screen">
           {/* Header */}
