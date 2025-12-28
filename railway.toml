@@ -4,7 +4,7 @@ buildCommand = "npm install && npx prisma generate --schema=packages/db/prisma/s
 
 [deploy]
 # Run migrations at startup, then start the server
-startCommand = "npx prisma generate --schema=packages/db/prisma/schema.prisma && cd packages/db && npx prisma migrate deploy && cd ../../apps/api && npm start"
+startCommand = "npx prisma generate --schema=packages/db/prisma/schema.prisma && cd packages/db && node migrate-and-fix.js && cd ../../apps/api && npm start"
 restartPolicyType = "on_failure"
 restartPolicyMaxRetries = 10
 healthcheckPath = "/health"
