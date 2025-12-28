@@ -195,16 +195,7 @@ export default async function Home() {
       {featuredProducts.length > 0 && (
         <section className="py-16 lg:py-24">
           <div className="container mx-auto px-4 sm:px-6 lg:px-8">
-            <div className="text-center mb-12">
-              <span className="inline-block px-4 py-1.5 rounded-full text-sm font-medium 
-                             bg-primary-dark/10 text-primary-dark mb-4">
-                ✨ Featured Collection
-              </span>
 
-              <p className="text-lg text-[rgb(var(--muted-foreground))] max-w-2xl mx-auto">
-                Discover our most loved products, carefully selected for quality and effectiveness
-              </p>
-            </div>
             
             <ProductCarousel products={featuredProducts} />
             
