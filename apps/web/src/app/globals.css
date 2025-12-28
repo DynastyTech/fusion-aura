@@ -12,10 +12,13 @@
     --muted-foreground: 100 116 139;
     --border: 226 232 240;
     --input: 241 245 249;
-    --primary: 34 197 94;
+    --primary: 101 163 13;
     --primary-foreground: 255 255 255;
-    --accent: 134 239 172;
+    --accent: 163 230 53;
     --accent-foreground: 15 23 42;
+    /* Yellow-Green to Green theme */
+    --primary-light: 163 230 53;
+    --primary-dark: 34 197 94;
   }
 
   .dark {
@@ -27,10 +30,13 @@
     --muted-foreground: 161 161 170;
     --border: 39 39 42;
     --input: 39 39 42;
-    --primary: 34 197 94;
+    --primary: 132 204 22;
     --primary-foreground: 9 9 11;
-    --accent: 134 239 172;
+    --accent: 163 230 53;
     --accent-foreground: 9 9 11;
+    /* Yellow-Green to Green theme */
+    --primary-light: 163 230 53;
+    --primary-dark: 74 222 128;
   }
 
   * {

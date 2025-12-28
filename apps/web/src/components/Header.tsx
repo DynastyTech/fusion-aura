@@ -3,7 +3,7 @@
 import { useState, useEffect } from 'react';
 import Link from 'next/link';
 import HeaderNav from './HeaderNav';
-import { HiSparkles } from 'react-icons/hi2';
+import { FaLeaf } from 'react-icons/fa';
 
 export default function Header() {
   const [scrolled, setScrolled] = useState(false);
@@ -36,7 +36,7 @@ export default function Header() {
                             rounded-xl blur-lg opacity-50 group-hover:opacity-75 transition-opacity" />
               <div className="relative bg-gradient-to-r from-primary-light to-primary-dark 
                             p-2 rounded-xl">
-                <HiSparkles className="w-5 h-5 text-white" />
+                <FaLeaf className="w-5 h-5 text-white" />
               </div>
             </div>
             <span className="text-xl font-bold">

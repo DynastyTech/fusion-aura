@@ -9,7 +9,7 @@ import {
   HiPaperAirplane,
   HiCheckCircle,
 } from 'react-icons/hi2';
-import { FaInstagram, FaTwitter, FaFacebook, FaTiktok, FaWhatsapp } from 'react-icons/fa';
+import { FaInstagram, FaFacebook, FaTiktok, FaWhatsapp } from 'react-icons/fa';
 
 const socialLinks = [
   { 
@@ -27,18 +27,18 @@ const socialLinks = [
     color: 'bg-green-500',
   },
   { 
-    name: 'Twitter', 
-    href: 'https://twitter.com/fusionaura', 
-    icon: FaTwitter,
-    handle: '@fusionaura',
-    color: 'bg-sky-500',
+    name: 'Facebook', 
+    href: 'https://facebook.com/abutiialpha', 
+    icon: FaFacebook,
+    handle: 'Abutii Alpha',
+    color: 'bg-blue-600',
   },
   { 
-    name: 'Facebook', 
-    href: 'https://facebook.com/fusionaura', 
-    icon: FaFacebook,
-    handle: 'FusionAura',
-    color: 'bg-blue-600',
+    name: 'TikTok', 
+    href: 'https://tiktok.com/@abutii_alpha', 
+    icon: FaTiktok,
+    handle: '@abutii_alpha',
+    color: 'bg-black dark:bg-white dark:text-black',
   },
 ];
 
@@ -141,7 +141,7 @@ export default function ContactPage() {
                   <div>
                     <p className="font-semibold text-[rgb(var(--foreground))]">Location</p>
                     <p className="text-[rgb(var(--muted-foreground))]">
-                      Lagos, Nigeria<br />
+                      Sandton, South Africa<br />
                       We deliver nationwide!
                     </p>
                   </div>

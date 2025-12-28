@@ -2,12 +2,11 @@
 
 import Link from 'next/link';
 import { 
-  HiSparkles, 
   HiEnvelope, 
   HiMapPin,
   HiPhone,
 } from 'react-icons/hi2';
-import { FaInstagram, FaTwitter, FaFacebook, FaTiktok } from 'react-icons/fa';
+import { FaInstagram, FaWhatsapp, FaFacebook, FaTiktok, FaLeaf } from 'react-icons/fa';
 
 const footerLinks = {
   shop: [
@@ -37,9 +36,19 @@ const socialLinks = [
     icon: FaInstagram,
     handle: '@abutii_alpha',
   },
-  { name: 'Twitter', href: 'https://twitter.com/fusionaura', icon: FaTwitter },
-  { name: 'Facebook', href: 'https://facebook.com/fusionaura', icon: FaFacebook },
-  { name: 'TikTok', href: 'https://tiktok.com/@fusionaura', icon: FaTiktok },
+  { 
+    name: 'WhatsApp', 
+    href: 'https://wa.me/27658090794', 
+    icon: FaWhatsapp,
+    handle: '+27 65 809 0794',
+  },
+  { 
+    name: 'Facebook', 
+    href: 'https://facebook.com/abutiialpha', 
+    icon: FaFacebook,
+    handle: 'Abutii Alpha',
+  },
+  { name: 'TikTok', href: 'https://tiktok.com/@abutii_alpha', icon: FaTiktok },
 ];
 
 export default function Footer() {
@@ -58,7 +67,7 @@ export default function Footer() {
                               rounded-xl blur-lg opacity-50 group-hover:opacity-75 transition-opacity" />
                 <div className="relative bg-gradient-to-r from-primary-light to-primary-dark 
                               p-2 rounded-xl">
-                  <HiSparkles className="w-5 h-5 text-white" />
+                  <FaLeaf className="w-5 h-5 text-white" />
                 </div>
               </div>
               <span className="text-xl font-bold">
@@ -75,24 +84,24 @@ export default function Footer() {
             {/* Contact Info */}
             <div className="space-y-3">
               <a 
-                href="mailto:contact@fusionaura.com" 
+                href="mailto:alphageneralsol@gmail.com" 
                 className="flex items-center gap-2 text-[rgb(var(--muted-foreground))] 
                            hover:text-primary-dark transition-colors"
               >
                 <HiEnvelope className="w-4 h-4" />
-                <span>contact@fusionaura.com</span>
+                <span>alphageneralsol@gmail.com</span>
               </a>
               <a 
-                href="tel:+1234567890" 
+                href="tel:+27658090794" 
                 className="flex items-center gap-2 text-[rgb(var(--muted-foreground))] 
                            hover:text-primary-dark transition-colors"
               >
                 <HiPhone className="w-4 h-4" />
-                <span>+1 (234) 567-890</span>
+                <span>+27 65 809 0794</span>
               </a>
               <p className="flex items-center gap-2 text-[rgb(var(--muted-foreground))]">
                 <HiMapPin className="w-4 h-4" />
-                <span>Lagos, Nigeria</span>
+                <span>Sandton, South Africa</span>
               </p>
             </div>
 
