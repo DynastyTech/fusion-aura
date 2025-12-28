@@ -76,10 +76,16 @@ async function build() {
     credentials: true,
   });
 
-  // Rate limiting
+  // Rate limiting - higher limits for production use
   await server.register(rateLimit, {
-    max: 100,
+    max: 500,
     timeWindow: '1 minute',
+    // Skip rate limiting for authenticated requests
+    keyGenerator: (request) => {
+      // Use IP + user ID if authenticated for more granular limits
+      const userId = (request.user as any)?.id;
+      return userId ? `user-${userId}` : request.ip;
+    },
   });
 
   // Multipart support for file uploads
