@@ -47,14 +47,20 @@ export async function apiRequest<T>(
     const data = await response.json();
 
     if (!response.ok) {
-      // If 401, clear token and user
-      if (response.status === 401) {
+      // If 401 on auth endpoints, clear token and user
+      // Don't clear on other endpoints to avoid race conditions
+      if (response.status === 401 && endpoint.includes('/api/auth/')) {
         if (typeof window !== 'undefined') {
+          console.log('🚫 Clearing auth due to 401 on auth endpoint:', endpoint);
           localStorage.removeItem('token');
           localStorage.removeItem('user');
           // Trigger storage event to update auth context
           window.dispatchEvent(new Event('storage'));
         }
+      }
+      // Log rate limiting errors
+      if (response.status === 429) {
+        console.warn('⚠️ Rate limited on:', endpoint);
       }
       // If 403, log detailed error
       if (response.status === 403) {
