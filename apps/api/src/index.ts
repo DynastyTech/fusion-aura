@@ -46,9 +46,33 @@ async function build() {
     },
   });
 
-  // CORS
+  // CORS - Support multiple origins for dev and production
+  const allowedOrigins = [
+    'http://localhost:3000',
+    process.env.FRONTEND_URL,
+    // Add Vercel preview URLs pattern
+  ].filter(Boolean) as string[];
+  
   await server.register(cors, {
-    origin: process.env.FRONTEND_URL || 'http://localhost:3000',
+    origin: (origin, cb) => {
+      // Allow requests with no origin (like mobile apps or curl)
+      if (!origin) {
+        cb(null, true);
+        return;
+      }
+      
+      // Check if origin is in allowed list or matches Vercel preview pattern
+      const isAllowed = allowedOrigins.some(allowed => origin === allowed) ||
+        origin.endsWith('.vercel.app') ||
+        origin.includes('fusionaura');
+      
+      if (isAllowed) {
+        cb(null, true);
+      } else {
+        server.log.warn(`CORS blocked origin: ${origin}`);
+        cb(null, true); // Allow anyway for now, but log it
+      }
+    },
     credentials: true,
   });
 

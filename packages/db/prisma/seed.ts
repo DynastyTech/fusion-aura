@@ -1,9 +1,47 @@
 import { PrismaClient } from '@prisma/client';
+import bcrypt from 'bcryptjs';
 
 const prisma = new PrismaClient();
 
 async function main() {
   console.log('🌱 Starting seed...');
+
+  // Create admin user
+  console.log('👤 Creating admin user...');
+  const adminEmail = process.env.ADMIN_EMAIL || 'admin@fusionaura.com';
+  const adminPassword = process.env.ADMIN_PASSWORD || 'admin123';
+  
+  const existingAdmin = await prisma.user.findUnique({
+    where: { email: adminEmail },
+  });
+
+  if (!existingAdmin) {
+    const hashedPassword = await bcrypt.hash(adminPassword, 10);
+    await prisma.user.create({
+      data: {
+        email: adminEmail,
+        password: hashedPassword,
+        firstName: 'Admin',
+        lastName: 'User',
+        role: 'ADMIN',
+        addressLine1: 'Admin Address',
+        city: 'Johannesburg',
+        postalCode: '2000',
+      },
+    });
+    console.log(`✅ Admin user created: ${adminEmail}`);
+  } else {
+    // Ensure user is admin
+    if (existingAdmin.role !== 'ADMIN') {
+      await prisma.user.update({
+        where: { id: existingAdmin.id },
+        data: { role: 'ADMIN' },
+      });
+      console.log('✅ Updated existing user to ADMIN role');
+    } else {
+      console.log('⏭️  Admin user already exists');
+    }
+  }
 
   // Create categories first
   console.log('📁 Creating categories...');
