@@ -151,7 +151,28 @@ export default function HeaderNav() {
       </nav>
 
       {/* Mobile Navigation Button */}
-      <div className="flex md:hidden items-center gap-2">
+      <div className="flex md:hidden items-center gap-1">
+        {/* Login button visible in header for non-logged users */}
+        {!user && (
+          <Link
+            href="/login"
+            className="flex items-center gap-1 px-3 py-1.5 rounded-lg
+                       bg-primary-dark text-white text-sm font-medium
+                       hover:bg-primary-dark/90 transition-colors"
+          >
+            <HiUser className="w-4 h-4" />
+            <span>Login</span>
+          </Link>
+        )}
+
+        {/* Show user initial if logged in */}
+        {user && (
+          <div className="flex items-center justify-center w-8 h-8 rounded-full 
+                          bg-primary-dark text-white text-sm font-bold">
+            {user.firstName?.[0] || user.email?.[0]?.toUpperCase() || 'U'}
+          </div>
+        )}
+
         {!isAdmin && (
           <Link href="/cart" className="relative p-2">
             <HiShoppingCart className="w-6 h-6 text-[rgb(var(--foreground))]" />
