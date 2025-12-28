@@ -342,6 +342,40 @@ export default function HeaderNav() {
                 {theme === 'dark' ? 'Light Mode' : 'Dark Mode'}
               </span>
             </button>
+
+            {/* Divider before Login */}
+            <div className="my-4 border-t border-[rgb(var(--border))]" />
+
+            {/* Login/Logout in Menu */}
+            {user ? (
+              <button
+                onClick={() => {
+                  logout();
+                  setMobileMenuOpen(false);
+                }}
+                className="flex items-center gap-4 px-5 py-4 rounded-2xl w-full
+                           text-red-500 hover:bg-red-500/10
+                           active:bg-red-500/20 transition-all duration-200"
+              >
+                <div className="p-3 rounded-xl bg-red-500/20">
+                  <HiArrowRightOnRectangle className="w-6 h-6 text-red-500" />
+                </div>
+                <span className="font-semibold text-lg">Logout</span>
+              </button>
+            ) : (
+              <Link
+                href="/login"
+                onClick={() => setMobileMenuOpen(false)}
+                className="flex items-center gap-4 px-5 py-4 rounded-2xl
+                           text-[rgb(var(--foreground))] hover:bg-[rgb(var(--muted))]
+                           active:bg-[rgb(var(--muted))] transition-all duration-200"
+              >
+                <div className="p-3 rounded-xl bg-primary-light/20">
+                  <HiUser className="w-6 h-6 text-primary-dark" />
+                </div>
+                <span className="font-semibold text-lg">Login / Sign Up</span>
+              </Link>
+            )}
           </nav>
 
           {/* Footer Actions */}
