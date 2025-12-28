@@ -200,9 +200,7 @@ export default async function Home() {
                              bg-primary-dark/10 text-primary-dark mb-4">
                 ✨ Featured Collection
               </span>
-              <h2 className="text-3xl sm:text-4xl lg:text-5xl font-bold text-[rgb(var(--foreground))] mb-4">
-                Trending Products
-              </h2>
+
               <p className="text-lg text-[rgb(var(--muted-foreground))] max-w-2xl mx-auto">
                 Discover our most loved products, carefully selected for quality and effectiveness
               </p>
