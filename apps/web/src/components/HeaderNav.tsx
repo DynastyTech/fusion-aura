@@ -152,27 +152,6 @@ export default function HeaderNav() {
 
       {/* Mobile Navigation Button */}
       <div className="flex md:hidden items-center gap-1">
-        {/* Login button visible in header for non-logged users */}
-        {!user && (
-          <Link
-            href="/login"
-            className="flex items-center gap-1 px-3 py-1.5 rounded-lg
-                       bg-primary-dark text-white text-sm font-medium
-                       hover:bg-primary-dark/90 transition-colors"
-          >
-            <HiUser className="w-4 h-4" />
-            <span>Login</span>
-          </Link>
-        )}
-
-        {/* Show user initial if logged in */}
-        {user && (
-          <div className="flex items-center justify-center w-8 h-8 rounded-full 
-                          bg-primary-dark text-white text-sm font-bold">
-            {user.firstName?.[0] || user.email?.[0]?.toUpperCase() || 'U'}
-          </div>
-        )}
-
         {!isAdmin && (
           <Link href="/cart" className="relative p-2">
             <HiShoppingCart className="w-6 h-6 text-[rgb(var(--foreground))]" />
@@ -326,8 +305,8 @@ export default function HeaderNav() {
                          text-[rgb(var(--foreground))] hover:bg-[rgb(var(--muted))]
                          active:bg-[rgb(var(--muted))] transition-all duration-200"
             >
-              <div className="p-3 rounded-xl bg-blue-500/20">
-                <HiEnvelope className="w-6 h-6 text-blue-500" />
+              <div className="p-3 rounded-xl bg-primary-light/20">
+                <HiEnvelope className="w-6 h-6 text-primary-dark" />
               </div>
               <span className="font-semibold text-lg">Contact Us</span>
             </Link>
@@ -339,8 +318,8 @@ export default function HeaderNav() {
                          text-[rgb(var(--foreground))] hover:bg-[rgb(var(--muted))]
                          active:bg-[rgb(var(--muted))] transition-all duration-200"
             >
-              <div className="p-3 rounded-xl bg-purple-500/20">
-                <HiInformationCircle className="w-6 h-6 text-purple-500" />
+              <div className="p-3 rounded-xl bg-primary-light/20">
+                <HiInformationCircle className="w-6 h-6 text-primary-dark" />
               </div>
               <span className="font-semibold text-lg">About Us</span>
             </Link>
@@ -352,11 +331,11 @@ export default function HeaderNav() {
                          text-[rgb(var(--foreground))] hover:bg-[rgb(var(--muted))]
                          active:bg-[rgb(var(--muted))] transition-all duration-200"
             >
-              <div className={`p-3 rounded-xl ${theme === 'dark' ? 'bg-yellow-500/20' : 'bg-slate-500/20'}`}>
+              <div className="p-3 rounded-xl bg-primary-light/20">
                 {theme === 'dark' ? (
-                  <HiSun className="w-6 h-6 text-yellow-500" />
+                  <HiSun className="w-6 h-6 text-primary-dark" />
                 ) : (
-                  <HiMoon className="w-6 h-6 text-slate-500" />
+                  <HiMoon className="w-6 h-6 text-primary-dark" />
                 )}
               </div>
               <span className="font-semibold text-lg">
