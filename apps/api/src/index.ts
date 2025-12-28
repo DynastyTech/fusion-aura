@@ -160,11 +160,68 @@ async function build() {
   return server;
 }
 
+// Run database migrations with retry logic
+async function runMigrations(maxRetries = 5, delayMs = 3000): Promise<void> {
+  const { prisma } = await import('@fusionaura/db');
+  
+  for (let attempt = 1; attempt <= maxRetries; attempt++) {
+    try {
+      console.log(`🔄 Running database schema check (attempt ${attempt}/${maxRetries})...`);
+      
+      // Check if deletedAt column exists on orders table
+      const result = await prisma.$queryRaw<any[]>`
+        SELECT column_name 
+        FROM information_schema.columns 
+        WHERE table_name = 'orders' AND column_name = 'deletedAt'
+      `;
+      
+      if (result.length === 0) {
+        console.log('📝 Adding deletedAt column to orders table...');
+        await prisma.$executeRawUnsafe(`
+          ALTER TABLE "orders" ADD COLUMN IF NOT EXISTS "deletedAt" TIMESTAMP(3)
+        `);
+        await prisma.$executeRawUnsafe(`
+          CREATE INDEX IF NOT EXISTS "orders_deletedAt_idx" ON "orders"("deletedAt")
+        `);
+        console.log('✅ Added deletedAt column');
+      } else {
+        console.log('✅ Database schema is up to date');
+      }
+      
+      // Add new OrderStatus enum values if needed
+      const enumValues = ['ACCEPTED', 'DECLINED', 'PENDING_DELIVERY', 'OUT_FOR_DELIVERY', 'COMPLETED'];
+      for (const value of enumValues) {
+        try {
+          await prisma.$executeRawUnsafe(`ALTER TYPE "OrderStatus" ADD VALUE IF NOT EXISTS '${value}'`);
+        } catch (e) {
+          // Ignore if value already exists
+        }
+      }
+      
+      console.log('✅ Database schema check complete');
+      return;
+    } catch (error: any) {
+      console.error(`❌ Database check attempt ${attempt} failed:`, error.message);
+      if (attempt < maxRetries) {
+        console.log(`   Retrying in ${delayMs / 1000} seconds...`);
+        await new Promise(resolve => setTimeout(resolve, delayMs));
+      }
+    }
+  }
+  
+  console.warn('⚠️ Database schema check failed after all retries, continuing anyway...');
+}
+
 async function start() {
   try {
     const app = await build();
     await app.listen({ port: config.port, host: '0.0.0.0' });
     console.log(`🚀 FusionAura API server running on port ${config.port}`);
+    
+    // Run migrations in background after server starts
+    runMigrations().catch(err => {
+      console.error('Migration error (non-fatal):', err.message);
+    });
   } catch (err) {
     server.log.error(err);
     process.exit(1);

@@ -3,8 +3,8 @@ builder = "nixpacks"
 buildCommand = "npm install && npx prisma generate --schema=packages/db/prisma/schema.prisma && cd packages/db && npm run build && cd ../../apps/api && npm run build"
 
 [deploy]
-# Run migrations at startup, then start the server
-startCommand = "npx prisma generate --schema=packages/db/prisma/schema.prisma && cd packages/db && node migrate-and-fix.js && cd ../../apps/api && npm start"
+# Start the server - migrations will be handled by the API on first request
+startCommand = "npx prisma generate --schema=packages/db/prisma/schema.prisma && cd apps/api && npm start"
 restartPolicyType = "on_failure"
 restartPolicyMaxRetries = 10
 healthcheckPath = "/health"
