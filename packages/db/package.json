@@ -1,11 +1,11 @@
 {
   "name": "@fusionaura/db",
   "version": "1.0.0",
-  "main": "./index.ts",
-  "types": "./index.ts",
+  "main": "./dist/index.js",
+  "types": "./dist/index.d.ts",
   "scripts": {
     "generate": "prisma generate",
-    "build": "prisma generate",
+    "build": "prisma generate && tsc",
     "migrate:dev": "prisma migrate dev",
     "migrate:deploy": "prisma migrate deploy",
     "studio": "prisma studio",
