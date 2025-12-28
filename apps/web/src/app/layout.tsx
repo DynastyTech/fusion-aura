@@ -1,11 +1,23 @@
 import type { Metadata } from 'next';
-import { Inter } from 'next/font/google';
+import { Outfit, Space_Grotesk } from 'next/font/google';
 import './globals.css';
 import { AuthProvider } from '@/contexts/AuthContext';
 import { CartProvider } from '@/contexts/CartContext';
-import { PageTransition } from '@/components/PageTransition';
+import { ThemeProvider } from '@/contexts/ThemeContext';
+import Header from '@/components/Header';
+import Footer from '@/components/Footer';
 
-const inter = Inter({ subsets: ['latin'] });
+const outfit = Outfit({ 
+  subsets: ['latin'],
+  variable: '--font-outfit',
+  display: 'swap',
+});
+
+const spaceGrotesk = Space_Grotesk({ 
+  subsets: ['latin'],
+  variable: '--font-space',
+  display: 'swap',
+});
 
 export const metadata: Metadata = {
   title: 'FusionAura - Sustainable Life, Timeless Remedies, Trusted Care',
@@ -17,6 +29,10 @@ export const viewport = {
   width: 'device-width',
   initialScale: 1,
   maximumScale: 5,
+  themeColor: [
+    { media: '(prefers-color-scheme: light)', color: '#ffffff' },
+    { media: '(prefers-color-scheme: dark)', color: '#0a0a0a' },
+  ],
 };
 
 export default function RootLayout({
@@ -25,17 +41,22 @@ export default function RootLayout({
   children: React.ReactNode;
 }) {
   return (
-    <html lang="en">
-      <body className={inter.className}>
-        <AuthProvider>
-          <CartProvider>
-            <PageTransition>
-              {children}
-            </PageTransition>
-          </CartProvider>
-        </AuthProvider>
+    <html lang="en" suppressHydrationWarning>
+      <body className={`${outfit.variable} ${spaceGrotesk.variable} font-sans antialiased`}>
+        <ThemeProvider>
+          <AuthProvider>
+            <CartProvider>
+              <div className="flex min-h-screen flex-col">
+                <Header />
+                <main className="flex-1">
+                  {children}
+                </main>
+                <Footer />
+              </div>
+            </CartProvider>
+          </AuthProvider>
+        </ThemeProvider>
       </body>
     </html>
   );
 }
-

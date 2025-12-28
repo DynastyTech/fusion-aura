@@ -4,13 +4,14 @@ import { useState } from 'react';
 import { useRouter } from 'next/navigation';
 import Link from 'next/link';
 import { login, register } from '@/lib/api';
-import Logo from '@/components/Logo';
+import { HiSparkles, HiArrowLeft, HiEye, HiEyeSlash, HiEnvelope, HiLockClosed, HiUser, HiMapPin, HiPhone } from 'react-icons/hi2';
 
 export default function LoginPage() {
   const router = useRouter();
   const [isLogin, setIsLogin] = useState(true);
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
+  const [showPassword, setShowPassword] = useState(false);
   const [firstName, setFirstName] = useState('');
   const [lastName, setLastName] = useState('');
   const [addressLine1, setAddressLine1] = useState('');
@@ -43,12 +44,8 @@ export default function LoginPage() {
       }
 
       if (response.success && response.data) {
-        // Store token and user info
         localStorage.setItem('token', response.data.token);
         localStorage.setItem('user', JSON.stringify(response.data.user));
-
-        // Force page reload to update AuthContext
-        // This ensures HeaderNav and all components get the updated auth state
         window.location.href = response.data.user.role === 'ADMIN' ? '/admin/dashboard' : '/products';
       } else {
         setError(response.error || 'Authentication failed');
@@ -61,179 +58,224 @@ export default function LoginPage() {
   };
 
   return (
-    <div className="min-h-screen bg-gradient-to-b from-primary-light/20 to-white flex items-center justify-center py-12 px-4 sm:px-6 lg:px-8">
-      <div className="max-w-md w-full space-y-8">
-        {/* Header */}
-        <div className="text-center">
-          <div className="flex justify-center mb-4">
-            <Logo href="/" width={200} height={70} />
-          </div>
-          <h2 className="text-3xl font-bold text-gray-900">
-            {isLogin ? 'Sign in to your account' : 'Create your account'}
-          </h2>
-          <p className="mt-2 text-sm text-gray-600">
-            {isLogin ? "Don't have an account? " : 'Already have an account? '}
-            <button
-              onClick={() => {
-                setIsLogin(!isLogin);
-                setError('');
-              }}
-              className="font-medium text-primary-dark hover:text-primary-dark/80"
-            >
-              {isLogin ? 'Sign up' : 'Sign in'}
-            </button>
-          </p>
-        </div>
+    <div className="min-h-screen bg-[rgb(var(--background))] flex items-center justify-center py-8 px-4 sm:px-6 lg:px-8">
+      {/* Background Effects */}
+      <div className="absolute inset-0 overflow-hidden">
+        <div className="absolute top-0 left-1/4 w-96 h-96 bg-primary-light/20 rounded-full blur-3xl" />
+        <div className="absolute bottom-0 right-1/4 w-80 h-80 bg-primary-dark/10 rounded-full blur-3xl" />
+      </div>
 
-        {/* Form */}
-        <form className="mt-8 space-y-6" onSubmit={handleSubmit}>
+      <div className="relative w-full max-w-md">
+        {/* Card */}
+        <div className="card p-6 sm:p-8 animate-fade-in-up">
+          {/* Header */}
+          <div className="text-center mb-8">
+            <Link href="/" className="inline-flex items-center gap-2 group mb-6">
+              <div className="relative">
+                <div className="absolute inset-0 bg-gradient-to-r from-primary-light to-primary-dark 
+                              rounded-xl blur-lg opacity-50 group-hover:opacity-75 transition-opacity" />
+                <div className="relative bg-gradient-to-r from-primary-light to-primary-dark 
+                              p-2 rounded-xl">
+                  <HiSparkles className="w-5 h-5 text-white" />
+                </div>
+              </div>
+              <span className="text-xl font-bold">
+                <span className="text-primary-light">Fusion</span>
+                <span className="text-primary-dark">Aura</span>
+              </span>
+            </Link>
+            
+            <h1 className="text-2xl sm:text-3xl font-bold text-[rgb(var(--foreground))]">
+              {isLogin ? 'Welcome back!' : 'Create account'}
+            </h1>
+            <p className="mt-2 text-[rgb(var(--muted-foreground))]">
+              {isLogin ? "Don't have an account? " : 'Already have an account? '}
+              <button
+                onClick={() => {
+                  setIsLogin(!isLogin);
+                  setError('');
+                }}
+                className="font-semibold text-primary-dark hover:text-primary-dark/80 transition-colors"
+              >
+                {isLogin ? 'Sign up' : 'Sign in'}
+              </button>
+            </p>
+          </div>
+
+          {/* Error Message */}
           {error && (
-            <div className="bg-red-50 border border-red-200 text-red-700 px-4 py-3 rounded">
+            <div className="mb-6 p-4 rounded-xl bg-red-50 dark:bg-red-900/20 
+                          border border-red-200 dark:border-red-800 text-red-700 dark:text-red-400
+                          animate-scale-in">
               {error}
             </div>
           )}
 
-          <div className="space-y-4">
+          {/* Form */}
+          <form onSubmit={handleSubmit} className="space-y-4">
             {!isLogin && (
               <>
+                {/* Name Field */}
                 <div>
-                  <label htmlFor="firstName" className="block text-sm font-medium text-gray-700">
-                    Full Name *
+                  <label htmlFor="firstName" className="block text-sm font-medium text-[rgb(var(--foreground))] mb-1.5">
+                    Full Name
                   </label>
-                  <input
-                    id="firstName"
-                    type="text"
-                    required
-                    value={firstName}
-                    onChange={(e) => setFirstName(e.target.value)}
-                    placeholder="Your full name"
-                    className="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-primary-dark focus:border-primary-dark"
-                  />
-                </div>
-                
-                <div>
-                  <label htmlFor="addressLine1" className="block text-sm font-medium text-gray-700">
-                    Delivery Address Line 1 *
-                  </label>
-                  <input
-                    id="addressLine1"
-                    type="text"
-                    required
-                    value={addressLine1}
-                    onChange={(e) => setAddressLine1(e.target.value)}
-                    placeholder="Street address"
-                    className="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-primary-dark focus:border-primary-dark"
-                  />
-                </div>
-                
-                <div>
-                  <label htmlFor="addressLine2" className="block text-sm font-medium text-gray-700">
-                    Address Line 2
-                  </label>
-                  <input
-                    id="addressLine2"
-                    type="text"
-                    value={addressLine2}
-                    onChange={(e) => setAddressLine2(e.target.value)}
-                    placeholder="Apartment, suite, etc. (optional)"
-                    className="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-primary-dark focus:border-primary-dark"
-                  />
-                </div>
-                
-                <div className="grid grid-cols-2 gap-4">
-                  <div>
-                    <label htmlFor="city" className="block text-sm font-medium text-gray-700">
-                      City *
-                    </label>
+                  <div className="relative">
+                    <HiUser className="absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 text-[rgb(var(--muted-foreground))]" />
                     <input
-                      id="city"
+                      id="firstName"
                       type="text"
                       required
-                      value={city}
-                      onChange={(e) => setCity(e.target.value)}
-                      placeholder="City"
-                      className="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-primary-dark focus:border-primary-dark"
-                    />
-                  </div>
-                  
-                  <div>
-                    <label htmlFor="postalCode" className="block text-sm font-medium text-gray-700">
-                      Postal Code *
-                    </label>
-                    <input
-                      id="postalCode"
-                      type="text"
-                      required
-                      value={postalCode}
-                      onChange={(e) => setPostalCode(e.target.value)}
-                      placeholder="Postal code"
-                      className="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-primary-dark focus:border-primary-dark"
+                      value={firstName}
+                      onChange={(e) => setFirstName(e.target.value)}
+                      placeholder="Your full name"
+                      className="input-field pl-12"
                     />
                   </div>
                 </div>
-                
+
+                {/* Address Fields */}
                 <div>
-                  <label htmlFor="phone" className="block text-sm font-medium text-gray-700">
-                    Phone Number
+                  <label htmlFor="addressLine1" className="block text-sm font-medium text-[rgb(var(--foreground))] mb-1.5">
+                    Delivery Address
                   </label>
+                  <div className="relative">
+                    <HiMapPin className="absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 text-[rgb(var(--muted-foreground))]" />
+                    <input
+                      id="addressLine1"
+                      type="text"
+                      required
+                      value={addressLine1}
+                      onChange={(e) => setAddressLine1(e.target.value)}
+                      placeholder="Street address"
+                      className="input-field pl-12"
+                    />
+                  </div>
+                </div>
+
+                <input
+                  type="text"
+                  value={addressLine2}
+                  onChange={(e) => setAddressLine2(e.target.value)}
+                  placeholder="Apartment, suite, etc. (optional)"
+                  className="input-field"
+                />
+
+                <div className="grid grid-cols-2 gap-3">
                   <input
-                    id="phone"
-                    type="tel"
-                    value={phone}
-                    onChange={(e) => setPhone(e.target.value)}
-                    placeholder="Phone number (optional)"
-                    className="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-primary-dark focus:border-primary-dark"
+                    type="text"
+                    required
+                    value={city}
+                    onChange={(e) => setCity(e.target.value)}
+                    placeholder="City"
+                    className="input-field"
                   />
+                  <input
+                    type="text"
+                    required
+                    value={postalCode}
+                    onChange={(e) => setPostalCode(e.target.value)}
+                    placeholder="Postal code"
+                    className="input-field"
+                  />
+                </div>
+
+                {/* Phone Field */}
+                <div>
+                  <label htmlFor="phone" className="block text-sm font-medium text-[rgb(var(--foreground))] mb-1.5">
+                    Phone (Optional)
+                  </label>
+                  <div className="relative">
+                    <HiPhone className="absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 text-[rgb(var(--muted-foreground))]" />
+                    <input
+                      id="phone"
+                      type="tel"
+                      value={phone}
+                      onChange={(e) => setPhone(e.target.value)}
+                      placeholder="Phone number"
+                      className="input-field pl-12"
+                    />
+                  </div>
                 </div>
               </>
             )}
 
+            {/* Email Field */}
             <div>
-              <label htmlFor="email" className="block text-sm font-medium text-gray-700">
+              <label htmlFor="email" className="block text-sm font-medium text-[rgb(var(--foreground))] mb-1.5">
                 Email address
               </label>
-              <input
-                id="email"
-                type="email"
-                required
-                value={email}
-                onChange={(e) => setEmail(e.target.value)}
-                className="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-primary-dark focus:border-primary-dark"
-              />
+              <div className="relative">
+                <HiEnvelope className="absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 text-[rgb(var(--muted-foreground))]" />
+                <input
+                  id="email"
+                  type="email"
+                  required
+                  value={email}
+                  onChange={(e) => setEmail(e.target.value)}
+                  placeholder="you@example.com"
+                  className="input-field pl-12"
+                />
+              </div>
             </div>
 
+            {/* Password Field */}
             <div>
-              <label htmlFor="password" className="block text-sm font-medium text-gray-700">
+              <label htmlFor="password" className="block text-sm font-medium text-[rgb(var(--foreground))] mb-1.5">
                 Password
               </label>
-              <input
-                id="password"
-                type="password"
-                required
-                minLength={8}
-                value={password}
-                onChange={(e) => setPassword(e.target.value)}
-                className="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-primary-dark focus:border-primary-dark"
-              />
+              <div className="relative">
+                <HiLockClosed className="absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 text-[rgb(var(--muted-foreground))]" />
+                <input
+                  id="password"
+                  type={showPassword ? 'text' : 'password'}
+                  required
+                  minLength={8}
+                  value={password}
+                  onChange={(e) => setPassword(e.target.value)}
+                  placeholder="••••••••"
+                  className="input-field pl-12 pr-12"
+                />
+                <button
+                  type="button"
+                  onClick={() => setShowPassword(!showPassword)}
+                  className="absolute right-4 top-1/2 -translate-y-1/2 text-[rgb(var(--muted-foreground))] 
+                           hover:text-[rgb(var(--foreground))] transition-colors"
+                >
+                  {showPassword ? <HiEyeSlash className="w-5 h-5" /> : <HiEye className="w-5 h-5" />}
+                </button>
+              </div>
             </div>
-          </div>
 
-          <div>
+            {/* Submit Button */}
             <button
               type="submit"
               disabled={loading}
-              className="w-full flex justify-center py-2 px-4 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-primary-dark hover:bg-primary-dark/90 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-primary-dark disabled:opacity-50 disabled:cursor-not-allowed"
+              className="w-full btn-primary py-3.5 text-base mt-6"
             >
-              {loading ? 'Processing...' : isLogin ? 'Sign in' : 'Sign up'}
+              {loading ? (
+                <div className="flex items-center justify-center gap-2">
+                  <div className="w-5 h-5 border-2 border-white border-t-transparent rounded-full animate-spin" />
+                  Processing...
+                </div>
+              ) : (
+                isLogin ? 'Sign in' : 'Create account'
+              )}
             </button>
-          </div>
+          </form>
 
-          <div className="text-center">
-            <Link href="/" className="text-sm text-gray-600 hover:text-primary-dark">
-              ← Back to home
+          {/* Back to Home */}
+          <div className="mt-6 text-center">
+            <Link 
+              href="/" 
+              className="inline-flex items-center gap-2 text-[rgb(var(--muted-foreground))] 
+                       hover:text-primary-dark transition-colors"
+            >
+              <HiArrowLeft className="w-4 h-4" />
+              Back to home
             </Link>
           </div>
-        </form>
+        </div>
       </div>
     </div>
   );

@@ -6,8 +6,15 @@ import Link from 'next/link';
 import Image from 'next/image';
 import { apiRequest } from '@/lib/api';
 import { getGuestCart, updateGuestCartItem, removeFromGuestCart, getGuestCartTotal, clearGuestCart } from '@/lib/guestCart';
-import HeaderNav from '@/components/HeaderNav';
-import Logo from '@/components/Logo';
+import { 
+  HiShoppingCart, 
+  HiPlus, 
+  HiMinus, 
+  HiTrash, 
+  HiArrowRight,
+  HiShoppingBag,
+  HiInformationCircle,
+} from 'react-icons/hi2';
 
 interface CartItem {
   id: string;
@@ -62,7 +69,6 @@ export default function CartPage() {
       }
     } catch (error) {
       console.error('Error fetching cart:', error);
-      // Fallback to guest cart if API fails
       loadGuestCart();
     } finally {
       setLoading(false);
@@ -74,7 +80,6 @@ export default function CartPage() {
     if (token) {
       fetchCart();
     } else {
-      // Guest cart
       loadGuestCart();
     }
   }, [fetchCart, loadGuestCart]);
@@ -87,6 +92,7 @@ export default function CartPage() {
       updateGuestCartItem(itemId, quantity);
       loadGuestCart();
       window.dispatchEvent(new Event('cartUpdated'));
+      setUpdating(null);
     } else {
       try {
         const response = await apiRequest(`/api/cart/${itemId}`, {
@@ -112,6 +118,7 @@ export default function CartPage() {
       removeFromGuestCart(itemId);
       loadGuestCart();
       window.dispatchEvent(new Event('cartUpdated'));
+      setUpdating(null);
     } else {
       try {
         const response = await apiRequest(`/api/cart/${itemId}`, {
@@ -135,108 +142,135 @@ export default function CartPage() {
 
   if (loading) {
     return (
-      <div className="min-h-screen bg-white flex items-center justify-center">
-        <div className="text-center">Loading...</div>
+      <div className="min-h-screen bg-[rgb(var(--background))] flex items-center justify-center">
+        <div className="text-center">
+          <div className="inline-block w-8 h-8 border-4 border-primary-dark border-t-transparent 
+                        rounded-full animate-spin mb-4" />
+          <p className="text-[rgb(var(--muted-foreground))]">Loading cart...</p>
+        </div>
       </div>
     );
   }
 
   return (
-    <div className="min-h-screen bg-white">
-      {/* Header */}
-      <header className="sticky top-0 z-50 bg-white shadow-sm">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-4">
-          <div className="flex justify-between items-center">
-            <Logo href="/" width={180} height={60} />
-            <HeaderNav />
-          </div>
+    <div className="min-h-screen bg-[rgb(var(--background))]">
+      <div className="container mx-auto px-4 sm:px-6 lg:px-8 py-6 lg:py-8">
+        {/* Header */}
+        <div className="mb-6 lg:mb-8">
+          <h1 className="text-2xl sm:text-3xl font-bold text-[rgb(var(--foreground))] flex items-center gap-3">
+            <HiShoppingCart className="w-8 h-8 text-primary-dark" />
+            Shopping Cart
+          </h1>
+          {cart && cart.items.length > 0 && (
+            <p className="text-[rgb(var(--muted-foreground))] mt-1">
+              {cart.items.length} item{cart.items.length !== 1 ? 's' : ''} in your cart
+            </p>
+          )}
         </div>
-      </header>
-
-      {/* Cart Content */}
-      <main className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
-        <h1 className="text-3xl font-bold mb-8">Shopping Cart</h1>
 
         {!cart || cart.items.length === 0 ? (
-          <div className="text-center py-12">
-            <p className="text-gray-500 text-lg mb-4">Your cart is empty</p>
-            <Link
-              href="/products"
-              className="inline-block bg-primary-dark text-white px-6 py-3 rounded-lg hover:bg-primary-dark/90"
-            >
-              Continue Shopping
+          <div className="card p-12 text-center max-w-md mx-auto">
+            <div className="w-20 h-20 mx-auto mb-6 rounded-full bg-[rgb(var(--muted))] 
+                          flex items-center justify-center">
+              <HiShoppingBag className="w-10 h-10 text-[rgb(var(--muted-foreground))]" />
+            </div>
+            <h2 className="text-xl font-semibold text-[rgb(var(--foreground))] mb-2">
+              Your cart is empty
+            </h2>
+            <p className="text-[rgb(var(--muted-foreground))] mb-6">
+              Looks like you haven't added anything yet
+            </p>
+            <Link href="/products" className="btn-primary">
+              <HiShoppingBag className="w-5 h-5" />
+              Start Shopping
             </Link>
           </div>
         ) : (
-          <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
+          <div className="grid grid-cols-1 lg:grid-cols-3 gap-6 lg:gap-8">
             {/* Cart Items */}
             <div className="lg:col-span-2 space-y-4">
               {isGuest && (
-                <div className="bg-blue-50 border border-blue-200 rounded-lg p-4 mb-4">
-                  <p className="text-blue-800 text-sm">
-                    💡 You&apos;re shopping as a guest. You can checkout without creating an account!
+                <div className="flex items-start gap-3 p-4 rounded-xl bg-blue-50 dark:bg-blue-900/20 
+                              border border-blue-200 dark:border-blue-800">
+                  <HiInformationCircle className="w-5 h-5 text-blue-600 flex-shrink-0 mt-0.5" />
+                  <p className="text-sm text-blue-800 dark:text-blue-300">
+                    You're shopping as a guest. You can checkout without creating an account!
                   </p>
                 </div>
               )}
+
               {cart.items.map((item) => (
                 <div
                   key={item.id}
-                  className="bg-white border border-gray-200 rounded-lg p-4 flex items-center space-x-4"
+                  className="card p-4 flex flex-col sm:flex-row items-start sm:items-center gap-4"
                 >
-                  {item.product.images && item.product.images.length > 0 ? (
-                    <div className="relative w-24 h-24 flex-shrink-0">
+                  {/* Image */}
+                  <div className="relative w-full sm:w-24 h-32 sm:h-24 flex-shrink-0 rounded-xl overflow-hidden bg-[rgb(var(--muted))]">
+                    {item.product.images && item.product.images.length > 0 ? (
                       <Image
                         src={item.product.images[0]}
                         alt={item.product.name}
                         fill
-                        className="object-cover rounded"
+                        className="object-cover"
                       />
-                    </div>
-                  ) : (
-                    <div className="w-24 h-24 bg-gray-100 rounded flex-shrink-0" />
-                  )}
+                    ) : (
+                      <div className="w-full h-full flex items-center justify-center">
+                        <HiShoppingBag className="w-8 h-8 text-[rgb(var(--muted-foreground))]" />
+                      </div>
+                    )}
+                  </div>
 
-                  <div className="flex-1">
+                  {/* Info */}
+                  <div className="flex-1 min-w-0">
                     <Link
                       href={`/products/${item.product.slug}`}
-                      className="text-lg font-semibold text-gray-900 hover:text-primary-dark"
+                      className="font-semibold text-[rgb(var(--foreground))] hover:text-primary-dark 
+                               transition-colors line-clamp-2"
                     >
                       {item.product.name}
                     </Link>
                     <p className="text-primary-dark font-bold mt-1">
-                      R{toNumber(item.product.price).toFixed(2)}
+                      R{toNumber(item.product.price).toFixed(2)} each
                     </p>
                   </div>
 
-                  <div className="flex items-center space-x-2">
-                    <button
-                      onClick={() => updateQuantity(item.id, item.quantity - 1)}
-                      disabled={updating === item.id || item.quantity <= 1}
-                      className="w-8 h-8 rounded border border-gray-300 hover:bg-gray-50 disabled:opacity-50"
-                    >
-                      -
-                    </button>
-                    <span className="w-12 text-center">{item.quantity}</span>
-                    <button
-                      onClick={() => updateQuantity(item.id, item.quantity + 1)}
-                      disabled={updating === item.id}
-                      className="w-8 h-8 rounded border border-gray-300 hover:bg-gray-50 disabled:opacity-50"
-                    >
-                      +
-                    </button>
-                  </div>
+                  {/* Quantity Controls */}
+                  <div className="flex items-center gap-2 w-full sm:w-auto justify-between sm:justify-start">
+                    <div className="flex items-center bg-[rgb(var(--muted))] rounded-xl">
+                      <button
+                        onClick={() => updateQuantity(item.id, item.quantity - 1)}
+                        disabled={updating === item.id || item.quantity <= 1}
+                        className="p-2 hover:bg-[rgb(var(--border))] rounded-l-xl transition-colors 
+                                 disabled:opacity-50 disabled:cursor-not-allowed"
+                      >
+                        <HiMinus className="w-4 h-4" />
+                      </button>
+                      <span className="w-12 text-center font-semibold text-[rgb(var(--foreground))]">
+                        {item.quantity}
+                      </span>
+                      <button
+                        onClick={() => updateQuantity(item.id, item.quantity + 1)}
+                        disabled={updating === item.id}
+                        className="p-2 hover:bg-[rgb(var(--border))] rounded-r-xl transition-colors 
+                                 disabled:opacity-50 disabled:cursor-not-allowed"
+                      >
+                        <HiPlus className="w-4 h-4" />
+                      </button>
+                    </div>
 
-                  <div className="text-right">
-                    <p className="text-lg font-bold text-gray-900">
-                      R{item.subtotal.toFixed(2)}
-                    </p>
-                    <button
-                      onClick={() => removeItem(item.id)}
-                      disabled={updating === item.id}
-                      className="text-sm text-red-600 hover:text-red-800 mt-1 disabled:opacity-50"
-                    >
-                      Remove
-                    </button>
+                    <div className="flex items-center gap-4">
+                      <p className="text-lg font-bold text-[rgb(var(--foreground))]">
+                        R{item.subtotal.toFixed(2)}
+                      </p>
+                      <button
+                        onClick={() => removeItem(item.id)}
+                        disabled={updating === item.id}
+                        className="p-2 text-red-500 hover:bg-red-50 dark:hover:bg-red-900/20 
+                                 rounded-lg transition-colors disabled:opacity-50"
+                      >
+                        <HiTrash className="w-5 h-5" />
+                      </button>
+                    </div>
                   </div>
                 </div>
               ))}
@@ -244,31 +278,41 @@ export default function CartPage() {
 
             {/* Order Summary */}
             <div className="lg:col-span-1">
-              <div className="bg-gray-50 rounded-lg p-6 sticky top-4">
-                <h2 className="text-xl font-bold mb-4">Order Summary</h2>
-                <div className="space-y-2 mb-4">
-                  <div className="flex justify-between">
+              <div className="card p-6 sticky top-24">
+                <h2 className="text-xl font-bold text-[rgb(var(--foreground))] mb-4">
+                  Order Summary
+                </h2>
+                
+                <div className="space-y-3 mb-6">
+                  <div className="flex justify-between text-[rgb(var(--muted-foreground))]">
                     <span>Subtotal</span>
-                    <span>R{cart.total.toFixed(2)}</span>
+                    <span className="font-medium text-[rgb(var(--foreground))]">
+                      R{cart.total.toFixed(2)}
+                    </span>
                   </div>
-                  <div className="flex justify-between">
+                  <div className="flex justify-between text-[rgb(var(--muted-foreground))]">
                     <span>VAT (15%)</span>
-                    <span>R{(cart.total * 0.15).toFixed(2)}</span>
+                    <span className="font-medium text-[rgb(var(--foreground))]">
+                      R{(cart.total * 0.15).toFixed(2)}
+                    </span>
                   </div>
-                  <div className="border-t pt-2 flex justify-between font-bold text-lg">
-                    <span>Total</span>
-                    <span>R{(cart.total * 1.15).toFixed(2)}</span>
+                  <div className="border-t border-[rgb(var(--border))] pt-3 flex justify-between">
+                    <span className="text-lg font-bold text-[rgb(var(--foreground))]">Total</span>
+                    <span className="text-lg font-bold text-primary-dark">
+                      R{(cart.total * 1.15).toFixed(2)}
+                    </span>
                   </div>
                 </div>
-                <Link
-                  href="/checkout"
-                  className="block w-full bg-primary-dark text-white text-center py-3 rounded-lg hover:bg-primary-dark/90 font-semibold"
-                >
+
+                <Link href="/checkout" className="btn-primary w-full justify-center">
                   Proceed to Checkout
+                  <HiArrowRight className="w-5 h-5" />
                 </Link>
+
                 <Link
                   href="/products"
-                  className="block w-full text-center py-2 text-gray-600 hover:text-primary-dark mt-2"
+                  className="block w-full text-center py-3 text-[rgb(var(--muted-foreground))] 
+                           hover:text-primary-dark transition-colors mt-3"
                 >
                   Continue Shopping
                 </Link>
@@ -276,7 +320,7 @@ export default function CartPage() {
             </div>
           </div>
         )}
-      </main>
+      </div>
     </div>
   );
 }

@@ -2,19 +2,166 @@
 @tailwind components;
 @tailwind utilities;
 
-:root {
-  --foreground-rgb: 0, 0, 0;
-  --background-start-rgb: 255, 255, 255;
-  --background-end-rgb: 255, 255, 255;
+@layer base {
+  :root {
+    --background: 255 255 255;
+    --foreground: 10 10 10;
+    --card: 255 255 255;
+    --card-foreground: 10 10 10;
+    --muted: 245 245 245;
+    --muted-foreground: 115 115 115;
+    --border: 229 229 229;
+    --input: 229 229 229;
+    --primary: 34 197 94;
+    --primary-foreground: 255 255 255;
+    --accent: 134 239 172;
+    --accent-foreground: 10 10 10;
+  }
+
+  .dark {
+    --background: 10 10 10;
+    --foreground: 245 245 245;
+    --card: 26 26 26;
+    --card-foreground: 245 245 245;
+    --muted: 38 38 38;
+    --muted-foreground: 163 163 163;
+    --border: 38 38 38;
+    --input: 38 38 38;
+    --primary: 34 197 94;
+    --primary-foreground: 10 10 10;
+    --accent: 134 239 172;
+    --accent-foreground: 10 10 10;
+  }
+
+  * {
+    @apply border-[rgb(var(--border))];
+  }
+
+  body {
+    @apply bg-[rgb(var(--background))] text-[rgb(var(--foreground))];
+    font-feature-settings: "rlig" 1, "calt" 1;
+  }
 }
 
-body {
-  color: rgb(var(--foreground-rgb));
-  background: linear-gradient(
-      to bottom,
-      transparent,
-      rgb(var(--background-end-rgb))
-    )
-    rgb(var(--background-start-rgb));
+@layer components {
+  .btn-primary {
+    @apply inline-flex items-center justify-center gap-2 px-6 py-3 
+           bg-primary-dark text-white font-semibold rounded-xl
+           hover:bg-primary-dark/90 active:scale-95
+           transition-all duration-200 ease-out
+           shadow-lg hover:shadow-xl hover:shadow-primary-dark/20
+           disabled:opacity-50 disabled:cursor-not-allowed disabled:hover:scale-100;
+  }
+
+  .btn-secondary {
+    @apply inline-flex items-center justify-center gap-2 px-6 py-3
+           bg-[rgb(var(--muted))] text-[rgb(var(--foreground))] font-semibold rounded-xl
+           hover:bg-[rgb(var(--muted))]/80 active:scale-95
+           transition-all duration-200 ease-out
+           border border-[rgb(var(--border))]
+           disabled:opacity-50 disabled:cursor-not-allowed;
+  }
+
+  .btn-ghost {
+    @apply inline-flex items-center justify-center gap-2 px-4 py-2
+           text-[rgb(var(--foreground))] font-medium rounded-lg
+           hover:bg-[rgb(var(--muted))] active:scale-95
+           transition-all duration-200 ease-out;
+  }
+
+  .card {
+    @apply bg-[rgb(var(--card))] rounded-2xl border border-[rgb(var(--border))]
+           shadow-sm hover:shadow-lg transition-shadow duration-300;
+  }
+
+  .card-hover {
+    @apply card hover:scale-[1.02] hover:-translate-y-1 
+           transition-all duration-300 ease-out cursor-pointer;
+  }
+
+  .input-field {
+    @apply w-full px-4 py-3 rounded-xl
+           bg-[rgb(var(--input))] border border-[rgb(var(--border))]
+           text-[rgb(var(--foreground))] placeholder:text-[rgb(var(--muted-foreground))]
+           focus:outline-none focus:ring-2 focus:ring-primary-dark focus:border-transparent
+           transition-all duration-200;
+  }
+
+  .glass {
+    @apply bg-white/80 dark:bg-black/80 backdrop-blur-xl;
+  }
+
+  .gradient-text {
+    @apply bg-gradient-to-r from-primary-light via-primary to-primary-dark 
+           bg-clip-text text-transparent;
+  }
+
+  .animate-stagger > * {
+    @apply animate-fade-in-up;
+  }
+  
+  .animate-stagger > *:nth-child(1) { animation-delay: 0.1s; }
+  .animate-stagger > *:nth-child(2) { animation-delay: 0.2s; }
+  .animate-stagger > *:nth-child(3) { animation-delay: 0.3s; }
+  .animate-stagger > *:nth-child(4) { animation-delay: 0.4s; }
+  .animate-stagger > *:nth-child(5) { animation-delay: 0.5s; }
+  .animate-stagger > *:nth-child(6) { animation-delay: 0.6s; }
 }
 
+@layer utilities {
+  .text-balance {
+    text-wrap: balance;
+  }
+
+  .scrollbar-hide {
+    -ms-overflow-style: none;
+    scrollbar-width: none;
+  }
+  
+  .scrollbar-hide::-webkit-scrollbar {
+    display: none;
+  }
+
+  .safe-bottom {
+    padding-bottom: env(safe-area-inset-bottom);
+  }
+
+  .safe-top {
+    padding-top: env(safe-area-inset-top);
+  }
+}
+
+/* Custom scrollbar for light mode */
+::-webkit-scrollbar {
+  width: 8px;
+  height: 8px;
+}
+
+::-webkit-scrollbar-track {
+  background: rgb(var(--muted));
+  border-radius: 4px;
+}
+
+::-webkit-scrollbar-thumb {
+  background: rgb(var(--muted-foreground));
+  border-radius: 4px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: rgb(var(--foreground));
+}
+
+/* Smooth page transitions */
+html {
+  scroll-behavior: smooth;
+}
+
+/* Focus visible styling */
+:focus-visible {
+  @apply outline-2 outline-offset-2 outline-primary-dark;
+}
+
+/* Selection styling */
+::selection {
+  @apply bg-primary-light/30;
+}
