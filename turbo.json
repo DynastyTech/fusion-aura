@@ -1,9 +1,16 @@
 {
   "$schema": "https://turbo.build/schema.json",
-  "globalDependencies": ["**/.env.*local"],
+  "globalDependencies": [
+    "**/.env.*local",
+    "**/package.json",
+    "**/tailwind.config.js",
+    "**/postcss.config.js",
+    "**/globals.css"
+  ],
   "pipeline": {
     "build": {
       "dependsOn": ["^build"],
+      "inputs": ["src/**", "public/**", "*.js", "*.json", "*.ts"],
       "outputs": ["dist/**", ".next/**", "build/**", "node_modules/.prisma/**"]
     },
     "dev": {
