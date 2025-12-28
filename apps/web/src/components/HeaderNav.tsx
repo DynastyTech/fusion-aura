@@ -18,29 +18,44 @@ import {
   HiArrowRightOnRectangle,
   HiMagnifyingGlass,
   HiUser,
+  HiEnvelope,
+  HiInformationCircle,
 } from 'react-icons/hi2';
+import { FaLeaf } from 'react-icons/fa';
 
 export default function HeaderNav() {
   const { user, logout } = useAuth();
   const { itemCount } = useCart();
   const { theme, toggleTheme } = useTheme();
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
-  const [scrolled, setScrolled] = useState(false);
 
   const isAdmin = user?.role === 'ADMIN';
 
+  // Lock body scroll when mobile menu is open
   useEffect(() => {
-    const handleScroll = () => {
-      setScrolled(window.scrollY > 20);
+    if (mobileMenuOpen) {
+      document.body.style.overflow = 'hidden';
+      document.body.style.position = 'fixed';
+      document.body.style.width = '100%';
+      document.body.style.top = `-${window.scrollY}px`;
+    } else {
+      const scrollY = document.body.style.top;
+      document.body.style.overflow = '';
+      document.body.style.position = '';
+      document.body.style.width = '';
+      document.body.style.top = '';
+      if (scrollY) {
+        window.scrollTo(0, parseInt(scrollY || '0', 10) * -1);
+      }
+    }
+    
+    return () => {
+      document.body.style.overflow = '';
+      document.body.style.position = '';
+      document.body.style.width = '';
+      document.body.style.top = '';
     };
-    window.addEventListener('scroll', handleScroll);
-    return () => window.removeEventListener('scroll', handleScroll);
-  }, []);
-
-  // Close mobile menu when route changes
-  useEffect(() => {
-    setMobileMenuOpen(false);
-  }, []);
+  }, [mobileMenuOpen]);
 
   const navLinks = user ? (
     isAdmin ? [
@@ -174,53 +189,72 @@ export default function HeaderNav() {
         </button>
       </div>
 
+      {/* Full-Screen Mobile Menu Overlay */}
+      {mobileMenuOpen && (
+        <div 
+          className="fixed inset-0 bg-black/60 backdrop-blur-sm z-[998] md:hidden"
+          onClick={() => setMobileMenuOpen(false)}
+        />
+      )}
+
       {/* Full-Screen Mobile Menu */}
       <div
-        className={`fixed inset-0 bg-[rgb(var(--background))] z-50 
-                    transform transition-all duration-300 ease-out md:hidden
-                    ${mobileMenuOpen ? 'opacity-100 visible' : 'opacity-0 invisible pointer-events-none'}`}
+        className={`fixed top-0 left-0 right-0 bottom-0 w-full h-full 
+                    bg-[rgb(var(--background))] z-[999] md:hidden
+                    transform transition-transform duration-300 ease-out
+                    ${mobileMenuOpen ? 'translate-x-0' : 'translate-x-full'}`}
+        style={{ minHeight: '100vh', minHeight: '100dvh' }}
       >
-        <div className="flex flex-col h-full safe-top safe-bottom">
+        <div className="flex flex-col h-full min-h-screen">
           {/* Header */}
-          <div className="flex items-center justify-between p-4 border-b border-[rgb(var(--border))]">
-            <span className="font-bold text-xl gradient-text">Menu</span>
+          <div className="flex items-center justify-between p-4 border-b border-[rgb(var(--border))] bg-[rgb(var(--background))]">
+            <div className="flex items-center gap-2">
+              <div className="p-2 rounded-xl bg-gradient-to-r from-primary-light to-primary-dark">
+                <FaLeaf className="w-5 h-5 text-white" />
+              </div>
+              <span className="font-bold text-xl">
+                <span className="text-primary-light">Fusion</span>
+                <span className="text-primary-dark">Aura</span>
+              </span>
+            </div>
             <button
               onClick={() => setMobileMenuOpen(false)}
               className="p-3 rounded-xl hover:bg-[rgb(var(--muted))] transition-colors"
+              aria-label="Close menu"
             >
-              <HiXMark className="w-7 h-7" />
+              <HiXMark className="w-7 h-7 text-[rgb(var(--foreground))]" />
             </button>
           </div>
 
           {/* User Info */}
           {user && (
-            <div className="px-4 py-3 border-b border-[rgb(var(--border))] bg-[rgb(var(--muted))]/50">
-              <p className="font-semibold text-[rgb(var(--foreground))]">
-                {user.firstName || 'User'}
+            <div className="px-6 py-4 border-b border-[rgb(var(--border))] bg-[rgb(var(--muted))]/30">
+              <p className="font-semibold text-lg text-[rgb(var(--foreground))]">
+                Welcome, {user.firstName || 'User'}
               </p>
               <p className="text-sm text-[rgb(var(--muted-foreground))]">{user.email}</p>
               {isAdmin && (
-                <span className="inline-block mt-1 px-2 py-0.5 text-xs font-medium 
+                <span className="inline-block mt-2 px-3 py-1 text-xs font-medium 
                                bg-primary-dark text-white rounded-full">
-                  Admin
+                  Administrator
                 </span>
               )}
             </div>
           )}
 
           {/* Navigation Links */}
-          <nav className="flex-1 overflow-y-auto p-6 space-y-2">
+          <nav className="flex-1 overflow-y-auto px-4 py-6 space-y-2">
             <Link
               href="/"
               onClick={() => setMobileMenuOpen(false)}
-              className="flex items-center gap-4 px-6 py-4 rounded-2xl
+              className="flex items-center gap-4 px-5 py-4 rounded-2xl
                          text-[rgb(var(--foreground))] hover:bg-[rgb(var(--muted))]
-                         transition-all duration-200 text-lg"
+                         active:bg-[rgb(var(--muted))] transition-all duration-200"
             >
-              <div className="p-2 rounded-xl bg-primary-light/20">
+              <div className="p-3 rounded-xl bg-primary-light/20">
                 <HiHome className="w-6 h-6 text-primary-dark" />
               </div>
-              <span className="font-semibold">Home</span>
+              <span className="font-semibold text-lg">Home</span>
             </Link>
 
             {navLinks.map((link) => (
@@ -228,14 +262,14 @@ export default function HeaderNav() {
                 key={link.href}
                 href={link.href}
                 onClick={() => setMobileMenuOpen(false)}
-                className="flex items-center gap-4 px-6 py-4 rounded-2xl
+                className="flex items-center gap-4 px-5 py-4 rounded-2xl
                            text-[rgb(var(--foreground))] hover:bg-[rgb(var(--muted))]
-                           transition-all duration-200 text-lg"
+                           active:bg-[rgb(var(--muted))] transition-all duration-200"
               >
-                <div className="p-2 rounded-xl bg-primary-light/20">
+                <div className="p-3 rounded-xl bg-primary-light/20">
                   <link.icon className="w-6 h-6 text-primary-dark" />
                 </div>
-                <span className="font-semibold">{link.label}</span>
+                <span className="font-semibold text-lg">{link.label}</span>
               </Link>
             ))}
 
@@ -243,14 +277,14 @@ export default function HeaderNav() {
               <Link
                 href="/cart"
                 onClick={() => setMobileMenuOpen(false)}
-                className="flex items-center gap-4 px-6 py-4 rounded-2xl
+                className="flex items-center gap-4 px-5 py-4 rounded-2xl
                            text-[rgb(var(--foreground))] hover:bg-[rgb(var(--muted))]
-                           transition-all duration-200 text-lg"
+                           active:bg-[rgb(var(--muted))] transition-all duration-200"
               >
-                <div className="p-2 rounded-xl bg-primary-light/20">
+                <div className="p-3 rounded-xl bg-primary-light/20">
                   <HiShoppingCart className="w-6 h-6 text-primary-dark" />
                 </div>
-                <span className="font-semibold">Cart</span>
+                <span className="font-semibold text-lg">Cart</span>
                 {itemCount > 0 && (
                   <span className="ml-auto bg-primary-dark text-white text-sm 
                                  font-bold px-3 py-1 rounded-full">
@@ -259,10 +293,59 @@ export default function HeaderNav() {
                 )}
               </Link>
             )}
+
+            {/* Divider */}
+            <div className="my-4 border-t border-[rgb(var(--border))]" />
+
+            {/* Secondary Links */}
+            <Link
+              href="/contact"
+              onClick={() => setMobileMenuOpen(false)}
+              className="flex items-center gap-4 px-5 py-4 rounded-2xl
+                         text-[rgb(var(--foreground))] hover:bg-[rgb(var(--muted))]
+                         active:bg-[rgb(var(--muted))] transition-all duration-200"
+            >
+              <div className="p-3 rounded-xl bg-blue-500/20">
+                <HiEnvelope className="w-6 h-6 text-blue-500" />
+              </div>
+              <span className="font-semibold text-lg">Contact Us</span>
+            </Link>
+
+            <Link
+              href="/about"
+              onClick={() => setMobileMenuOpen(false)}
+              className="flex items-center gap-4 px-5 py-4 rounded-2xl
+                         text-[rgb(var(--foreground))] hover:bg-[rgb(var(--muted))]
+                         active:bg-[rgb(var(--muted))] transition-all duration-200"
+            >
+              <div className="p-3 rounded-xl bg-purple-500/20">
+                <HiInformationCircle className="w-6 h-6 text-purple-500" />
+              </div>
+              <span className="font-semibold text-lg">About Us</span>
+            </Link>
+
+            {/* Theme Toggle in Menu */}
+            <button
+              onClick={toggleTheme}
+              className="flex items-center gap-4 px-5 py-4 rounded-2xl w-full
+                         text-[rgb(var(--foreground))] hover:bg-[rgb(var(--muted))]
+                         active:bg-[rgb(var(--muted))] transition-all duration-200"
+            >
+              <div className={`p-3 rounded-xl ${theme === 'dark' ? 'bg-yellow-500/20' : 'bg-slate-500/20'}`}>
+                {theme === 'dark' ? (
+                  <HiSun className="w-6 h-6 text-yellow-500" />
+                ) : (
+                  <HiMoon className="w-6 h-6 text-slate-500" />
+                )}
+              </div>
+              <span className="font-semibold text-lg">
+                {theme === 'dark' ? 'Light Mode' : 'Dark Mode'}
+              </span>
+            </button>
           </nav>
 
           {/* Footer Actions */}
-          <div className="p-6 border-t border-[rgb(var(--border))] space-y-3">
+          <div className="p-6 border-t border-[rgb(var(--border))] bg-[rgb(var(--background))]">
             {user ? (
               <button
                 onClick={() => {
@@ -270,8 +353,8 @@ export default function HeaderNav() {
                   setMobileMenuOpen(false);
                 }}
                 className="w-full flex items-center justify-center gap-3 px-6 py-4 
-                           rounded-2xl bg-red-500/10 text-red-500 font-semibold text-lg
-                           hover:bg-red-500/20 transition-all duration-200"
+                           rounded-2xl bg-red-500 text-white font-semibold text-lg
+                           hover:bg-red-600 active:bg-red-700 transition-all duration-200"
               >
                 <HiArrowRightOnRectangle className="w-6 h-6" />
                 Logout
@@ -281,8 +364,10 @@ export default function HeaderNav() {
                 href="/login"
                 onClick={() => setMobileMenuOpen(false)}
                 className="w-full flex items-center justify-center gap-3 px-6 py-4 
-                           rounded-2xl bg-primary-dark text-white font-semibold text-lg
-                           hover:bg-primary-dark/90 transition-all duration-200"
+                           rounded-2xl bg-gradient-to-r from-primary-light to-primary-dark 
+                           text-white font-semibold text-lg
+                           hover:opacity-90 active:opacity-80 transition-all duration-200
+                           shadow-lg shadow-primary-dark/30"
               >
                 <HiUser className="w-6 h-6" />
                 Login / Sign Up
