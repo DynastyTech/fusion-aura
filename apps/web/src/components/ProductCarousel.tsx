@@ -73,16 +73,16 @@ export default function ProductCarousel({ products }: ProductCarouselProps) {
         });
       } else {
         // Guest user - use localStorage
-        addToGuestCart({
-          productId: product.id,
-          quantity: 1,
-          product: {
+        addToGuestCart(
+          {
             id: product.id,
             name: product.name,
+            slug: product.slug,
             price: toNumber(product.price),
             images: product.images,
           },
-        });
+          1
+        );
       }
       
       // Refresh cart count

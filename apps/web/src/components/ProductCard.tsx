@@ -76,16 +76,16 @@ export default function ProductCard({ product, index = 0, showCategory = true, c
         });
         await refreshCart();
       } else {
-        addToGuestCart({
-          productId: product.id,
-          quantity: 1,
-          product: {
+        addToGuestCart(
+          {
             id: product.id,
             name: product.name,
+            slug: product.slug,
             price: price,
             images: product.images,
           },
-        });
+          1
+        );
       }
       
       window.dispatchEvent(new Event('cartUpdated'));

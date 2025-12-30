@@ -41,16 +41,16 @@ export default function WishlistPage() {
       // Guest user - add to guest cart and remove from wishlist
       const item = items.find((i) => i.productId === productId);
       if (item) {
-        addToGuestCart({
-          productId: item.product.id,
-          quantity: 1,
-          product: {
+        addToGuestCart(
+          {
             id: item.product.id,
             name: item.product.name,
+            slug: item.product.slug,
             price: toNumber(item.product.price),
             images: item.product.images,
           },
-        });
+          1
+        );
         await removeFromWishlist(productId);
       }
     }
