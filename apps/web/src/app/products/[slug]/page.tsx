@@ -3,8 +3,6 @@ import Image from 'next/image';
 import { notFound } from 'next/navigation';
 import AddToCartButton from '@/components/AddToCartButton';
 import RelatedProducts from '@/components/RelatedProducts';
-import HeaderNav from '@/components/HeaderNav';
-import Logo from '@/components/Logo';
 
 interface Product {
   id: string;
@@ -92,17 +90,7 @@ export default async function ProductDetailPage({
     .slice(0, 4);
 
   return (
-    <div className="min-h-screen bg-white">
-      {/* Header */}
-      <header className="sticky top-0 z-50 bg-white shadow-sm">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-4">
-          <div className="flex justify-between items-center">
-            <Logo href="/" width={180} height={60} />
-            <HeaderNav />
-          </div>
-        </div>
-      </header>
-
+    <div className="min-h-screen bg-[rgb(var(--background))]">
       {/* Product Detail */}
       <main className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
         <Link
@@ -116,7 +104,7 @@ export default async function ProductDetailPage({
           {/* Product Images */}
           <div className="space-y-4">
             {product.images && product.images.length > 0 ? (
-              <div className="relative w-full h-96 bg-gray-100 rounded-lg overflow-hidden">
+              <div className="relative w-full h-96 bg-[rgb(var(--muted))] rounded-lg overflow-hidden">
                 <Image
                   src={product.images[0]}
                   alt={product.name}
@@ -126,9 +114,9 @@ export default async function ProductDetailPage({
                 />
               </div>
             ) : (
-              <div className="w-full h-96 bg-gray-100 rounded-lg flex items-center justify-center">
+              <div className="w-full h-96 bg-[rgb(var(--muted))] rounded-lg flex items-center justify-center">
                 <svg
-                  className="w-32 h-32 text-gray-400"
+                  className="w-32 h-32 text-[rgb(var(--muted-foreground))]"
                   fill="none"
                   stroke="currentColor"
                   viewBox="0 0 24 24"
@@ -151,7 +139,7 @@ export default async function ProductDetailPage({
                 {product.category.name}
               </span>
             </div>
-            <h1 className="text-4xl font-bold text-gray-900 mb-4">{product.name}</h1>
+            <h1 className="text-4xl font-bold text-[rgb(var(--foreground))] mb-4">{product.name}</h1>
 
             {/* Price */}
             <div className="mb-6">
@@ -161,7 +149,7 @@ export default async function ProductDetailPage({
                 </span>
                 {product.compareAtPrice && toNumber(product.compareAtPrice) > toNumber(product.price) && (
                   <>
-                    <span className="text-xl text-gray-500 line-through">
+                    <span className="text-xl text-[rgb(var(--muted-foreground))] line-through">
                       R{toNumber(product.compareAtPrice).toFixed(2)}
                     </span>
                     <span className="text-sm bg-red-100 text-red-800 px-2 py-1 rounded">
@@ -192,14 +180,14 @@ export default async function ProductDetailPage({
             {/* Description */}
             {product.description && (
               <div className="mb-6">
-                <h2 className="text-xl font-semibold mb-3">Description</h2>
-                <p className="text-gray-700 whitespace-pre-line">{product.description}</p>
+                <h2 className="text-xl font-semibold text-[rgb(var(--foreground))] mb-3">Description</h2>
+                <p className="text-[rgb(var(--muted-foreground))] whitespace-pre-line">{product.description}</p>
               </div>
             )}
 
             {/* Add to Cart Button */}
             <AddToCartButton product={product} />
-            <p className="text-sm text-gray-500 text-center mt-4">
+            <p className="text-sm text-[rgb(var(--muted-foreground))] text-center mt-4">
               Free shipping on orders over R500
             </p>
           </div>
@@ -210,17 +198,6 @@ export default async function ProductDetailPage({
           <RelatedProducts products={relatedProducts} currentProductId={product.id} />
         )}
       </main>
-
-      {/* Footer */}
-      <footer className="bg-gray-800 text-white py-8 mt-20">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
-          <p className="mb-2">
-            <span className="text-primary-light">Fusion</span>
-            <span className="text-primary-dark">Aura</span>
-          </p>
-          <p className="text-gray-400 text-sm">© 2024 FusionAura. All rights reserved.</p>
-        </div>
-      </footer>
     </div>
   );
 }
