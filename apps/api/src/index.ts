@@ -11,7 +11,7 @@ import { productRoutes } from './routes/products';
 import { categoryRoutes } from './routes/categories';
 import { cartRoutes } from './routes/cart';
 import { orderRoutes } from './routes/orders';
-// import { paymentRoutes } from './routes/payments'; // Disabled - using COD
+import { paymentRoutes } from './routes/payments'; // PayFast integration
 import { inventoryRoutes } from './routes/inventory';
 import { uploadRoutes } from './routes/upload';
 import { geocodingRoutes } from './routes/geocoding';
@@ -149,7 +149,7 @@ async function build() {
   await server.register(categoryRoutes, { prefix: '/api/categories' });
   await server.register(cartRoutes, { prefix: '/api/cart' });
   await server.register(orderRoutes, { prefix: '/api/orders' });
-  // await server.register(paymentRoutes, { prefix: '/api/payments' }); // Disabled - using COD
+  await server.register(paymentRoutes, { prefix: '/api/payments' }); // PayFast integration
   await server.register(inventoryRoutes, { prefix: '/api/inventory' });
   await server.register(uploadRoutes, { prefix: '/api/upload' });
   await server.register(geocodingRoutes, { prefix: '/api/geocoding' });

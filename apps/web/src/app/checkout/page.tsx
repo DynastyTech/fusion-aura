@@ -5,7 +5,7 @@ import { useRouter } from 'next/navigation';
 import Link from 'next/link';
 import { apiRequest } from '@/lib/api';
 import { getGuestCart, getGuestCartTotal, clearGuestCart } from '@/lib/guestCart';
-import { HiCurrencyDollar } from 'react-icons/hi2';
+import { HiCurrencyDollar, HiCreditCard } from 'react-icons/hi2';
 
 interface CartItem {
   id: string;
@@ -31,6 +31,7 @@ export default function CheckoutPage() {
   const [isGuest, setIsGuest] = useState(false);
   const [useCurrentLocation, setUseCurrentLocation] = useState(false);
   const [gettingLocation, setGettingLocation] = useState(false);
+  const [paymentMethod, setPaymentMethod] = useState<'cod' | 'payfast'>('cod');
   const [formData, setFormData] = useState({
     name: '',
     email: '',
@@ -247,7 +248,34 @@ export default function CheckoutPage() {
       });
 
       if (response.success && response.data) {
-        // Clear cart
+        const orderId = response.data.id || response.data.orderNumber;
+
+        // If PayFast selected, redirect to PayFast
+        if (paymentMethod === 'payfast' && !isGuest) {
+          try {
+            const paymentResponse = await apiRequest<{ redirectUrl: string }>('/api/payments/initiate', {
+              method: 'POST',
+              body: JSON.stringify({ orderId: response.data.id }),
+            });
+
+            if (paymentResponse.success && paymentResponse.data?.redirectUrl) {
+              // Don't clear cart yet - will be done after successful payment
+              window.location.href = paymentResponse.data.redirectUrl;
+              return;
+            } else {
+              alert('Failed to initiate payment. Please try again or use Cash on Delivery.');
+              setProcessing(false);
+              return;
+            }
+          } catch (paymentError) {
+            console.error('Payment initiation error:', paymentError);
+            alert('Payment initiation failed. Please try Cash on Delivery.');
+            setProcessing(false);
+            return;
+          }
+        }
+
+        // Clear cart for COD orders
         if (isGuest) {
           clearGuestCart();
         } else {
@@ -255,7 +283,6 @@ export default function CheckoutPage() {
         }
         window.dispatchEvent(new Event('cartUpdated'));
         // Redirect to order confirmation page (works for both guests and logged-in users)
-        const orderId = response.data.id || response.data.orderNumber;
         router.push(`/order-confirmation/${orderId}`);
       } else {
         // Show detailed error info for debugging
@@ -309,14 +336,71 @@ export default function CheckoutPage() {
           {/* Shipping Form */}
           <div className="lg:col-span-2">
             <form onSubmit={handleCheckout} className="card p-6 space-y-6">
-              <div className="bg-primary-dark/10 border border-primary-dark/30 rounded-xl p-4">
-                <div className="flex items-center gap-2">
-                  <HiCurrencyDollar className="w-5 h-5 text-primary-dark" />
-                  <p className="text-primary-dark font-semibold">Cash on Delivery</p>
+              {/* Payment Method Selection */}
+              <div>
+                <h2 className="text-xl font-bold text-[rgb(var(--foreground))] mb-4">Payment Method</h2>
+                <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                  {/* Cash on Delivery Option */}
+                  <button
+                    type="button"
+                    onClick={() => setPaymentMethod('cod')}
+                    className={`p-4 rounded-xl border-2 transition-all text-left ${
+                      paymentMethod === 'cod'
+                        ? 'border-primary-dark bg-primary-dark/10'
+                        : 'border-[rgb(var(--border))] hover:border-primary-dark/50'
+                    }`}
+                  >
+                    <div className="flex items-center gap-3">
+                      <div className={`w-5 h-5 rounded-full border-2 flex items-center justify-center ${
+                        paymentMethod === 'cod' ? 'border-primary-dark' : 'border-[rgb(var(--muted-foreground))]'
+                      }`}>
+                        {paymentMethod === 'cod' && (
+                          <div className="w-3 h-3 rounded-full bg-primary-dark" />
+                        )}
+                      </div>
+                      <HiCurrencyDollar className="w-6 h-6 text-primary-dark" />
+                      <span className="font-semibold text-[rgb(var(--foreground))]">Cash on Delivery</span>
+                    </div>
+                    <p className="text-[rgb(var(--muted-foreground))] text-sm mt-2 ml-8">
+                      Pay when your order arrives
+                    </p>
+                  </button>
+
+                  {/* PayFast Option */}
+                  <button
+                    type="button"
+                    onClick={() => setPaymentMethod('payfast')}
+                    className={`p-4 rounded-xl border-2 transition-all text-left ${
+                      paymentMethod === 'payfast'
+                        ? 'border-blue-500 bg-blue-500/10'
+                        : 'border-[rgb(var(--border))] hover:border-blue-500/50'
+                    }`}
+                  >
+                    <div className="flex items-center gap-3">
+                      <div className={`w-5 h-5 rounded-full border-2 flex items-center justify-center ${
+                        paymentMethod === 'payfast' ? 'border-blue-500' : 'border-[rgb(var(--muted-foreground))]'
+                      }`}>
+                        {paymentMethod === 'payfast' && (
+                          <div className="w-3 h-3 rounded-full bg-blue-500" />
+                        )}
+                      </div>
+                      <HiCreditCard className="w-6 h-6 text-blue-500" />
+                      <span className="font-semibold text-[rgb(var(--foreground))]">Pay Online</span>
+                    </div>
+                    <p className="text-[rgb(var(--muted-foreground))] text-sm mt-2 ml-8">
+                      Secure payment via PayFast
+                    </p>
+                  </button>
                 </div>
-                <p className="text-[rgb(var(--muted-foreground))] text-sm mt-1">
-                  You will pay when your order is delivered. No online payment required.
-                </p>
+                
+                {paymentMethod === 'payfast' && (
+                  <div className="mt-4 bg-blue-500/10 border border-blue-500/30 rounded-xl p-4">
+                    <p className="text-blue-400 text-sm">
+                      💳 You&apos;ll be redirected to PayFast&apos;s secure payment page to complete your purchase.
+                      Accepts cards, EFT, and mobile payments.
+                    </p>
+                  </div>
+                )}
               </div>
 
               <h2 className="text-xl font-bold text-[rgb(var(--foreground))]">Delivery Information</h2>
@@ -434,10 +518,25 @@ export default function CheckoutPage() {
               <button
                 type="submit"
                 disabled={processing}
-                className="btn-primary w-full py-4 text-lg"
+                className={`w-full py-4 text-lg font-semibold rounded-xl transition-all ${
+                  paymentMethod === 'payfast'
+                    ? 'bg-blue-600 hover:bg-blue-700 text-white'
+                    : 'btn-primary'
+                }`}
               >
-                {processing ? 'Placing Order...' : 'Place Order (Cash on Delivery)'}
+                {processing 
+                  ? 'Processing...' 
+                  : paymentMethod === 'payfast'
+                    ? '💳 Proceed to Payment'
+                    : '🚚 Place Order (Cash on Delivery)'
+                }
               </button>
+
+              {paymentMethod === 'payfast' && isGuest && (
+                <p className="text-amber-400 text-sm text-center mt-2">
+                  ⚠️ Please log in to use online payment. Guest checkout only supports Cash on Delivery.
+                </p>
+              )}
             </form>
           </div>
 
