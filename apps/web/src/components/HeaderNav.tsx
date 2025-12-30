@@ -4,6 +4,7 @@ import { useState, useEffect } from 'react';
 import Link from 'next/link';
 import { useAuth } from '@/contexts/AuthContext';
 import { useCart } from '@/contexts/CartContext';
+import { useWishlist } from '@/contexts/WishlistContext';
 import { useTheme } from '@/contexts/ThemeContext';
 import { 
   HiShoppingCart, 
@@ -20,12 +21,14 @@ import {
   HiUser,
   HiEnvelope,
   HiInformationCircle,
+  HiHeart,
 } from 'react-icons/hi2';
 import { FaLeaf } from 'react-icons/fa';
 
 export default function HeaderNav() {
   const { user, logout } = useAuth();
   const { itemCount } = useCart();
+  const { count: wishlistCount } = useWishlist();
   const { theme, toggleTheme } = useTheme();
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
 
@@ -90,21 +93,41 @@ export default function HeaderNav() {
         ))}
 
         {!isAdmin && (
-          <Link 
-            href="/cart" 
-            className="relative p-2 rounded-xl text-[rgb(var(--foreground))]/70 
-                       hover:text-[rgb(var(--foreground))] hover:bg-[rgb(var(--muted))]
-                       transition-all duration-200"
-          >
-            <HiShoppingCart className="w-6 h-6" />
-            {itemCount > 0 && (
-              <span className="absolute -top-1 -right-1 bg-primary-dark text-white text-xs 
-                             font-bold rounded-full min-w-[20px] h-5 flex items-center justify-center
-                             animate-scale-in">
-                {itemCount > 99 ? '99+' : itemCount}
-              </span>
-            )}
-          </Link>
+          <>
+            {/* Wishlist */}
+            <Link 
+              href="/wishlist" 
+              className="relative p-2 rounded-xl text-[rgb(var(--foreground))]/70 
+                         hover:text-[rgb(var(--foreground))] hover:bg-[rgb(var(--muted))]
+                         transition-all duration-200"
+            >
+              <HiHeart className="w-6 h-6" />
+              {wishlistCount > 0 && (
+                <span className="absolute -top-1 -right-1 bg-red-500 text-white text-xs 
+                               font-bold rounded-full min-w-[20px] h-5 flex items-center justify-center
+                               animate-scale-in">
+                  {wishlistCount > 99 ? '99+' : wishlistCount}
+                </span>
+              )}
+            </Link>
+            
+            {/* Cart */}
+            <Link 
+              href="/cart" 
+              className="relative p-2 rounded-xl text-[rgb(var(--foreground))]/70 
+                         hover:text-[rgb(var(--foreground))] hover:bg-[rgb(var(--muted))]
+                         transition-all duration-200"
+            >
+              <HiShoppingCart className="w-6 h-6" />
+              {itemCount > 0 && (
+                <span className="absolute -top-1 -right-1 bg-primary-dark text-white text-xs 
+                               font-bold rounded-full min-w-[20px] h-5 flex items-center justify-center
+                               animate-scale-in">
+                  {itemCount > 99 ? '99+' : itemCount}
+                </span>
+              )}
+            </Link>
+          </>
         )}
 
         {/* Theme Toggle */}
@@ -153,15 +176,29 @@ export default function HeaderNav() {
       {/* Mobile Navigation Button */}
       <div className="flex md:hidden items-center gap-1">
         {!isAdmin && (
-          <Link href="/cart" className="relative p-2">
-            <HiShoppingCart className="w-6 h-6 text-[rgb(var(--foreground))]" />
-            {itemCount > 0 && (
-              <span className="absolute -top-1 -right-1 bg-primary-dark text-white text-xs 
-                             font-bold rounded-full min-w-[20px] h-5 flex items-center justify-center">
-                {itemCount > 99 ? '99+' : itemCount}
-              </span>
-            )}
-          </Link>
+          <>
+            {/* Wishlist Icon */}
+            <Link href="/wishlist" className="relative p-2">
+              <HiHeart className="w-6 h-6 text-[rgb(var(--foreground))]" />
+              {wishlistCount > 0 && (
+                <span className="absolute -top-1 -right-1 bg-red-500 text-white text-xs 
+                               font-bold rounded-full min-w-[20px] h-5 flex items-center justify-center">
+                  {wishlistCount > 99 ? '99+' : wishlistCount}
+                </span>
+              )}
+            </Link>
+            
+            {/* Cart Icon */}
+            <Link href="/cart" className="relative p-2">
+              <HiShoppingCart className="w-6 h-6 text-[rgb(var(--foreground))]" />
+              {itemCount > 0 && (
+                <span className="absolute -top-1 -right-1 bg-primary-dark text-white text-xs 
+                               font-bold rounded-full min-w-[20px] h-5 flex items-center justify-center">
+                  {itemCount > 99 ? '99+' : itemCount}
+                </span>
+              )}
+            </Link>
+          </>
         )}
         
         <button
@@ -274,24 +311,45 @@ export default function HeaderNav() {
             ))}
 
             {!isAdmin && (
-              <Link
-                href="/cart"
-                onClick={() => setMobileMenuOpen(false)}
-                className="flex items-center gap-4 px-5 py-4 rounded-2xl
-                           text-[rgb(var(--foreground))] hover:bg-[rgb(var(--muted))]
-                           active:bg-[rgb(var(--muted))] transition-all duration-200"
-              >
-                <div className="p-3 rounded-xl bg-primary-light/20">
-                  <HiShoppingCart className="w-6 h-6 text-primary-dark" />
-                </div>
-                <span className="font-semibold text-lg">Cart</span>
-                {itemCount > 0 && (
-                  <span className="ml-auto bg-primary-dark text-white text-sm 
-                                 font-bold px-3 py-1 rounded-full">
-                    {itemCount}
-                  </span>
-                )}
-              </Link>
+              <>
+                <Link
+                  href="/wishlist"
+                  onClick={() => setMobileMenuOpen(false)}
+                  className="flex items-center gap-4 px-5 py-4 rounded-2xl
+                             text-[rgb(var(--foreground))] hover:bg-[rgb(var(--muted))]
+                             active:bg-[rgb(var(--muted))] transition-all duration-200"
+                >
+                  <div className="p-3 rounded-xl bg-red-500/20">
+                    <HiHeart className="w-6 h-6 text-red-500" />
+                  </div>
+                  <span className="font-semibold text-lg">Wishlist</span>
+                  {wishlistCount > 0 && (
+                    <span className="ml-auto bg-red-500 text-white text-sm 
+                                   font-bold px-3 py-1 rounded-full">
+                      {wishlistCount}
+                    </span>
+                  )}
+                </Link>
+                
+                <Link
+                  href="/cart"
+                  onClick={() => setMobileMenuOpen(false)}
+                  className="flex items-center gap-4 px-5 py-4 rounded-2xl
+                             text-[rgb(var(--foreground))] hover:bg-[rgb(var(--muted))]
+                             active:bg-[rgb(var(--muted))] transition-all duration-200"
+                >
+                  <div className="p-3 rounded-xl bg-primary-light/20">
+                    <HiShoppingCart className="w-6 h-6 text-primary-dark" />
+                  </div>
+                  <span className="font-semibold text-lg">Cart</span>
+                  {itemCount > 0 && (
+                    <span className="ml-auto bg-primary-dark text-white text-sm 
+                                   font-bold px-3 py-1 rounded-full">
+                      {itemCount}
+                    </span>
+                  )}
+                </Link>
+              </>
             )}
 
             {/* Divider */}

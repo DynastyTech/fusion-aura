@@ -4,6 +4,7 @@ import { Outfit, Space_Grotesk } from 'next/font/google';
 import './globals.css';
 import { AuthProvider } from '@/contexts/AuthContext';
 import { CartProvider } from '@/contexts/CartContext';
+import { WishlistProvider } from '@/contexts/WishlistContext';
 import { ThemeProvider } from '@/contexts/ThemeContext';
 import Header from '@/components/Header';
 import Footer from '@/components/Footer';
@@ -48,6 +49,7 @@ export default function RootLayout({
         <ThemeProvider>
           <AuthProvider>
             <CartProvider>
+              <WishlistProvider>
               <Suspense fallback={null}>
                 <PageLoader />
               </Suspense>
@@ -58,6 +60,7 @@ export default function RootLayout({
                 </main>
                 <Footer />
               </div>
+            </WishlistProvider>
             </CartProvider>
           </AuthProvider>
         </ThemeProvider>
