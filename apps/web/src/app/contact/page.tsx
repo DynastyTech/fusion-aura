@@ -36,9 +36,9 @@ const socialLinks = [
   },
   { 
     name: 'TikTok', 
-    href: 'https://tiktok.com/@abutii_alpha', 
+    href: 'https://tiktok.com/@fusionaura1', 
     icon: FaTiktok,
-    handle: '@abutii_alpha',
+    handle: '@fusionaura1',
     color: 'bg-black dark:bg-white dark:text-black',
   },
 ];

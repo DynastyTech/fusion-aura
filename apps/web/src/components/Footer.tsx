@@ -48,7 +48,7 @@ const socialLinks = [
     icon: FaFacebook,
     handle: 'Abutii Alpha',
   },
-  { name: 'TikTok', href: 'https://tiktok.com/@abutii_alpha', icon: FaTiktok },
+  { name: 'TikTok', href: 'https://tiktok.com/@fusionaura1', icon: FaTiktok },
 ];
 
 export default function Footer() {
