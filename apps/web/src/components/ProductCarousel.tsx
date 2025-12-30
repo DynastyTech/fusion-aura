@@ -6,8 +6,10 @@ import Image from 'next/image';
 import { Swiper, SwiperSlide } from 'swiper/react';
 import { Navigation, Pagination, Autoplay, EffectCoverflow } from 'swiper/modules';
 import { motion } from 'framer-motion';
-import { FaLeaf, FaShoppingCart } from 'react-icons/fa';
+import { FaLeaf } from 'react-icons/fa';
+import { HiHeart, HiShoppingCart, HiCheck } from 'react-icons/hi2';
 import { useCart } from '@/contexts/CartContext';
+import { useWishlist } from '@/contexts/WishlistContext';
 import { addToGuestCart } from '@/lib/guestCart';
 import { apiRequest } from '@/lib/api';
 
@@ -45,18 +47,24 @@ function toNumber(value: number | string | null | undefined): number {
 
 export default function ProductCarousel({ products }: ProductCarouselProps) {
   const { refreshCart } = useCart();
+  const { isInWishlist, toggleWishlist } = useWishlist();
   const [addingToCart, setAddingToCart] = useState<string | null>(null);
+  const [addedToCart, setAddedToCart] = useState<string | null>(null);
+  const [togglingWishlist, setTogglingWishlist] = useState<string | null>(null);
 
   if (products.length === 0) return null;
 
-  const handleAddToCart = async (product: Product) => {
+  const handleAddToCart = async (e: React.MouseEvent, product: Product) => {
+    e.preventDefault();
+    e.stopPropagation();
+    
     setAddingToCart(product.id);
     try {
       const token = typeof window !== 'undefined' ? localStorage.getItem('token') : null;
       
       if (token) {
         // Authenticated user - use API
-        await apiRequest('/api/cart/items', {
+        await apiRequest('/api/cart/add', {
           method: 'POST',
           body: JSON.stringify({
             productId: product.id,
@@ -65,16 +73,16 @@ export default function ProductCarousel({ products }: ProductCarouselProps) {
         });
       } else {
         // Guest user - use localStorage
-        addToGuestCart(
-          {
+        addToGuestCart({
+          productId: product.id,
+          quantity: 1,
+          product: {
             id: product.id,
             name: product.name,
-            slug: product.slug,
-            price: product.price,
+            price: toNumber(product.price),
             images: product.images,
           },
-          1
-        );
+        });
       }
       
       // Refresh cart count
@@ -83,10 +91,28 @@ export default function ProductCarousel({ products }: ProductCarouselProps) {
       // Dispatch cart updated event
       window.dispatchEvent(new Event('cartUpdated'));
       
-      setTimeout(() => setAddingToCart(null), 1000);
+      setAddedToCart(product.id);
+      setTimeout(() => {
+        setAddingToCart(null);
+        setAddedToCart(null);
+      }, 2000);
     } catch (error) {
       console.error('Failed to add to cart:', error);
       setAddingToCart(null);
+    }
+  };
+
+  const handleToggleWishlist = async (e: React.MouseEvent, productId: string) => {
+    e.preventDefault();
+    e.stopPropagation();
+    
+    setTogglingWishlist(productId);
+    try {
+      await toggleWishlist(productId);
+    } catch (error) {
+      console.error('Failed to toggle wishlist:', error);
+    } finally {
+      setTogglingWishlist(null);
     }
   };
 
@@ -150,18 +176,45 @@ export default function ProductCarousel({ products }: ProductCarouselProps) {
                         <FaLeaf />
                       </div>
                     )}
+                    
+                    {/* Wishlist Button - Always visible */}
+                    <button
+                      onClick={(e) => handleToggleWishlist(e, product.id)}
+                      disabled={togglingWishlist === product.id}
+                      className={`absolute top-3 right-3 z-10 w-10 h-10 rounded-full flex items-center justify-center 
+                                shadow-lg backdrop-blur-sm transition-all duration-200 ${
+                        isInWishlist(product.id)
+                          ? 'bg-red-500 text-white'
+                          : 'bg-white/90 text-gray-700 hover:bg-red-500 hover:text-white'
+                      }`}
+                    >
+                      <HiHeart className={`w-5 h-5 ${togglingWishlist === product.id ? 'animate-pulse' : ''}`} />
+                    </button>
+
                     <div className="product-overlay">
                       <button
-                        className="btn btn-primary"
-                        onClick={() => handleAddToCart(product)}
+                        className={`btn ${addedToCart === product.id ? 'btn-success' : 'btn-primary'}`}
+                        onClick={(e) => handleAddToCart(e, product)}
                         disabled={addingToCart === product.id || !inStock}
                       >
-                        <FaShoppingCart size={20} />
-                        {!inStock
-                          ? 'Out of Stock'
-                          : addingToCart === product.id
-                          ? 'Added!'
-                          : 'Add to Cart'}
+                        {addedToCart === product.id ? (
+                          <>
+                            <HiCheck size={20} />
+                            Added!
+                          </>
+                        ) : addingToCart === product.id ? (
+                          <>
+                            <div className="w-5 h-5 border-2 border-white border-t-transparent rounded-full animate-spin" />
+                            Adding...
+                          </>
+                        ) : !inStock ? (
+                          'Out of Stock'
+                        ) : (
+                          <>
+                            <HiShoppingCart size={20} />
+                            Add to Cart
+                          </>
+                        )}
                       </button>
                     </div>
                   </div>
