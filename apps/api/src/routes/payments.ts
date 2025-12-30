@@ -2,7 +2,7 @@ import { FastifyPluginAsync } from 'fastify';
 import { z } from 'zod';
 import crypto from 'crypto';
 import { prisma } from '@fusionaura/db';
-import { requireAuth } from '../middleware/auth';
+import { authenticate } from '../middleware/auth';
 
 // PayFast Configuration
 const PAYFAST_CONFIG = {
@@ -99,7 +99,7 @@ export const paymentRoutes: FastifyPluginAsync = async (fastify) => {
   // ============================================
   // INITIATE PAYMENT - Create payment request
   // ============================================
-  fastify.post('/initiate', { preHandler: requireAuth }, async (request, reply) => {
+  fastify.post('/initiate', { preHandler: authenticate }, async (request, reply) => {
     const schema = z.object({
       orderId: z.string().uuid(),
     });
@@ -271,7 +271,7 @@ export const paymentRoutes: FastifyPluginAsync = async (fastify) => {
   // ============================================
   // VERIFY PAYMENT - Check payment status
   // ============================================
-  fastify.get('/verify/:orderId', { preHandler: requireAuth }, async (request, reply) => {
+  fastify.get('/verify/:orderId', { preHandler: authenticate }, async (request, reply) => {
     const { orderId } = request.params as { orderId: string };
     const user = request.user as { id: string };
 
