@@ -3,8 +3,7 @@
 import { useState } from 'react';
 import Link from 'next/link';
 import Image from 'next/image';
-import { motion, AnimatePresence } from 'framer-motion';
-import { HiHeart, HiShoppingCart, HiCheck, HiEye } from 'react-icons/hi2';
+import { HiHeart, HiShoppingCart, HiCheck } from 'react-icons/hi2';
 import { FaLeaf } from 'react-icons/fa';
 import { useWishlist } from '@/contexts/WishlistContext';
 import { useCart } from '@/contexts/CartContext';
@@ -46,7 +45,6 @@ export default function ProductCard({ product, index = 0, showCategory = true, c
   const [addingToCart, setAddingToCart] = useState(false);
   const [addedToCart, setAddedToCart] = useState(false);
   const [togglingWishlist, setTogglingWishlist] = useState(false);
-  const [isHovered, setIsHovered] = useState(false);
 
   const price = toNumber(product.price);
   const compareAtPrice = toNumber(product.compareAtPrice);
@@ -115,24 +113,24 @@ export default function ProductCard({ product, index = 0, showCategory = true, c
   };
 
   return (
-    <motion.div
-      initial={{ opacity: 0, y: 20 }}
-      animate={{ opacity: 1, y: 0 }}
-      transition={{ duration: 0.4, delay: Math.min(index * 0.05, 0.3) }}
+    <div
       className={`group relative ${className}`}
-      onMouseEnter={() => setIsHovered(true)}
-      onMouseLeave={() => setIsHovered(false)}
+      style={{ 
+        opacity: 1,
+        animation: `fadeInUp 0.3s ease-out ${Math.min(index * 0.05, 0.2)}s both`
+      }}
     >
       <Link href={`/products/${product.slug}`} className="block">
-        <div className="card-hover overflow-hidden rounded-xl bg-[rgb(var(--card))]">
-          {/* Product Image */}
+        <div className="overflow-hidden rounded-xl bg-[rgb(var(--card))] border border-[rgb(var(--border))] 
+                        transition-shadow duration-200 hover:shadow-lg">
+          {/* Product Image - Clean, no overlay icons */}
           <div className="relative aspect-square bg-[rgb(var(--muted))] overflow-hidden">
             {product.images && product.images.length > 0 ? (
               <Image
                 src={product.images[0]}
                 alt={product.name}
                 fill
-                className="object-cover group-hover:scale-110 transition-transform duration-500"
+                className="object-cover transition-transform duration-300 group-hover:scale-105"
                 sizes="(max-width: 640px) 50vw, (max-width: 1024px) 33vw, 25vw"
                 loading="lazy"
               />
@@ -142,7 +140,7 @@ export default function ProductCard({ product, index = 0, showCategory = true, c
               </div>
             )}
 
-            {/* Badges */}
+            {/* Badges - Only status badges, no action buttons */}
             <div className="absolute top-2 left-2 flex flex-col gap-1.5 z-10">
               {product.isFeatured && (
                 <span className="px-2 py-0.5 text-xs font-semibold bg-primary-dark text-white rounded-full">
@@ -160,88 +158,6 @@ export default function ProductCard({ product, index = 0, showCategory = true, c
                 </span>
               )}
             </div>
-
-            {/* Quick Action Buttons - Always visible on mobile, hover on desktop */}
-            <div className={`absolute top-2 right-2 flex flex-col gap-2 z-10 transition-opacity duration-300 ${
-              isHovered ? 'opacity-100' : 'opacity-100 sm:opacity-0 sm:group-hover:opacity-100'
-            }`}>
-              {/* Wishlist Button */}
-              <motion.button
-                whileHover={{ scale: 1.1 }}
-                whileTap={{ scale: 0.9 }}
-                onClick={handleToggleWishlist}
-                disabled={togglingWishlist}
-                className={`w-9 h-9 rounded-full flex items-center justify-center shadow-lg backdrop-blur-sm transition-all ${
-                  inWishlist
-                    ? 'bg-red-500 text-white'
-                    : 'bg-white/90 text-gray-700 hover:bg-red-500 hover:text-white'
-                }`}
-                title={inWishlist ? 'Remove from Wishlist' : 'Add to Wishlist'}
-              >
-                <HiHeart className={`w-5 h-5 ${togglingWishlist ? 'animate-pulse' : ''} ${inWishlist ? 'fill-current' : ''}`} />
-              </motion.button>
-
-              {/* Quick View Button (optional) */}
-              <motion.button
-                whileHover={{ scale: 1.1 }}
-                whileTap={{ scale: 0.9 }}
-                onClick={(e) => {
-                  e.preventDefault();
-                  e.stopPropagation();
-                  // Navigate to product page
-                  window.location.href = `/products/${product.slug}`;
-                }}
-                className="w-9 h-9 rounded-full bg-white/90 text-gray-700 hover:bg-primary-dark hover:text-white flex items-center justify-center shadow-lg backdrop-blur-sm transition-all"
-                title="Quick View"
-              >
-                <HiEye className="w-5 h-5" />
-              </motion.button>
-            </div>
-
-            {/* Add to Cart Overlay */}
-            <AnimatePresence>
-              {(isHovered || addedToCart) && (
-                <motion.div
-                  initial={{ opacity: 0, y: 20 }}
-                  animate={{ opacity: 1, y: 0 }}
-                  exit={{ opacity: 0, y: 20 }}
-                  className="absolute bottom-0 left-0 right-0 p-3 z-10"
-                >
-                  <motion.button
-                    whileHover={{ scale: 1.02 }}
-                    whileTap={{ scale: 0.98 }}
-                    onClick={handleAddToCart}
-                    disabled={!inStock || addingToCart}
-                    className={`w-full py-2.5 px-4 rounded-lg font-semibold text-sm flex items-center justify-center gap-2 transition-all shadow-lg ${
-                      addedToCart
-                        ? 'bg-green-500 text-white'
-                        : !inStock
-                        ? 'bg-gray-400 text-white cursor-not-allowed'
-                        : 'bg-primary-dark text-white hover:bg-primary-dark/90'
-                    }`}
-                  >
-                    {addedToCart ? (
-                      <>
-                        <HiCheck className="w-5 h-5" />
-                        Added!
-                      </>
-                    ) : addingToCart ? (
-                      <>
-                        <div className="w-4 h-4 border-2 border-white border-t-transparent rounded-full animate-spin" />
-                        Adding...
-                      </>
-                    ) : !inStock ? (
-                      'Out of Stock'
-                    ) : (
-                      <>
-                        <HiShoppingCart className="w-5 h-5" />
-                        Add to Cart
-                      </>
-                    )}
-                  </motion.button>
-                </motion.div>
-              )}
-            </AnimatePresence>
           </div>
 
           {/* Product Info */}
@@ -251,10 +167,11 @@ export default function ProductCard({ product, index = 0, showCategory = true, c
                 {product.category.name}
               </p>
             )}
-            <h3 className="font-semibold text-[rgb(var(--foreground))] line-clamp-2 mb-2 group-hover:text-primary-dark transition-colors">
+            <h3 className="font-semibold text-[rgb(var(--foreground))] line-clamp-2 mb-2 
+                           group-hover:text-primary-dark transition-colors duration-200">
               {product.name}
             </h3>
-            <div className="flex items-center gap-2">
+            <div className="flex items-center gap-2 mb-3">
               <span className="text-lg font-bold text-primary-dark">
                 R{price.toFixed(2)}
               </span>
@@ -264,39 +181,54 @@ export default function ProductCard({ product, index = 0, showCategory = true, c
                 </span>
               )}
             </div>
+
+            {/* Action Buttons - Always visible below product info */}
+            <div className="flex gap-2">
+              <button
+                onClick={handleAddToCart}
+                disabled={!inStock || addingToCart}
+                className={`flex-1 py-2.5 px-3 rounded-lg font-medium text-sm flex items-center justify-center gap-2 
+                            transition-all duration-200 touch-manipulation ${
+                  addedToCart
+                    ? 'bg-green-500 text-white'
+                    : !inStock
+                    ? 'bg-gray-400 text-white cursor-not-allowed'
+                    : 'bg-primary-dark text-white active:scale-[0.98]'
+                }`}
+              >
+                {addedToCart ? (
+                  <>
+                    <HiCheck className="w-4 h-4" />
+                    Added!
+                  </>
+                ) : addingToCart ? (
+                  <>
+                    <div className="w-4 h-4 border-2 border-white border-t-transparent rounded-full animate-spin" />
+                    Adding...
+                  </>
+                ) : (
+                  <>
+                    <HiShoppingCart className="w-4 h-4" />
+                    Add to Cart
+                  </>
+                )}
+              </button>
+              <button
+                onClick={handleToggleWishlist}
+                disabled={togglingWishlist}
+                className={`px-3 py-2.5 rounded-lg transition-all duration-200 touch-manipulation active:scale-[0.98] ${
+                  inWishlist
+                    ? 'bg-red-500 text-white'
+                    : 'bg-[rgb(var(--muted))] text-[rgb(var(--foreground))] hover:bg-red-100 hover:text-red-500'
+                }`}
+                title={inWishlist ? 'Remove from Wishlist' : 'Add to Wishlist'}
+              >
+                <HiHeart className={`w-5 h-5 ${togglingWishlist ? 'animate-pulse' : ''}`} />
+              </button>
+            </div>
           </div>
         </div>
       </Link>
-
-      {/* Mobile Quick Actions Bar (visible below card on small screens) */}
-      <div className="sm:hidden mt-2 flex gap-2">
-        <button
-          onClick={handleAddToCart}
-          disabled={!inStock || addingToCart}
-          className={`flex-1 py-2 px-3 rounded-lg font-medium text-sm flex items-center justify-center gap-1.5 transition-all ${
-            addedToCart
-              ? 'bg-green-500 text-white'
-              : !inStock
-              ? 'bg-gray-400 text-white cursor-not-allowed'
-              : 'bg-primary-dark text-white'
-          }`}
-        >
-          {addedToCart ? <HiCheck className="w-4 h-4" /> : <HiShoppingCart className="w-4 h-4" />}
-          {addedToCart ? 'Added!' : 'Add'}
-        </button>
-        <button
-          onClick={handleToggleWishlist}
-          disabled={togglingWishlist}
-          className={`px-3 py-2 rounded-lg transition-all ${
-            inWishlist
-              ? 'bg-red-500 text-white'
-              : 'bg-[rgb(var(--muted))] text-[rgb(var(--foreground))]'
-          }`}
-        >
-          <HiHeart className={`w-5 h-5 ${inWishlist ? 'fill-current' : ''}`} />
-        </button>
-      </div>
-    </motion.div>
+    </div>
   );
 }
-

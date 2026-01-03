@@ -57,7 +57,7 @@ export default function RootLayout({
               </Suspense>
               <div className="flex min-h-screen min-h-[100dvh] flex-col overflow-x-hidden w-full">
                 <Header />
-                <main className="flex-1 overflow-x-hidden">
+                <main className="flex-1 overflow-x-hidden pt-16">
                   {children}
                 </main>
                 <Footer />

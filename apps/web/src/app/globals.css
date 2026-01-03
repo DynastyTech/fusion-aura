@@ -394,7 +394,7 @@ html {
 
 /* Mobile-specific performance optimizations */
 @media (max-width: 768px) {
-  /* Disable complex animations on mobile for better performance */
+  /* Disable complex floating animations on mobile for better performance */
   .animate-float,
   .animate-float-slow {
     animation: none !important;
@@ -402,37 +402,30 @@ html {
 
   /* Reduce blur effects on mobile for performance */
   .backdrop-blur-xl {
-    backdrop-filter: blur(12px);
+    backdrop-filter: blur(10px);
   }
   
   .backdrop-blur-3xl,
   .blur-3xl {
-    filter: blur(24px);
-  }
-
-  /* Optimize transitions for mobile */
-  * {
-    transition-duration: 0.15s !important;
-  }
-
-  /* Ensure touch targets are appropriately sized */
-  button,
-  a,
-  [role="button"] {
-    min-height: 44px;
-    min-width: 44px;
+    filter: blur(20px);
   }
 
   /* Optimize scrolling containers */
   .overflow-y-auto,
   .overflow-x-auto {
     -webkit-overflow-scrolling: touch;
-    scroll-behavior: smooth;
   }
+}
 
-  /* Prevent rubber-banding causing layout issues */
-  .overflow-hidden {
-    touch-action: none;
+/* Smooth fade-in animation for product cards */
+@keyframes fadeInUp {
+  from {
+    opacity: 0;
+    transform: translateY(10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
   }
 }
 
