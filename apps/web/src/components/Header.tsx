@@ -1,20 +1,20 @@
 'use client';
 
-import { useState, useEffect } from 'react';
+import { useState, useCallback } from 'react';
 import Link from 'next/link';
 import HeaderNav from './HeaderNav';
 import { FaLeaf } from 'react-icons/fa';
+import { useOptimizedScroll } from '@/hooks/useDebounce';
 
 export default function Header() {
   const [scrolled, setScrolled] = useState(false);
 
-  useEffect(() => {
-    const handleScroll = () => {
-      setScrolled(window.scrollY > 20);
-    };
-    window.addEventListener('scroll', handleScroll);
-    return () => window.removeEventListener('scroll', handleScroll);
+  // Use optimized scroll with passive listener and requestAnimationFrame
+  const handleScroll = useCallback((scrollY: number) => {
+    setScrolled(scrollY > 20);
   }, []);
+
+  useOptimizedScroll(handleScroll);
 
   return (
     <header

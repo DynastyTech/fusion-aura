@@ -1,6 +1,9 @@
 .product-carousel-section {
   padding: 6rem 0;
   background-color: rgb(var(--background));
+  overflow-x: hidden;
+  width: 100%;
+  max-width: 100vw;
 }
 
 .section-header {
@@ -22,6 +25,8 @@
 
 .product-swiper {
   padding: 2rem 0 4rem;
+  overflow: hidden;
+  max-width: 100%;
 }
 
 .product-swiper .swiper-slide {

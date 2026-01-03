@@ -11,25 +11,25 @@ export default function PageLoader() {
   const [isLoading, setIsLoading] = useState(false);
   const [isInitialLoad, setIsInitialLoad] = useState(true);
 
-  // Show loader on initial page load
+  // Show loader on initial page load - 1 second duration
   useEffect(() => {
     if (isInitialLoad) {
       setIsLoading(true);
       const timer = setTimeout(() => {
         setIsLoading(false);
         setIsInitialLoad(false);
-      }, 1500);
+      }, 1000); // Reduced from 1500ms to 1000ms
       return () => clearTimeout(timer);
     }
   }, [isInitialLoad]);
 
-  // Show loader on route changes
+  // Show loader on route changes - 1 second duration
   useEffect(() => {
     if (!isInitialLoad) {
       setIsLoading(true);
       const timer = setTimeout(() => {
         setIsLoading(false);
-      }, 1500);
+      }, 1000); // Reduced from 1500ms to 1000ms
       return () => clearTimeout(timer);
     }
   }, [pathname, searchParams, isInitialLoad]);

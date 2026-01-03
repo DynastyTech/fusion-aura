@@ -9,6 +9,7 @@ import { ThemeProvider } from '@/contexts/ThemeContext';
 import Header from '@/components/Header';
 import Footer from '@/components/Footer';
 import PageLoader from '@/components/PageLoader';
+import ScrollOptimizer from '@/components/ScrollOptimizer';
 
 const outfit = Outfit({ 
   subsets: ['latin'],
@@ -44,18 +45,19 @@ export default function RootLayout({
   children: React.ReactNode;
 }) {
   return (
-    <html lang="en" suppressHydrationWarning>
-      <body className={`${outfit.variable} ${spaceGrotesk.variable} font-sans antialiased`}>
+    <html lang="en" suppressHydrationWarning className="overflow-x-hidden">
+      <body className={`${outfit.variable} ${spaceGrotesk.variable} font-sans antialiased overflow-x-hidden`}>
         <ThemeProvider>
           <AuthProvider>
             <CartProvider>
               <WishlistProvider>
+              <ScrollOptimizer />
               <Suspense fallback={null}>
                 <PageLoader />
               </Suspense>
-              <div className="flex min-h-screen flex-col">
+              <div className="flex min-h-screen min-h-[100dvh] flex-col overflow-x-hidden w-full">
                 <Header />
-                <main className="flex-1">
+                <main className="flex-1 overflow-x-hidden">
                   {children}
                 </main>
                 <Footer />
