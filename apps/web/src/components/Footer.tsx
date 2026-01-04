@@ -46,7 +46,7 @@ const socialLinks = [
     name: 'Facebook', 
     href: 'https://facebook.com/abutiialpha', 
     icon: FaFacebook,
-    handle: 'Abutii Alpha',
+    handle: 'Fusion-Aura',
   },
   { name: 'TikTok', href: 'https://tiktok.com/@fusionaura1', icon: FaTiktok },
 ];
