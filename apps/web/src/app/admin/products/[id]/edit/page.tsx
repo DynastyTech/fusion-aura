@@ -19,6 +19,11 @@ interface Category {
   name: string;
 }
 
+interface Inventory {
+  quantity: number;
+  lowStockThreshold?: number;
+}
+
 interface Product {
   id: string;
   name: string;
@@ -31,6 +36,7 @@ interface Product {
   images: string[];
   isActive: boolean;
   isFeatured: boolean;
+  inventory?: Inventory | null;
 }
 
 export default function EditProductPage() {
@@ -51,6 +57,7 @@ export default function EditProductPage() {
     images: [] as string[] | string,
     isActive: true,
     isFeatured: false,
+    stockQuantity: '0',
   });
 
   const fetchData = useCallback(async () => {
@@ -79,6 +86,7 @@ export default function EditProductPage() {
           images: Array.isArray(product.images) ? product.images : [],
           isActive: product.isActive ?? true,
           isFeatured: product.isFeatured ?? false,
+          stockQuantity: String(product.inventory?.quantity ?? 0),
         });
       } else {
         console.error('Failed to fetch product:', productRes.error);
@@ -126,10 +134,17 @@ export default function EditProductPage() {
         : [];
 
       const payload = {
-        ...formData,
+        name: formData.name,
+        slug: formData.slug,
+        description: formData.description,
+        shortDescription: formData.shortDescription,
+        categoryId: formData.categoryId,
+        isActive: formData.isActive,
+        isFeatured: formData.isFeatured,
         price: parseFloat(formData.price),
         compareAtPrice: formData.compareAtPrice ? parseFloat(formData.compareAtPrice) : undefined,
         images,
+        initialQuantity: parseInt(formData.stockQuantity) || 0,
       };
 
       const response = await apiRequest(`/api/products/${productId}`, {
@@ -201,14 +216,14 @@ export default function EditProductPage() {
                 </h2>
                 
                 <div className="space-y-4">
-                  <div>
+            <div>
                     <label className="block text-sm font-medium text-[rgb(var(--foreground))] mb-1.5">
                       Product Name *
                     </label>
-                    <input
-                      type="text"
-                      required
-                      value={formData.name}
+              <input
+                type="text"
+                required
+                value={formData.name}
                       onChange={(e) => {
                         setFormData({
                           ...formData,
@@ -218,27 +233,27 @@ export default function EditProductPage() {
                       }}
                       className="input-field"
                       placeholder="e.g., Premium Organic Honey"
-                    />
-                  </div>
+              />
+            </div>
 
-                  <div>
+            <div>
                     <label className="block text-sm font-medium text-[rgb(var(--foreground))] mb-1.5">
                       URL Slug *
-                    </label>
-                    <input
-                      type="text"
-                      required
-                      value={formData.slug}
-                      onChange={(e) => setFormData({ ...formData, slug: e.target.value })}
+              </label>
+              <input
+                type="text"
+                required
+                value={formData.slug}
+                onChange={(e) => setFormData({ ...formData, slug: e.target.value })}
                       className="input-field"
                       placeholder="premium-organic-honey"
-                    />
+              />
                     <p className="mt-1.5 text-xs text-[rgb(var(--muted-foreground))]">
                       Product URL: /products/<span className="font-medium">{formData.slug || 'slug'}</span>
-                    </p>
-                  </div>
+              </p>
+            </div>
 
-                  <div>
+            <div>
                     <label className="block text-sm font-medium text-[rgb(var(--foreground))] mb-1.5">
                       Short Description
                     </label>
@@ -281,11 +296,11 @@ export default function EditProductPage() {
 
             {/* Sidebar */}
             <div className="space-y-6">
-              {/* Pricing Card */}
+              {/* Pricing & Stock Card */}
               <div className="card p-4 sm:p-6">
                 <h2 className="text-lg font-semibold text-[rgb(var(--foreground))] mb-4 flex items-center gap-2">
                   <HiCurrencyDollar className="w-5 h-5 text-primary-dark" />
-                  Pricing
+                  Pricing & Stock
                 </h2>
                 
                 <div className="space-y-4">
@@ -332,6 +347,24 @@ export default function EditProductPage() {
                       Shows as strikethrough price if higher than price
                     </p>
                   </div>
+
+                  <div>
+                    <label className="block text-sm font-medium text-[rgb(var(--foreground))] mb-1.5">
+                      Stock Quantity *
+                    </label>
+                    <input
+                      type="number"
+                      required
+                      min="0"
+                      value={formData.stockQuantity}
+                      onChange={(e) => setFormData({ ...formData, stockQuantity: e.target.value })}
+                      className="input-field"
+                      placeholder="0"
+                    />
+                    <p className="mt-1.5 text-xs text-[rgb(var(--muted-foreground))]">
+                      Number of items available in stock
+                    </p>
+                  </div>
                 </div>
               </div>
 
@@ -347,20 +380,20 @@ export default function EditProductPage() {
                     <label className="block text-sm font-medium text-[rgb(var(--foreground))] mb-1.5">
                       Category *
                     </label>
-                    <select
-                      required
-                      value={formData.categoryId}
-                      onChange={(e) => setFormData({ ...formData, categoryId: e.target.value })}
+              <select
+                required
+                value={formData.categoryId}
+                onChange={(e) => setFormData({ ...formData, categoryId: e.target.value })}
                       className="input-field"
-                    >
-                      <option value="">Select a category</option>
-                      {categories.map((cat) => (
-                        <option key={cat.id} value={cat.id}>
-                          {cat.name}
-                        </option>
-                      ))}
-                    </select>
-                  </div>
+              >
+                <option value="">Select a category</option>
+                {categories.map((cat) => (
+                  <option key={cat.id} value={cat.id}>
+                    {cat.name}
+                  </option>
+                ))}
+              </select>
+            </div>
 
                   <div className="pt-2 space-y-3">
                     <label className="flex items-center gap-3 cursor-pointer group touch-target">
@@ -369,15 +402,15 @@ export default function EditProductPage() {
                           ? 'bg-primary-dark border-primary-dark' 
                           : 'border-[rgb(var(--border))] group-hover:border-primary-dark/50'}`}>
                         {formData.isActive && <HiCheck className="w-4 h-4 text-white" />}
-                      </div>
-                      <input
-                        type="checkbox"
-                        checked={formData.isActive}
-                        onChange={(e) => setFormData({ ...formData, isActive: e.target.checked })}
+          </div>
+              <input
+                type="checkbox"
+                checked={formData.isActive}
+                onChange={(e) => setFormData({ ...formData, isActive: e.target.checked })}
                         className="sr-only"
-                      />
+              />
                       <span className="text-sm text-[rgb(var(--foreground))]">Active (visible to customers)</span>
-                    </label>
+            </label>
 
                     <label className="flex items-center gap-3 cursor-pointer group touch-target">
                       <div className={`w-6 h-6 rounded-lg border-2 flex items-center justify-center transition-colors
@@ -386,15 +419,15 @@ export default function EditProductPage() {
                           : 'border-[rgb(var(--border))] group-hover:border-primary-dark/50'}`}>
                         {formData.isFeatured && <HiCheck className="w-4 h-4 text-white" />}
                       </div>
-                      <input
-                        type="checkbox"
-                        checked={formData.isFeatured}
-                        onChange={(e) => setFormData({ ...formData, isFeatured: e.target.checked })}
+              <input
+                type="checkbox"
+                checked={formData.isFeatured}
+                onChange={(e) => setFormData({ ...formData, isFeatured: e.target.checked })}
                         className="sr-only"
-                      />
+              />
                       <span className="text-sm text-[rgb(var(--foreground))]">Featured (show on homepage)</span>
-                    </label>
-                  </div>
+            </label>
+          </div>
                 </div>
               </div>
 
@@ -418,12 +451,12 @@ export default function EditProductPage() {
                   )}
                 </button>
                 
-                <Link
-                  href="/admin/dashboard"
+            <Link
+              href="/admin/dashboard"
                   className="btn-secondary w-full justify-center touch-target"
-                >
-                  Cancel
-                </Link>
+            >
+              Cancel
+            </Link>
               </div>
             </div>
           </div>

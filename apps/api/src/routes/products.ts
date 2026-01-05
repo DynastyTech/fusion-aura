@@ -247,20 +247,50 @@ export async function productRoutes(fastify: FastifyInstance) {
       const params = request.params as { id: string };
       const body = updateProductSchema.parse(request.body);
 
-      const product = await prisma.product.update({
-        where: { id: params.id },
-        data: body,
-        include: {
-          category: true,
-        },
+      // Extract stockQuantity from the body (it's not a product field)
+      const { initialQuantity: stockQuantity, ...productData } = body;
+
+      // Update product and optionally inventory in a transaction
+      const result = await prisma.$transaction(async (tx: any) => {
+        const product = await tx.product.update({
+          where: { id: params.id },
+          data: productData,
+          include: {
+            category: true,
+            inventory: true,
+          },
+        });
+
+        // Update inventory if stockQuantity is provided
+        if (stockQuantity !== undefined) {
+          await tx.inventory.upsert({
+            where: { productId: params.id },
+            update: { quantity: stockQuantity },
+            create: {
+              productId: params.id,
+              quantity: stockQuantity,
+            },
+          });
+        }
+
+        // Fetch updated product with inventory
+        const updatedProduct = await tx.product.findUnique({
+          where: { id: params.id },
+          include: {
+            category: true,
+            inventory: true,
+          },
+        });
+
+        return updatedProduct;
       });
 
       // Update in Meilisearch
-      await indexProduct(product);
+      await indexProduct(result);
 
       return reply.send({
         success: true,
-        data: product,
+        data: result,
       });
     }
   );
