@@ -23,7 +23,4 @@ ON CONFLICT (email) DO UPDATE SET role = 'ADMIN';
 SELECT email, role FROM users WHERE email = 'admin@fusionaura.com';
 SQL
 
-echo ""
-echo "✅ Admin user created!"
-echo "📧 Email: admin@fusionaura.com"
-echo "🔑 Password: admin123"
+

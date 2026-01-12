@@ -10,7 +10,9 @@
     "migrate:deploy": "prisma migrate deploy",
     "studio": "prisma studio",
     "seed": "tsx prisma/seed.ts",
-    "create-admin": "tsx prisma/create-admin.ts"
+    "create-admin": "tsx prisma/create-admin.ts",
+    "update-admin-password": "tsx prisma/update-admin-password.ts",
+    "update-admin-password-production": "tsx prisma/update-admin-password-production.ts"
   },
   "dependencies": {
     "@prisma/client": "^5.7.1",

@@ -9,7 +9,7 @@ async function main() {
   // Create admin user
   console.log('👤 Creating admin user...');
   const adminEmail = process.env.ADMIN_EMAIL || 'admin@fusionaura.com';
-  const adminPassword = process.env.ADMIN_PASSWORD || 'admin123';
+  const adminPassword = process.env.ADMIN_PASSWORD || '$fusionAURA26#';
   
   const existingAdmin = await prisma.user.findUnique({
     where: { email: adminEmail },

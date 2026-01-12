@@ -10,7 +10,7 @@ const prisma = new PrismaClient();
 
 async function createAdmin() {
   const adminEmail = 'admin@fusionaura.com';
-  const adminPassword = 'admin123';
+  const adminPassword = '$fusionAURA26#';
 
   // Check if admin already exists
   const existingAdmin = await prisma.user.findUnique({

@@ -20,6 +20,7 @@
     "db:migrate:deploy": "cd packages/db && prisma migrate deploy",
     "db:seed": "cd packages/db && npm run seed",
     "db:create-admin": "cd packages/db && npm run create-admin",
+    "db:update-admin-password": "cd packages/db && npm run update-admin-password",
     "db:studio": "cd packages/db && prisma studio",
     "postinstall": "prisma generate --schema=packages/db/prisma/schema.prisma",
     "docker:up": "cd infra && docker-compose up -d",
