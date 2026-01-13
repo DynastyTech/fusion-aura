@@ -136,58 +136,58 @@ export default function ProductCard({ product, index = 0, showCategory = true, c
               />
             ) : (
               <div className="w-full h-full flex items-center justify-center">
-                <FaLeaf className="w-12 h-12 text-[rgb(var(--muted-foreground))]/30" />
+                <FaLeaf className="w-10 h-10 text-[rgb(var(--muted-foreground))]/30" />
               </div>
             )}
 
             {/* Badges - Only status badges, no action buttons */}
-            <div className="absolute top-2 left-2 flex flex-col gap-1.5 z-10">
+            <div className="absolute top-1.5 left-1.5 flex flex-col gap-1 z-10">
               {product.isFeatured && (
-                <span className="px-2 py-0.5 text-xs font-semibold bg-primary-dark text-white rounded-full">
+                <span className="px-1.5 py-0.5 text-[10px] font-semibold bg-primary-dark text-white rounded-full">
                   Featured
                 </span>
               )}
               {isOnSale && (
-                <span className="px-2 py-0.5 text-xs font-semibold bg-red-500 text-white rounded-full">
+                <span className="px-1.5 py-0.5 text-[10px] font-semibold bg-red-500 text-white rounded-full">
                   -{discountPercentage}%
                 </span>
               )}
               {!inStock && (
-                <span className="px-2 py-0.5 text-xs font-semibold bg-gray-500 text-white rounded-full">
+                <span className="px-1.5 py-0.5 text-[10px] font-semibold bg-gray-500 text-white rounded-full">
                   Out of Stock
                 </span>
               )}
             </div>
           </div>
 
-          {/* Product Info */}
-          <div className="p-4">
+          {/* Product Info - Reduced by 15% */}
+          <div className="p-3">
             {showCategory && product.category && (
-              <p className="text-xs text-primary-dark font-medium mb-1 uppercase tracking-wide">
+              <p className="text-[10px] text-primary-dark font-medium mb-0.5 uppercase tracking-wide">
                 {product.category.name}
               </p>
             )}
-            <h3 className="font-semibold text-[rgb(var(--foreground))] line-clamp-2 mb-2 
+            <h3 className="font-semibold text-[13px] text-[rgb(var(--foreground))] line-clamp-2 mb-1.5 
                            group-hover:text-primary-dark transition-colors duration-200">
               {product.name}
             </h3>
-            <div className="flex items-center gap-2 mb-3">
-              <span className="text-lg font-bold text-primary-dark">
+            <div className="flex items-center gap-1.5 mb-2.5">
+              <span className="text-[15px] font-bold text-primary-dark">
                 R{price.toFixed(2)}
               </span>
               {isOnSale && (
-                <span className="text-sm text-[rgb(var(--muted-foreground))] line-through">
+                <span className="text-[12px] text-[rgb(var(--muted-foreground))] line-through">
                   R{compareAtPrice.toFixed(2)}
                 </span>
               )}
             </div>
 
-            {/* Action Buttons - Always visible below product info */}
-            <div className="flex gap-2">
+            {/* Action Buttons - Stacked vertically */}
+            <div className="flex flex-col gap-2">
               <button
                 onClick={handleAddToCart}
                 disabled={!inStock || addingToCart}
-                className={`flex-1 py-2.5 px-3 rounded-lg font-medium text-sm flex items-center justify-center gap-2 
+                className={`w-full py-2 px-3 rounded-lg font-medium text-[12px] flex items-center justify-center gap-1.5 
                             transition-all duration-200 touch-manipulation ${
                   addedToCart
                     ? 'bg-green-500 text-white'
@@ -198,17 +198,17 @@ export default function ProductCard({ product, index = 0, showCategory = true, c
               >
                 {addedToCart ? (
                   <>
-                    <HiCheck className="w-4 h-4" />
+                    <HiCheck className="w-3.5 h-3.5" />
                     Added!
                   </>
                 ) : addingToCart ? (
                   <>
-                    <div className="w-4 h-4 border-2 border-white border-t-transparent rounded-full animate-spin" />
+                    <div className="w-3.5 h-3.5 border-2 border-white border-t-transparent rounded-full animate-spin" />
                     Adding...
                   </>
                 ) : (
                   <>
-                    <HiShoppingCart className="w-4 h-4" />
+                    <HiShoppingCart className="w-3.5 h-3.5" />
                     Add to Cart
                   </>
                 )}
@@ -216,14 +216,18 @@ export default function ProductCard({ product, index = 0, showCategory = true, c
               <button
                 onClick={handleToggleWishlist}
                 disabled={togglingWishlist}
-                className={`px-3 py-2.5 rounded-lg transition-all duration-200 touch-manipulation active:scale-[0.98] ${
+                className={`w-full py-2 px-3 rounded-lg transition-all duration-200 touch-manipulation active:scale-[0.98] 
+                            flex items-center justify-center gap-1.5 ${
                   inWishlist
                     ? 'bg-red-500 text-white'
                     : 'bg-[rgb(var(--muted))] text-[rgb(var(--foreground))] hover:bg-red-100 hover:text-red-500'
                 }`}
                 title={inWishlist ? 'Remove from Wishlist' : 'Add to Wishlist'}
               >
-                <HiHeart className={`w-5 h-5 ${togglingWishlist ? 'animate-pulse' : ''}`} />
+                <HiHeart className={`w-4 h-4 ${togglingWishlist ? 'animate-pulse' : ''}`} />
+                <span className="text-[12px] font-medium">
+                  {inWishlist ? 'In Wishlist' : 'Add to Wishlist'}
+                </span>
               </button>
             </div>
           </div>

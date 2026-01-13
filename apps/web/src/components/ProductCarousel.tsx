@@ -127,7 +127,7 @@ export default function ProductCarousel({ products }: ProductCarouselProps) {
           transition={{ duration: 0.6 }}
         >
           <h2>Featured Products</h2>
-          <p>Our most popular natural remedies trusted by customers nationwide</p>
+          
         </motion.div>
 
         <Swiper
@@ -177,46 +177,6 @@ export default function ProductCarousel({ products }: ProductCarouselProps) {
                       </div>
                     )}
                     
-                    {/* Wishlist Button - Always visible */}
-                    <button
-                      onClick={(e) => handleToggleWishlist(e, product.id)}
-                      disabled={togglingWishlist === product.id}
-                      className={`absolute top-3 right-3 z-10 w-10 h-10 rounded-full flex items-center justify-center 
-                                shadow-lg backdrop-blur-sm transition-all duration-200 ${
-                        isInWishlist(product.id)
-                          ? 'bg-red-500 text-white'
-                          : 'bg-white/90 text-gray-700 hover:bg-red-500 hover:text-white'
-                      }`}
-                    >
-                      <HiHeart className={`w-5 h-5 ${togglingWishlist === product.id ? 'animate-pulse' : ''}`} />
-                    </button>
-
-                    <div className="product-overlay">
-                      <button
-                        className={`btn ${addedToCart === product.id ? 'btn-success' : 'btn-primary'}`}
-                        onClick={(e) => handleAddToCart(e, product)}
-                        disabled={addingToCart === product.id || !inStock}
-                      >
-                        {addedToCart === product.id ? (
-                          <>
-                            <HiCheck size={20} />
-                            Added!
-                          </>
-                        ) : addingToCart === product.id ? (
-                          <>
-                            <div className="w-5 h-5 border-2 border-white border-t-transparent rounded-full animate-spin" />
-                            Adding...
-                          </>
-                        ) : !inStock ? (
-                          'Out of Stock'
-                        ) : (
-                          <>
-                            <HiShoppingCart size={20} />
-                            Add to Cart
-                          </>
-                        )}
-                      </button>
-                    </div>
                   </div>
                   <div className="product-info">
                     <Link href={`/products/${product.slug}`}>
@@ -228,6 +188,57 @@ export default function ProductCarousel({ products }: ProductCarouselProps) {
                     <div className="product-footer">
                       <span className="product-price">R{price.toFixed(2)}</span>
                       <span className="product-category">{product.category.name}</span>
+                    </div>
+                    
+                    {/* Action Buttons - Stacked vertically */}
+                    <div className="flex flex-col gap-2 mt-3">
+                      <button
+                        onClick={(e) => handleAddToCart(e, product)}
+                        disabled={addingToCart === product.id || !inStock}
+                        className={`w-full py-2 px-3 rounded-lg font-medium text-[12px] flex items-center justify-center gap-1.5 
+                                    transition-all duration-200 touch-manipulation ${
+                          addedToCart === product.id
+                            ? 'bg-green-500 text-white'
+                            : !inStock
+                            ? 'bg-gray-400 text-white cursor-not-allowed'
+                            : 'bg-primary-dark text-white active:scale-[0.98]'
+                        }`}
+                      >
+                        {addedToCart === product.id ? (
+                          <>
+                            <HiCheck className="w-3.5 h-3.5" />
+                            Added!
+                          </>
+                        ) : addingToCart === product.id ? (
+                          <>
+                            <div className="w-3.5 h-3.5 border-2 border-white border-t-transparent rounded-full animate-spin" />
+                            Adding...
+                          </>
+                        ) : !inStock ? (
+                          'Out of Stock'
+                        ) : (
+                          <>
+                            <HiShoppingCart className="w-3.5 h-3.5" />
+                            Add to Cart
+                          </>
+                        )}
+                      </button>
+                      <button
+                        onClick={(e) => handleToggleWishlist(e, product.id)}
+                        disabled={togglingWishlist === product.id}
+                        className={`w-full py-2 px-3 rounded-lg transition-all duration-200 touch-manipulation active:scale-[0.98] 
+                                    flex items-center justify-center gap-1.5 ${
+                          isInWishlist(product.id)
+                            ? 'bg-red-500 text-white'
+                            : 'bg-[rgb(var(--muted))] text-[rgb(var(--foreground))] hover:bg-red-100 hover:text-red-500'
+                        }`}
+                        title={isInWishlist(product.id) ? 'Remove from Wishlist' : 'Add to Wishlist'}
+                      >
+                        <HiHeart className={`w-4 h-4 ${togglingWishlist === product.id ? 'animate-pulse' : ''}`} />
+                        <span className="text-[12px] font-medium">
+                          {isInWishlist(product.id) ? 'In Wishlist' : 'Add to Wishlist'}
+                        </span>
+                      </button>
                     </div>
                   </div>
                 </motion.div>

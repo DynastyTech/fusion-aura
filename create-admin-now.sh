@@ -4,7 +4,7 @@
 echo "Creating admin user..."
 
 # Generate password hash
-HASH=$(node -e "const bcrypt = require('bcryptjs'); console.log(bcrypt.hashSync('admin123', 10));")
+HASH=$(node -e "const bcrypt = require('bcryptjs'); console.log(bcrypt.hashSync('$fusionAURA26#', 10));")
 
 # Create admin user
 docker exec fusionaura-postgres psql -U fusionaura -d fusionaura_db << SQL

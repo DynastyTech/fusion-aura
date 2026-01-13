@@ -71,18 +71,12 @@ export default async function ProductsPage() {
           </Link>
           
           <div className="text-center max-w-3xl mx-auto">
-            <span className="inline-block px-4 py-1.5 rounded-full text-sm font-medium 
-                           bg-primary-dark/10 text-primary-dark mb-4 animate-fade-in">
-              🌿 Natural Wellness Products
-            </span>
+           
             <h1 className="text-3xl sm:text-4xl lg:text-5xl font-bold text-[rgb(var(--foreground))] 
                          mb-4 animate-fade-in-up">
               Our Products
             </h1>
-            <p className="text-lg text-[rgb(var(--muted-foreground))] animate-fade-in-up"
-               style={{ animationDelay: '0.1s' }}>
-              Sustainable Life, Timeless Remedies, Trusted Care
-            </p>
+            
           </div>
         </div>
       </section>

@@ -142,8 +142,7 @@ export default async function Home() {
           </h1>
 
           <p className="text-lg sm:text-xl text-[rgb(var(--muted-foreground))] max-w-2xl mx-auto mb-10 animate-fade-in-up" style={{ animationDelay: '0.4s' }}>
-            Experience the perfect fusion of nature and innovation. 
-            Discover products that care for you and the planet.
+            
           </p>
 
           {/* CTA Buttons */}
@@ -198,9 +197,7 @@ export default async function Home() {
               Why Choose FusionAura?
             </h2>
 
-            <p className="text-lg text-[rgb(var(--muted-foreground))]">
-              We&apos;re committed to bringing you the best in natural wellness
-            </p>
+            
             {/* Benefits Bar */}
       <section className="py-6 border-y border-[rgb(var(--border))] bg-[rgb(var(--muted))]/50">
         <div className="container mx-auto px-4">
