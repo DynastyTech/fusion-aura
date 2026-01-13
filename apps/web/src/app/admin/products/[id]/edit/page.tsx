@@ -184,8 +184,8 @@ export default function EditProductPage() {
   }
 
   return (
-    <div className="min-h-screen bg-[rgb(var(--background))]">
-      <div className="container mx-auto px-4 sm:px-6 lg:px-8 py-6 lg:py-8">
+    <div className="min-h-screen bg-[rgb(var(--background))] pb-safe-bottom">
+      <div className="container mx-auto px-4 sm:px-6 lg:px-8 py-4 sm:py-6 lg:py-8">
         {/* Header */}
         <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 mb-6 lg:mb-8">
           <div>

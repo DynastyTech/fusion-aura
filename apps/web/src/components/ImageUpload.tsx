@@ -1,6 +1,6 @@
 'use client';
 
-import { useState } from 'react';
+import { useState, useRef } from 'react';
 import Image from 'next/image';
 import { apiRequest } from '@/lib/api';
 
@@ -13,6 +13,7 @@ interface ImageUploadProps {
 export default function ImageUpload({ images, onImagesChange, maxImages = 5 }: ImageUploadProps) {
   const [uploading, setUploading] = useState(false);
   const [error, setError] = useState<string | null>(null);
+  const fileInputRef = useRef<HTMLInputElement>(null);
 
   const handleFileSelect = async (e: React.ChangeEvent<HTMLInputElement>) => {
     const files = e.target.files;
@@ -51,10 +52,21 @@ export default function ImageUpload({ images, onImagesChange, maxImages = 5 }: I
 
       const uploadedUrls = await Promise.all(uploadPromises);
       onImagesChange([...images, ...uploadedUrls]);
+      
+      // Reset file input to allow selecting the same file again
+      if (fileInputRef.current) {
+        fileInputRef.current.value = '';
+      }
     } catch (err: any) {
       setError(err.message || 'Failed to upload images');
     } finally {
       setUploading(false);
+    }
+  };
+
+  const handleUploadClick = () => {
+    if (fileInputRef.current && !uploading) {
+      fileInputRef.current.click();
     }
   };
 
@@ -65,19 +77,19 @@ export default function ImageUpload({ images, onImagesChange, maxImages = 5 }: I
 
   return (
     <div className="space-y-4">
-      <label className="block text-sm font-medium text-gray-700">
+      <label className="block text-sm font-medium text-[rgb(var(--foreground))]">
         Product Images {images.length > 0 && `(${images.length}/${maxImages})`}
       </label>
 
       {error && (
-        <div className="bg-red-50 border border-red-200 text-red-700 px-4 py-3 rounded">
+        <div className="bg-red-50 border border-red-200 text-red-700 px-4 py-3 rounded-lg">
           {error}
         </div>
       )}
 
       {/* Image Preview Grid */}
       {images.length > 0 && (
-        <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
+        <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-4">
           {images.map((url, index) => (
             <div key={index} className="relative group">
               <Image
@@ -85,14 +97,15 @@ export default function ImageUpload({ images, onImagesChange, maxImages = 5 }: I
                 alt={`Product image ${index + 1}`}
                 width={128}
                 height={128}
-                className="w-full h-32 object-cover rounded-lg border border-gray-300"
+                className="w-full h-32 sm:h-40 object-cover rounded-lg border border-gray-300"
               />
               <button
                 type="button"
                 onClick={() => removeImage(index)}
-                className="absolute top-2 right-2 bg-red-600 text-white rounded-full p-1 opacity-0 group-hover:opacity-100 transition-opacity"
+                className="absolute top-2 right-2 bg-red-600 text-white rounded-full p-1.5 sm:p-2 opacity-100 sm:opacity-0 sm:group-hover:opacity-100 transition-opacity touch-target"
+                aria-label={`Remove image ${index + 1}`}
               >
-                <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <svg className="w-4 h-4 sm:w-5 sm:h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
                 </svg>
               </button>
@@ -101,17 +114,36 @@ export default function ImageUpload({ images, onImagesChange, maxImages = 5 }: I
         </div>
       )}
 
-      {/* Upload Button */}
+      {/* Upload Button - Mobile Optimized */}
       {images.length < maxImages && (
         <div>
-          <label className="flex flex-col items-center justify-center w-full h-32 border-2 border-gray-300 border-dashed rounded-lg cursor-pointer bg-gray-50 hover:bg-gray-100">
+          <input
+            ref={fileInputRef}
+            type="file"
+            className="hidden"
+            accept="image/*"
+            multiple
+            onChange={handleFileSelect}
+            disabled={uploading}
+          />
+          <button
+            type="button"
+            onClick={handleUploadClick}
+            disabled={uploading}
+            className="flex flex-col items-center justify-center w-full h-32 sm:h-40 border-2 border-dashed rounded-lg cursor-pointer transition-colors touch-target
+              border-[rgb(var(--border))] bg-[rgb(var(--muted))] hover:bg-[rgb(var(--muted))]/80
+              active:bg-[rgb(var(--muted))]/60 disabled:opacity-50 disabled:cursor-not-allowed"
+          >
             <div className="flex flex-col items-center justify-center pt-5 pb-6">
               {uploading ? (
-                <div className="text-sm text-gray-500">Uploading...</div>
+                <div className="flex flex-col items-center gap-2">
+                  <div className="w-6 h-6 border-2 border-primary-dark border-t-transparent rounded-full animate-spin" />
+                  <span className="text-sm text-[rgb(var(--muted-foreground))]">Uploading...</span>
+                </div>
               ) : (
                 <>
                   <svg
-                    className="w-8 h-8 mb-2 text-gray-500"
+                    className="w-8 h-8 sm:w-10 sm:h-10 mb-2 text-[rgb(var(--muted-foreground))]"
                     fill="none"
                     stroke="currentColor"
                     viewBox="0 0 24 24"
@@ -123,22 +155,21 @@ export default function ImageUpload({ images, onImagesChange, maxImages = 5 }: I
                       d="M7 16a4 4 0 01-.88-7.903A5 5 0 1115.9 6L16 6a5 5 0 011 9.9M15 13l-3-3m0 0l-3 3m3-3v12"
                     />
                   </svg>
-                  <p className="mb-2 text-sm text-gray-500">
-                    <span className="font-semibold">Click to upload</span> or drag and drop
+                  <p className="mb-2 text-sm sm:text-base font-semibold text-[rgb(var(--foreground))]">
+                    Tap to upload images
                   </p>
-                  <p className="text-xs text-gray-500">PNG, JPG, WEBP, GIF (MAX. 10MB)</p>
+                  <p className="text-xs sm:text-sm text-[rgb(var(--muted-foreground))] text-center px-4">
+                    PNG, JPG, WEBP, GIF (MAX. 10MB each)
+                  </p>
+                  {images.length > 0 && (
+                    <p className="text-xs text-[rgb(var(--muted-foreground))] mt-1">
+                      {maxImages - images.length} more {maxImages - images.length === 1 ? 'image' : 'images'} allowed
+                    </p>
+                  )}
                 </>
               )}
             </div>
-            <input
-              type="file"
-              className="hidden"
-              accept="image/*"
-              multiple
-              onChange={handleFileSelect}
-              disabled={uploading}
-            />
-          </label>
+          </button>
         </div>
       )}
     </div>

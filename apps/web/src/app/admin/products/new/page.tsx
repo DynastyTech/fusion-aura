@@ -120,8 +120,8 @@ export default function NewProductPage() {
   };
 
   return (
-    <div className="min-h-screen bg-[rgb(var(--background))]">
-      <div className="container mx-auto px-4 sm:px-6 lg:px-8 py-6 lg:py-8">
+    <div className="min-h-screen bg-[rgb(var(--background))] pb-safe-bottom">
+      <div className="container mx-auto px-4 sm:px-6 lg:px-8 py-4 sm:py-6 lg:py-8">
         {/* Header */}
         <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 mb-6 lg:mb-8">
           <div>
@@ -145,7 +145,7 @@ export default function NewProductPage() {
             {/* Main Content */}
             <div className="lg:col-span-2 space-y-6">
               {/* Basic Info Card */}
-              <div className="card p-6">
+              <div className="card p-4 sm:p-6">
                 <h2 className="text-lg font-semibold text-[rgb(var(--foreground))] mb-4 flex items-center gap-2">
                   <HiCube className="w-5 h-5 text-primary-dark" />
                   Basic Information
@@ -218,7 +218,7 @@ export default function NewProductPage() {
               </div>
 
               {/* Images Card */}
-              <div className="card p-6">
+              <div className="card p-4 sm:p-6">
                 <h2 className="text-lg font-semibold text-[rgb(var(--foreground))] mb-4">
                   Product Images
                 </h2>
@@ -233,7 +233,7 @@ export default function NewProductPage() {
             {/* Sidebar */}
             <div className="space-y-6">
               {/* Pricing Card */}
-              <div className="card p-6">
+              <div className="card p-4 sm:p-6">
                 <h2 className="text-lg font-semibold text-[rgb(var(--foreground))] mb-4 flex items-center gap-2">
                   <HiCurrencyDollar className="w-5 h-5 text-primary-dark" />
                   Pricing & Stock
@@ -302,7 +302,7 @@ export default function NewProductPage() {
               </div>
 
               {/* Category Card */}
-              <div className="card p-6">
+              <div className="card p-4 sm:p-6">
                 <h2 className="text-lg font-semibold text-[rgb(var(--foreground))] mb-4 flex items-center gap-2">
                   <HiTag className="w-5 h-5 text-primary-dark" />
                   Organization
@@ -369,7 +369,7 @@ export default function NewProductPage() {
                 <button
                   type="submit"
                   disabled={loading}
-                  className="btn-primary w-full justify-center"
+                  className="btn-primary w-full justify-center touch-target"
                 >
                   {loading ? (
                     <div className="flex items-center justify-center gap-2">
@@ -386,7 +386,7 @@ export default function NewProductPage() {
                 
                 <Link
                   href="/admin/dashboard"
-                  className="btn-secondary w-full justify-center"
+                  className="btn-secondary w-full justify-center touch-target"
                 >
                   Cancel
                 </Link>
