@@ -76,10 +76,7 @@ export default function Footer() {
               </span>
             </Link>
             
-            <p className="text-[rgb(var(--muted-foreground))] mb-6 max-w-sm">
-              Sustainable Life, Timeless Remedies, Trusted Care. 
-              Experience the fusion of nature and innovation.
-            </p>
+            
 
             {/* Contact Info */}
             <div className="space-y-3">

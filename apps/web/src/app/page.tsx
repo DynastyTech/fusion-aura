@@ -5,9 +5,6 @@ import {
   HiClock, 
   HiShieldCheck,
   HiArrowRight,
-  HiTruck,
-  HiCurrencyDollar,
-  HiHeart,
 } from 'react-icons/hi2';
 import { FaLeaf } from 'react-icons/fa';
 
@@ -80,28 +77,6 @@ const features = [
   },
 ];
 
-const benefits = [
-  {
-    icon: HiTruck,
-    title: 'Fast Delivery',
-    description: 'Swift shipping nationwide',
-  },
-  {
-    icon: HiCurrencyDollar,
-    title: 'Best Prices',
-    description: 'Competitive market rates',
-  },
-  {
-    icon: HiHeart,
-    title: '100% Natural',
-    description: 'Pure, organic ingredients',
-  },
-  {
-    icon: HiShieldCheck,
-    title: 'Quality Assured',
-    description: 'Rigorous quality checks',
-  },
-];
 
 export default async function Home() {
   const featuredProducts = await getFeaturedProducts();
@@ -150,6 +125,10 @@ export default async function Home() {
             <Link
               href="/products"
               className="group btn-primary px-8 py-4 text-lg animate-pulse-glow"
+              style={{ 
+                backgroundColor: 'rgb(34, 197, 94)',
+                backgroundImage: 'linear-gradient(135deg, rgb(163, 230, 53), rgb(34, 197, 94))'
+              }}
             >
               Shop Now
               <HiArrowRight className="w-5 h-5 group-hover:translate-x-1 transition-transform" />
@@ -192,38 +171,6 @@ export default async function Home() {
       {/* Features Section */}
       <section className="py-16 lg:py-24 bg-[rgb(var(--muted))]/30">
         <div className="container mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="text-center mb-12">
-            <h2 className="text-3xl sm:text-4xl font-bold text-[rgb(var(--foreground))] mb-4">
-              Why Choose FusionAura?
-            </h2>
-
-            
-            {/* Benefits Bar */}
-      <section className="py-6 border-y border-[rgb(var(--border))] bg-[rgb(var(--muted))]/50">
-        <div className="container mx-auto px-4">
-          <div className="grid grid-cols-2 md:grid-cols-4 gap-4 md:gap-8">
-            {benefits.map((benefit, index) => (
-              <div 
-                key={benefit.title}
-                className="flex items-center gap-3 justify-center md:justify-start animate-fade-in"
-                style={{ animationDelay: `${index * 0.1}s` }}
-              >
-                <benefit.icon className="w-6 h-6 text-primary-dark flex-shrink-0" />
-                <div>
-                  <p className="font-semibold text-[rgb(var(--foreground))] text-sm md:text-base">
-                    {benefit.title}
-                  </p>
-                  <p className="text-xs text-[rgb(var(--muted-foreground))] hidden md:block">
-                    {benefit.description}
-                  </p>
-                </div>
-              </div>
-            ))}
-          </div>
-        </div>
-      </section>
-          </div>
-
           <div className="grid grid-cols-1 md:grid-cols-3 gap-6 lg:gap-8">
             {features.map((feature, index) => (
               <div
