@@ -20,6 +20,7 @@ async function createPaymentLink(data: {
   currency: string;
   successUrl: string;
   failureUrl: string;
+  webhookUrl: string;
   orderId: string;
   orderNumber: string;
   customerEmail?: string;
@@ -31,6 +32,7 @@ async function createPaymentLink(data: {
     console.log('📤 Creating iKhokha payment link...');
     console.log('Amount:', data.amount);
     console.log('Order ID:', data.orderId);
+    console.log('Webhook URL:', data.webhookUrl);
     
     const requestBody = {
       amount: Math.round(data.amount * 100), // Convert to cents
@@ -38,7 +40,13 @@ async function createPaymentLink(data: {
       description: data.description || `FusionAura Order #${data.orderNumber}`,
       successUrl: data.successUrl,
       failureUrl: data.failureUrl,
+      // Webhook/notification URL for payment status updates
+      urlCallback: data.webhookUrl,
+      notifyUrl: data.webhookUrl,
+      webhookUrl: data.webhookUrl,
       externalId: data.orderId,
+      entityId: data.orderId,
+      reference: data.orderNumber,
       ...(data.customerEmail && { email: data.customerEmail }),
       ...(data.customerName && { customerName: data.customerName }),
       ...(data.customerPhone && { phone: data.customerPhone }),
@@ -120,6 +128,7 @@ export const paymentRoutes: FastifyPluginAsync = async (fastify) => {
 
     // Build return URLs
     const baseUrl = process.env.FRONTEND_URL || 'https://www.fusionaura.co.za';
+    const apiUrl = process.env.API_URL || 'https://api.fusionaura.co.za';
 
     // Create iKhokha payment link
     const paymentResult = await createPaymentLink({
@@ -127,6 +136,7 @@ export const paymentRoutes: FastifyPluginAsync = async (fastify) => {
       currency: 'ZAR',
       successUrl: `${baseUrl}/orders/${orderId}/success`,
       failureUrl: `${baseUrl}/orders/${orderId}/cancelled`,
+      webhookUrl: `${apiUrl}/api/payments/ikhokha/webhook`,
       orderId: orderId,
       orderNumber: order.orderNumber,
       customerEmail: user.email,
