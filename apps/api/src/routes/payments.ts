@@ -8,9 +8,9 @@ const IKHOKHA_CONFIG = {
   applicationId: process.env.IKHOKHA_APPLICATION_ID || '',
   applicationSecret: process.env.IKHOKHA_APPLICATION_SECRET || '',
   
-  // API URLs
+  // API URLs - based on iKhokha documentation
   get apiUrl() {
-    return 'https://api.ikhokha.com/public-api/v1/api';
+    return 'https://api.ikhokha.com/public-api/v1';
   },
 };
 
@@ -34,25 +34,28 @@ async function createPaymentLink(data: {
     console.log('Order ID:', data.orderId);
     console.log('Webhook URL:', data.webhookUrl);
     
-    const requestBody = {
-      amount: Math.round(data.amount * 100), // Convert to cents
+    // Build request body according to iKhokha API documentation
+    const requestBody: Record<string, any> = {
+      amount: Math.round(data.amount * 100), // Convert to cents (R103.50 = 10350)
       currency: data.currency || 'ZAR',
       description: data.description || `FusionAura Order #${data.orderNumber}`,
       successUrl: data.successUrl,
       failureUrl: data.failureUrl,
-      // Webhook/notification URL for payment status updates
-      urlCallback: data.webhookUrl,
-      notifyUrl: data.webhookUrl,
-      webhookUrl: data.webhookUrl,
       externalId: data.orderId,
-      entityId: data.orderId,
-      reference: data.orderNumber,
-      ...(data.customerEmail && { email: data.customerEmail }),
-      ...(data.customerName && { customerName: data.customerName }),
-      ...(data.customerPhone && { phone: data.customerPhone }),
     };
 
+    // Add optional fields if provided
+    if (data.customerEmail) requestBody.email = data.customerEmail;
+    if (data.customerName) requestBody.customerName = data.customerName;
+    if (data.customerPhone) requestBody.phone = data.customerPhone;
+
     console.log('Request body:', JSON.stringify(requestBody, null, 2));
+    console.log('API URL:', `${IKHOKHA_CONFIG.apiUrl}/payment-link`);
+    console.log('Headers:', {
+      'Content-Type': 'application/json',
+      'Application-Id': IKHOKHA_CONFIG.applicationId ? '[SET]' : '[MISSING]',
+      'Application-Secret': IKHOKHA_CONFIG.applicationSecret ? '[SET]' : '[MISSING]',
+    });
 
     const response = await fetch(`${IKHOKHA_CONFIG.apiUrl}/payment-link`, {
       method: 'POST',
