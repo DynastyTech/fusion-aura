@@ -22,6 +22,85 @@ try {
   console.warn('Nodemailer not available, email functionality disabled');
 }
 
+// Password Reset Email
+export interface PasswordResetEmailData {
+  email: string;
+  name: string;
+  resetUrl: string;
+}
+
+export async function sendPasswordResetEmail(data: PasswordResetEmailData): Promise<void> {
+  // Skip if SMTP not configured
+  if (!transporter || !process.env.SMTP_USER || !process.env.SMTP_PASS) {
+    console.log('⚠️  Email not configured. Password reset email would be sent to:', data.email);
+    console.log('Reset URL:', data.resetUrl);
+    return;
+  }
+
+  const html = `
+    <!DOCTYPE html>
+    <html>
+      <head>
+        <meta charset="utf-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <style>
+          body { font-family: Arial, sans-serif; line-height: 1.6; color: #333; margin: 0; padding: 0; }
+          .container { max-width: 600px; margin: 0 auto; padding: 20px; }
+          .header { background: linear-gradient(135deg, #82aa5a, #418755); color: white; padding: 30px 20px; text-align: center; border-radius: 10px 10px 0 0; }
+          .content { background: #f9f9f9; padding: 30px; border-radius: 0 0 10px 10px; }
+          .button { display: inline-block; background: linear-gradient(135deg, #82aa5a, #418755); color: white; padding: 15px 30px; text-decoration: none; border-radius: 8px; font-weight: bold; margin: 20px 0; }
+          .button:hover { opacity: 0.9; }
+          .warning { background: #fff3cd; border: 1px solid #ffc107; padding: 15px; border-radius: 8px; margin: 20px 0; }
+          .footer { text-align: center; color: #666; font-size: 12px; margin-top: 30px; }
+        </style>
+      </head>
+      <body>
+        <div class="container">
+          <div class="header">
+            <h1>🔐 Password Reset</h1>
+          </div>
+          <div class="content">
+            <p>Hi ${data.name},</p>
+            <p>We received a request to reset your password for your FusionAura account.</p>
+            
+            <p style="text-align: center;">
+              <a href="${data.resetUrl}" class="button">Reset My Password</a>
+            </p>
+
+            <div class="warning">
+              <p><strong>⏰ This link expires in 1 hour.</strong></p>
+              <p>If you didn't request this password reset, you can safely ignore this email. Your password will remain unchanged.</p>
+            </div>
+
+            <p>If the button doesn't work, copy and paste this link into your browser:</p>
+            <p style="word-break: break-all; background: #e9ecef; padding: 10px; border-radius: 5px; font-size: 12px;">
+              ${data.resetUrl}
+            </p>
+
+            <div class="footer">
+              <p>This email was sent by FusionAura</p>
+              <p>If you have any questions, contact us at alphageneralsol@gmail.com</p>
+            </div>
+          </div>
+        </div>
+      </body>
+    </html>
+  `;
+
+  try {
+    await transporter.sendMail({
+      from: `"FusionAura" <${process.env.SMTP_USER || 'noreply@fusionaura.com'}>`,
+      to: data.email,
+      subject: 'Reset Your Password - FusionAura',
+      html,
+    });
+    console.log(`✅ Password reset email sent to ${data.email}`);
+  } catch (error) {
+    console.error('❌ Error sending password reset email:', error);
+    throw error; // Rethrow to let the caller handle it
+  }
+}
+
 export interface OrderEmailData {
   orderNumber: string;
   customerName: string;

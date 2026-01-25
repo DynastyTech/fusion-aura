@@ -62,6 +62,10 @@ model User {
   postalCode   String? // SA postal codes
   country      String  @default("ZA")
   
+  // Password reset
+  resetToken       String?   @unique
+  resetTokenExpiry DateTime?
+  
   // Stripe
   stripeCustomerId String? @unique
   

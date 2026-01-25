@@ -222,9 +222,19 @@ export default function LoginPage() {
 
             {/* Password Field */}
             <div>
-              <label htmlFor="password" className="block text-sm font-medium text-[rgb(var(--foreground))] mb-1.5">
-                Password
-              </label>
+              <div className="flex items-center justify-between mb-1.5">
+                <label htmlFor="password" className="block text-sm font-medium text-[rgb(var(--foreground))]">
+                  Password
+                </label>
+                {isLogin && (
+                  <Link
+                    href="/forgot-password"
+                    className="text-sm text-primary-dark hover:text-primary-dark/80 transition-colors"
+                  >
+                    Forgot password?
+                  </Link>
+                )}
+              </div>
               <div className="relative">
                 <HiLockClosed className="absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 text-[rgb(var(--muted-foreground))]" />
                 <input

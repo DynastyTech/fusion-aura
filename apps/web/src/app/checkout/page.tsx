@@ -250,26 +250,38 @@ export default function CheckoutPage() {
       if (response.success && response.data) {
         const orderId = response.data.id || response.data.orderNumber;
 
-        // If iKhokha selected, redirect to iKhokha
-        if (paymentMethod === 'ikhokha' && !isGuest) {
+        // If iKhokha selected, redirect to iKhokha payment page
+        if (paymentMethod === 'ikhokha') {
           try {
-            const paymentResponse = await apiRequest<{ redirectUrl: string }>('/api/payments/initiate', {
+            console.log('Initiating iKhokha payment for order:', response.data.id);
+            const paymentResponse = await apiRequest<{ redirectUrl: string; error?: string }>('/api/payments/initiate', {
               method: 'POST',
               body: JSON.stringify({ orderId: response.data.id }),
             });
 
+            console.log('Payment response:', paymentResponse);
+
             if (paymentResponse.success && paymentResponse.data?.redirectUrl) {
-              // Don't clear cart yet - will be done after successful payment
+              // Clear cart before redirecting
+              if (isGuest) {
+                clearGuestCart();
+              } else {
+                await apiRequest('/api/cart', { method: 'DELETE' });
+              }
+              window.dispatchEvent(new Event('cartUpdated'));
+              // Redirect to iKhokha payment page
               window.location.href = paymentResponse.data.redirectUrl;
               return;
             } else {
-              alert('Failed to initiate payment. Please try again or use Cash on Delivery.');
+              const errorMsg = (paymentResponse as any).error || 'Failed to initiate payment';
+              console.error('Payment initiation failed:', errorMsg);
+              alert(`Payment error: ${errorMsg}\n\nPlease try again or use Cash on Delivery.`);
               setProcessing(false);
               return;
             }
-          } catch (paymentError) {
+          } catch (paymentError: any) {
             console.error('Payment initiation error:', paymentError);
-            alert('Payment initiation failed. Please try Cash on Delivery.');
+            alert(`Payment initiation failed: ${paymentError.message || 'Unknown error'}\n\nPlease try Cash on Delivery.`);
             setProcessing(false);
             return;
           }
@@ -532,11 +544,6 @@ export default function CheckoutPage() {
                 }
               </button>
 
-              {paymentMethod === 'ikhokha' && isGuest && (
-                <p className="text-amber-400 text-sm text-center mt-2">
-                  ⚠️ Please log in to use online payment. Guest checkout only supports Cash on Delivery.
-                </p>
-              )}
             </form>
           </div>
 

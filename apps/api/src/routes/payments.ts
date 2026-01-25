@@ -95,14 +95,14 @@ async function createPaymentLink(data: {
 export const paymentRoutes: FastifyPluginAsync = async (fastify) => {
   // ============================================
   // INITIATE PAYMENT - Create iKhokha payment request
+  // Works for both authenticated users and guests
   // ============================================
-  fastify.post('/initiate', { preHandler: authenticate }, async (request, reply) => {
+  fastify.post('/initiate', async (request, reply) => {
     const schema = z.object({
       orderId: z.string().uuid(),
     });
 
     const { orderId } = schema.parse(request.body);
-    const user = request.user as { id: string; email: string; firstName?: string; lastName?: string; phone?: string };
 
     // Check if iKhokha credentials are configured
     if (!IKHOKHA_CONFIG.applicationId || !IKHOKHA_CONFIG.applicationSecret) {
@@ -112,23 +112,48 @@ export const paymentRoutes: FastifyPluginAsync = async (fastify) => {
       });
     }
 
-    // Get order details
+    // Get order details (works for both authenticated and guest orders)
     const order = await prisma.order.findUnique({
       where: { id: orderId },
-      include: { items: { include: { product: true } } },
+      include: { 
+        items: { include: { product: true } },
+        user: true,
+      },
     });
 
     if (!order) {
       return reply.status(404).send({ error: 'Order not found' });
     }
 
-    if (order.userId !== user.id) {
-      return reply.status(403).send({ error: 'Unauthorized' });
+    // Optional: Verify ownership if user is authenticated
+    // But allow guest orders to proceed (they have no userId)
+    try {
+      const authHeader = request.headers.authorization;
+      if (authHeader && authHeader.startsWith('Bearer ')) {
+        const token = authHeader.substring(7);
+        const decoded = fastify.jwt.verify(token) as { id: string };
+        // If authenticated user, verify they own this order (unless it's a guest order)
+        if (order.userId && order.userId !== decoded.id) {
+          return reply.status(403).send({ error: 'Unauthorized' });
+        }
+      }
+    } catch (error) {
+      // JWT verification failed - proceed if it's a guest order
+      if (order.userId) {
+        return reply.status(403).send({ error: 'Authentication required for this order' });
+      }
     }
 
     // Build return URLs
     const baseUrl = process.env.FRONTEND_URL || 'https://www.fusionaura.co.za';
     const apiUrl = process.env.API_URL || 'https://api.fusionaura.co.za';
+
+    // Get customer details from order or user
+    const customerEmail = order.user?.email || undefined;
+    const customerName = order.user 
+      ? `${order.user.firstName || ''} ${order.user.lastName || ''}`.trim() 
+      : order.shippingName;
+    const customerPhone = order.shippingPhone || undefined;
 
     // Create iKhokha payment link
     const paymentResult = await createPaymentLink({
@@ -139,8 +164,9 @@ export const paymentRoutes: FastifyPluginAsync = async (fastify) => {
       webhookUrl: `${apiUrl}/api/payments/ikhokha/webhook`,
       orderId: orderId,
       orderNumber: order.orderNumber,
-      customerEmail: user.email,
-      customerName: user.firstName ? `${user.firstName} ${user.lastName || ''}`.trim() : undefined,
+      customerEmail,
+      customerName,
+      customerPhone,
       description: order.items.map(i => `${i.product.name} x${i.quantity}`).join(', ').substring(0, 255),
     });
 

@@ -1,8 +1,10 @@
 import { FastifyInstance, FastifyRequest, FastifyReply } from 'fastify';
 import { z } from 'zod';
 import bcrypt from 'bcryptjs';
+import crypto from 'crypto';
 import { prisma } from '@fusionaura/db';
 import { authenticate } from '../middleware/auth';
+import { sendPasswordResetEmail } from '../utils/email';
 
 const registerSchema = z.object({
   email: z.string().email(),
@@ -120,6 +122,124 @@ export async function authRoutes(fastify: FastifyInstance) {
         token,
       },
     });
+  });
+
+  // Forgot Password - Request reset link
+  fastify.post('/forgot-password', async (request: FastifyRequest, reply: FastifyReply) => {
+    const schema = z.object({
+      email: z.string().email(),
+    });
+
+    try {
+      const { email } = schema.parse(request.body);
+
+      // Find user
+      const user = await prisma.user.findUnique({
+        where: { email },
+      });
+
+      // Always return success to prevent email enumeration
+      if (!user || user.deletedAt) {
+        return reply.send({
+          success: true,
+          message: 'If an account exists with this email, you will receive a password reset link.',
+        });
+      }
+
+      // Generate reset token
+      const resetToken = crypto.randomBytes(32).toString('hex');
+      const resetTokenExpiry = new Date(Date.now() + 60 * 60 * 1000); // 1 hour from now
+
+      // Save token to user
+      await prisma.user.update({
+        where: { id: user.id },
+        data: {
+          resetToken,
+          resetTokenExpiry,
+        },
+      });
+
+      // Send reset email
+      const frontendUrl = process.env.FRONTEND_URL || 'https://www.fusionaura.co.za';
+      const resetUrl = `${frontendUrl}/reset-password?token=${resetToken}`;
+
+      await sendPasswordResetEmail({
+        email: user.email,
+        name: user.firstName || 'Customer',
+        resetUrl,
+      });
+
+      return reply.send({
+        success: true,
+        message: 'If an account exists with this email, you will receive a password reset link.',
+      });
+    } catch (error: any) {
+      console.error('Forgot password error:', error);
+      return reply.status(500).send({
+        success: false,
+        error: 'An error occurred. Please try again.',
+      });
+    }
+  });
+
+  // Reset Password - Use token to set new password
+  fastify.post('/reset-password', async (request: FastifyRequest, reply: FastifyReply) => {
+    const schema = z.object({
+      token: z.string().min(1),
+      password: z.string().min(8, 'Password must be at least 8 characters'),
+    });
+
+    try {
+      const { token, password } = schema.parse(request.body);
+
+      // Find user with valid token
+      const user = await prisma.user.findFirst({
+        where: {
+          resetToken: token,
+          resetTokenExpiry: {
+            gt: new Date(), // Token not expired
+          },
+          deletedAt: null,
+        },
+      });
+
+      if (!user) {
+        return reply.status(400).send({
+          success: false,
+          error: 'Invalid or expired reset token. Please request a new password reset.',
+        });
+      }
+
+      // Hash new password
+      const hashedPassword = await bcrypt.hash(password, 10);
+
+      // Update password and clear reset token
+      await prisma.user.update({
+        where: { id: user.id },
+        data: {
+          password: hashedPassword,
+          resetToken: null,
+          resetTokenExpiry: null,
+        },
+      });
+
+      return reply.send({
+        success: true,
+        message: 'Password has been reset successfully. You can now log in with your new password.',
+      });
+    } catch (error: any) {
+      if (error.name === 'ZodError') {
+        return reply.status(400).send({
+          success: false,
+          error: error.errors[0]?.message || 'Invalid input',
+        });
+      }
+      console.error('Reset password error:', error);
+      return reply.status(500).send({
+        success: false,
+        error: 'An error occurred. Please try again.',
+      });
+    }
   });
 
   // Get current user
