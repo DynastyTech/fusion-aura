@@ -174,13 +174,21 @@ export async function authRoutes(fastify: FastifyInstance) {
         message: 'If an account exists with this email, you will receive a password reset link.',
       });
     } catch (error: any) {
-      console.error('Forgot password error:', error);
+      console.error('Forgot password error:', error.message);
       
       // Check if it's an email configuration issue
       if (error.message && error.message.includes('Email service not configured')) {
         return reply.status(503).send({
           success: false,
-          error: 'Email service is temporarily unavailable. Please contact support or try again later.',
+          error: 'Email service is temporarily unavailable. Please contact support.',
+        });
+      }
+
+      // Check if it's an email sending issue
+      if (error.message && error.message.includes('Failed to send email')) {
+        return reply.status(503).send({
+          success: false,
+          error: 'Unable to send email. Please try again later or contact support.',
         });
       }
       

@@ -88,16 +88,22 @@ export async function sendPasswordResetEmail(data: PasswordResetEmailData): Prom
   `;
 
   try {
-    await transporter.sendMail({
+    console.log('📧 Attempting to send password reset email to:', data.email);
+    console.log('   SMTP User:', process.env.SMTP_USER);
+    console.log('   SMTP Host:', process.env.SMTP_HOST || 'smtp.gmail.com');
+    
+    const result = await transporter.sendMail({
       from: `"FusionAura" <${process.env.SMTP_USER || 'noreply@fusionaura.com'}>`,
       to: data.email,
       subject: 'Reset Your Password - FusionAura',
       html,
     });
-    console.log(`✅ Password reset email sent to ${data.email}`);
-  } catch (error) {
-    console.error('❌ Error sending password reset email:', error);
-    throw error; // Rethrow to let the caller handle it
+    console.log(`✅ Password reset email sent to ${data.email}`, result.messageId);
+  } catch (error: any) {
+    console.error('❌ Error sending password reset email:', error.message);
+    console.error('   Error code:', error.code);
+    console.error('   Error response:', error.response);
+    throw new Error(`Failed to send email: ${error.message}`);
   }
 }
 
