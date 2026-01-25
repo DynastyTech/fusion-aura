@@ -30,11 +30,11 @@ export interface PasswordResetEmailData {
 }
 
 export async function sendPasswordResetEmail(data: PasswordResetEmailData): Promise<void> {
-  // Skip if SMTP not configured
+  // Skip if SMTP not configured - but throw error so the caller knows
   if (!transporter || !process.env.SMTP_USER || !process.env.SMTP_PASS) {
     console.log('⚠️  Email not configured. Password reset email would be sent to:', data.email);
     console.log('Reset URL:', data.resetUrl);
-    return;
+    throw new Error('Email service not configured. Please contact support.');
   }
 
   const html = `

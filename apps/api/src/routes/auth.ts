@@ -175,6 +175,15 @@ export async function authRoutes(fastify: FastifyInstance) {
       });
     } catch (error: any) {
       console.error('Forgot password error:', error);
+      
+      // Check if it's an email configuration issue
+      if (error.message && error.message.includes('Email service not configured')) {
+        return reply.status(503).send({
+          success: false,
+          error: 'Email service is temporarily unavailable. Please contact support or try again later.',
+        });
+      }
+      
       return reply.status(500).send({
         success: false,
         error: 'An error occurred. Please try again.',
