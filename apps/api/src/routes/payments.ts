@@ -1,103 +1,92 @@
 import { FastifyPluginAsync } from 'fastify';
 import { z } from 'zod';
-import crypto from 'crypto';
 import { prisma } from '@fusionaura/db';
 import { authenticate } from '../middleware/auth';
 
-// PayFast Configuration
-const PAYFAST_CONFIG = {
-  // Sandbox credentials (replace with live credentials in production)
-  merchantId: process.env.PAYFAST_MERCHANT_ID || '10000100',
-  merchantKey: process.env.PAYFAST_MERCHANT_KEY || '46f0cd694581a',
-  passphrase: process.env.PAYFAST_PASSPHRASE || '', // Optional but recommended
+// iKhokha Configuration
+const IKHOKHA_CONFIG = {
+  applicationId: process.env.IKHOKHA_APPLICATION_ID || '',
+  applicationSecret: process.env.IKHOKHA_APPLICATION_SECRET || '',
   
-  // URLs
-  sandbox: process.env.NODE_ENV !== 'production',
-  get processUrl() {
-    return this.sandbox 
-      ? 'https://sandbox.payfast.co.za/eng/process'
-      : 'https://www.payfast.co.za/eng/process';
+  // API URLs
+  get apiUrl() {
+    return 'https://api.ikhokha.com/public-api/v1/api';
   },
-  get validateUrl() {
-    return this.sandbox
-      ? 'https://sandbox.payfast.co.za/eng/query/validate'
-      : 'https://www.payfast.co.za/eng/query/validate';
-  }
 };
 
-// Generate PayFast signature
-function generateSignature(data: Record<string, string>, passphrase?: string): string {
-  // Create parameter string
-  let pfOutput = '';
-  for (const key in data) {
-    if (data.hasOwnProperty(key) && data[key] !== '') {
-      pfOutput += `${key}=${encodeURIComponent(data[key].trim()).replace(/%20/g, '+')}&`;
-    }
-  }
-
-  // Remove last ampersand
-  let getString = pfOutput.slice(0, -1);
-  
-  // Add passphrase if provided
-  if (passphrase) {
-    getString += `&passphrase=${encodeURIComponent(passphrase.trim()).replace(/%20/g, '+')}`;
-  }
-
-  // Generate MD5 hash
-  return crypto.createHash('md5').update(getString).digest('hex');
-}
-
-// Validate PayFast signature from ITN
-function validateSignature(pfData: Record<string, string>, pfParamString: string, passphrase?: string): boolean {
-  // Generate our signature
-  let tempParamString = pfParamString;
-  if (passphrase) {
-    tempParamString += `&passphrase=${encodeURIComponent(passphrase.trim()).replace(/%20/g, '+')}`;
-  }
-  
-  const signature = crypto.createHash('md5').update(tempParamString).digest('hex');
-  return pfData['signature'] === signature;
-}
-
-// Validate PayFast server IP
-function validateIP(ip: string): boolean {
-  const validHosts = [
-    'www.payfast.co.za',
-    'sandbox.payfast.co.za',
-    'w1w.payfast.co.za',
-    'w2w.payfast.co.za'
-  ];
-  
-  // In production, you should resolve these hostnames and check against the IP
-  // For now, we'll be lenient in sandbox mode
-  if (PAYFAST_CONFIG.sandbox) return true;
-  
-  // Add IP validation logic here for production
-  return true;
-}
-
-// Verify payment with PayFast server
-async function validatePaymentWithServer(pfParamString: string): Promise<boolean> {
+// Create iKhokha payment link
+async function createPaymentLink(data: {
+  amount: number;
+  currency: string;
+  successUrl: string;
+  failureUrl: string;
+  orderId: string;
+  orderNumber: string;
+  customerEmail?: string;
+  customerName?: string;
+  customerPhone?: string;
+  description?: string;
+}): Promise<{ success: boolean; paymentUrl?: string; transactionId?: string; error?: string }> {
   try {
-    const response = await fetch(PAYFAST_CONFIG.validateUrl, {
+    console.log('📤 Creating iKhokha payment link...');
+    console.log('Amount:', data.amount);
+    console.log('Order ID:', data.orderId);
+    
+    const requestBody = {
+      amount: Math.round(data.amount * 100), // Convert to cents
+      currency: data.currency || 'ZAR',
+      description: data.description || `FusionAura Order #${data.orderNumber}`,
+      successUrl: data.successUrl,
+      failureUrl: data.failureUrl,
+      externalId: data.orderId,
+      ...(data.customerEmail && { email: data.customerEmail }),
+      ...(data.customerName && { customerName: data.customerName }),
+      ...(data.customerPhone && { phone: data.customerPhone }),
+    };
+
+    console.log('Request body:', JSON.stringify(requestBody, null, 2));
+
+    const response = await fetch(`${IKHOKHA_CONFIG.apiUrl}/payment-link`, {
       method: 'POST',
       headers: {
-        'Content-Type': 'application/x-www-form-urlencoded',
+        'Content-Type': 'application/json',
+        'Application-Id': IKHOKHA_CONFIG.applicationId,
+        'Application-Secret': IKHOKHA_CONFIG.applicationSecret,
       },
-      body: pfParamString,
+      body: JSON.stringify(requestBody),
     });
+
+    const responseText = await response.text();
+    console.log('iKhokha response status:', response.status);
+    console.log('iKhokha response:', responseText);
+
+    if (!response.ok) {
+      console.error('❌ iKhokha API error:', responseText);
+      return { 
+        success: false, 
+        error: `iKhokha API error: ${response.status} - ${responseText}` 
+      };
+    }
+
+    const result = JSON.parse(responseText);
     
-    const result = await response.text();
-    return result === 'VALID';
-  } catch (error) {
-    console.error('PayFast validation error:', error);
-    return false;
+    return {
+      success: true,
+      paymentUrl: result.payUrl || result.paymentUrl || result.url,
+      transactionId: result.transactionId || result.id,
+    };
+  } catch (error: any) {
+    console.error('❌ iKhokha payment link creation error:', error);
+    return { 
+      success: false, 
+      error: error.message || 'Failed to create payment link' 
+    };
   }
 }
 
 export const paymentRoutes: FastifyPluginAsync = async (fastify) => {
   // ============================================
-  // INITIATE PAYMENT - Create payment request
+  // INITIATE PAYMENT - Create iKhokha payment request
   // ============================================
   fastify.post('/initiate', { preHandler: authenticate }, async (request, reply) => {
     const schema = z.object({
@@ -105,7 +94,15 @@ export const paymentRoutes: FastifyPluginAsync = async (fastify) => {
     });
 
     const { orderId } = schema.parse(request.body);
-    const user = request.user as { id: string; email: string; firstName?: string; lastName?: string };
+    const user = request.user as { id: string; email: string; firstName?: string; lastName?: string; phone?: string };
+
+    // Check if iKhokha credentials are configured
+    if (!IKHOKHA_CONFIG.applicationId || !IKHOKHA_CONFIG.applicationSecret) {
+      console.error('❌ iKhokha credentials not configured');
+      return reply.status(500).send({ 
+        error: 'Payment gateway not configured. Please contact support.' 
+      });
+    }
 
     // Get order details
     const order = await prisma.order.findUnique({
@@ -122,149 +119,121 @@ export const paymentRoutes: FastifyPluginAsync = async (fastify) => {
     }
 
     // Build return URLs
-    const baseUrl = process.env.FRONTEND_URL || 'http://localhost:3000';
-    const apiUrl = process.env.API_URL || 'http://localhost:3001';
+    const baseUrl = process.env.FRONTEND_URL || 'https://www.fusionaura.co.za';
 
-    // PayFast payment data
-    const paymentData: Record<string, string> = {
-      // Merchant details
-      merchant_id: PAYFAST_CONFIG.merchantId,
-      merchant_key: PAYFAST_CONFIG.merchantKey,
-      
-      // URLs
-      return_url: `${baseUrl}/orders/${orderId}/success`,
-      cancel_url: `${baseUrl}/orders/${orderId}/cancelled`,
-      notify_url: `${apiUrl}/api/payments/notify`, // ITN callback
-      
-      // Customer details
-      name_first: user.firstName || '',
-      name_last: user.lastName || '',
-      email_address: user.email,
-      
-      // Transaction details
-      m_payment_id: orderId, // Your internal order ID
-      amount: order.total.toFixed(2),
-      item_name: `FusionAura Order #${order.orderNumber}`,
-      item_description: order.items.map(i => `${i.product.name} x${i.quantity}`).join(', ').substring(0, 255),
-      
-      // Optional: Custom fields
-      custom_str1: order.orderNumber,
-    };
+    // Create iKhokha payment link
+    const paymentResult = await createPaymentLink({
+      amount: order.total.toNumber(),
+      currency: 'ZAR',
+      successUrl: `${baseUrl}/orders/${orderId}/success`,
+      failureUrl: `${baseUrl}/orders/${orderId}/cancelled`,
+      orderId: orderId,
+      orderNumber: order.orderNumber,
+      customerEmail: user.email,
+      customerName: user.firstName ? `${user.firstName} ${user.lastName || ''}`.trim() : undefined,
+      description: order.items.map(i => `${i.product.name} x${i.quantity}`).join(', ').substring(0, 255),
+    });
 
-    // Generate signature
-    paymentData.signature = generateSignature(paymentData, PAYFAST_CONFIG.passphrase);
-
-    // Build the redirect URL with query parameters
-    const params = new URLSearchParams(paymentData);
-    const redirectUrl = `${PAYFAST_CONFIG.processUrl}?${params.toString()}`;
+    if (!paymentResult.success) {
+      console.error('❌ Failed to create payment link:', paymentResult.error);
+      return reply.status(500).send({ 
+        error: 'Failed to initiate payment. Please try again or use Cash on Delivery.',
+        details: paymentResult.error
+      });
+    }
 
     // Update order with payment initiation
     await prisma.order.update({
       where: { id: orderId },
       data: {
-        stripePaymentIntentId: `payfast_${Date.now()}`, // Reusing field for PayFast reference
+        stripePaymentIntentId: `ikhokha_${paymentResult.transactionId || Date.now()}`,
       },
     });
 
+    console.log('✅ Payment link created:', paymentResult.paymentUrl);
+
     return {
       success: true,
-      redirectUrl,
-      paymentData, // For debugging/form submission
+      redirectUrl: paymentResult.paymentUrl,
+      transactionId: paymentResult.transactionId,
     };
   });
 
   // ============================================
-  // ITN (Instant Transaction Notification) - Webhook
+  // WEBHOOK - iKhokha payment notification
   // ============================================
-  fastify.post('/notify', async (request, reply) => {
-    console.log('📬 PayFast ITN received');
+  fastify.post('/ikhokha/webhook', async (request, reply) => {
+    console.log('📬 iKhokha webhook received');
     
     try {
-      const pfData = request.body as Record<string, string>;
-      console.log('ITN Data:', JSON.stringify(pfData, null, 2));
+      const webhookData = request.body as Record<string, any>;
+      console.log('Webhook Data:', JSON.stringify(webhookData, null, 2));
 
-      // Build parameter string (excluding signature)
-      const pfParamString = Object.keys(pfData)
-        .filter(key => key !== 'signature')
-        .map(key => `${key}=${encodeURIComponent(pfData[key].trim()).replace(/%20/g, '+')}`)
-        .join('&');
+      // iKhokha webhook payload structure (adjust based on actual webhook format)
+      const externalId = webhookData.externalId || webhookData.external_id || webhookData.orderId;
+      const status = webhookData.status || webhookData.paymentStatus;
+      const transactionId = webhookData.transactionId || webhookData.transaction_id || webhookData.id;
+      const amount = webhookData.amount;
 
-      // 1. Validate signature
-      if (!validateSignature(pfData, pfParamString, PAYFAST_CONFIG.passphrase)) {
-        console.error('❌ Invalid PayFast signature');
-        return reply.status(400).send('Invalid signature');
-      }
-      console.log('✅ Signature valid');
-
-      // 2. Validate source IP (optional but recommended)
-      const clientIP = request.ip;
-      if (!validateIP(clientIP)) {
-        console.error('❌ Invalid source IP:', clientIP);
-        return reply.status(403).send('Invalid source');
+      if (!externalId) {
+        console.error('❌ No external ID in webhook');
+        return reply.status(400).send({ error: 'Missing external ID' });
       }
 
-      // 3. Validate with PayFast server (recommended for production)
-      if (!PAYFAST_CONFIG.sandbox) {
-        const isValid = await validatePaymentWithServer(pfParamString);
-        if (!isValid) {
-          console.error('❌ PayFast server validation failed');
-          return reply.status(400).send('Server validation failed');
-        }
-      }
-
-      // 4. Get order and validate amount
-      const orderId = pfData['m_payment_id'];
-      const paymentStatus = pfData['payment_status'];
-      const amountGross = parseFloat(pfData['amount_gross']);
-      const pfPaymentId = pfData['pf_payment_id'];
-
+      // Find the order
       const order = await prisma.order.findUnique({
-        where: { id: orderId },
+        where: { id: externalId },
       });
 
       if (!order) {
-        console.error('❌ Order not found:', orderId);
-        return reply.status(404).send('Order not found');
+        console.error('❌ Order not found:', externalId);
+        return reply.status(404).send({ error: 'Order not found' });
       }
 
-      // Validate amount matches
-      if (Math.abs(order.total.toNumber() - amountGross) > 0.01) {
-        console.error('❌ Amount mismatch. Expected:', order.total, 'Got:', amountGross);
-        return reply.status(400).send('Amount mismatch');
+      // Validate amount if provided (convert from cents)
+      if (amount) {
+        const expectedAmount = order.total.toNumber() * 100;
+        if (Math.abs(expectedAmount - amount) > 100) { // Allow R1 tolerance
+          console.error('❌ Amount mismatch. Expected:', expectedAmount, 'Got:', amount);
+          return reply.status(400).send({ error: 'Amount mismatch' });
+        }
       }
 
-      // 5. Process based on payment status
-      console.log('Payment status:', paymentStatus);
+      // Process based on payment status
+      console.log('Payment status:', status);
 
-      if (paymentStatus === 'COMPLETE') {
-        // Payment successful - update order
+      const successStatuses = ['COMPLETE', 'COMPLETED', 'SUCCESS', 'SUCCESSFUL', 'PAID'];
+      const cancelledStatuses = ['CANCELLED', 'CANCELED', 'FAILED', 'DECLINED'];
+
+      if (successStatuses.includes(status?.toUpperCase())) {
+        // Payment successful
         await prisma.order.update({
-          where: { id: orderId },
+          where: { id: externalId },
           data: {
             status: 'PENDING', // Ready for admin to process
-            stripePaymentIntentId: pfPaymentId, // Store PayFast payment ID
+            stripePaymentIntentId: `ikhokha_${transactionId}`,
           },
         });
         console.log('✅ Order updated to PENDING (paid)');
-      } else if (paymentStatus === 'CANCELLED') {
+      } else if (cancelledStatuses.includes(status?.toUpperCase())) {
+        // Payment failed/cancelled
         await prisma.order.update({
-          where: { id: orderId },
+          where: { id: externalId },
           data: {
             status: 'CANCELLED',
           },
         });
-        console.log('⚠️ Order cancelled');
-      } else if (paymentStatus === 'PENDING') {
-        // Payment is pending (e.g., EFT)
-        console.log('⏳ Payment pending');
+        console.log('⚠️ Order cancelled due to payment failure');
+      } else {
+        console.log('⏳ Payment status pending or unknown:', status);
       }
 
       // Return 200 OK to acknowledge receipt
-      return reply.status(200).send('OK');
+      return reply.status(200).send({ success: true, message: 'Webhook processed' });
       
     } catch (error) {
-      console.error('❌ ITN processing error:', error);
-      return reply.status(500).send('Internal error');
+      console.error('❌ Webhook processing error:', error);
+      return reply.status(500).send({ error: 'Internal error' });
     }
   });
 
@@ -300,18 +269,31 @@ export const paymentRoutes: FastifyPluginAsync = async (fastify) => {
       orderNumber: order.orderNumber,
       status: order.status,
       paymentId: order.stripePaymentIntentId,
-      isPaid: order.status !== 'CANCELLED' && order.stripePaymentIntentId?.startsWith('pf_'),
+      isPaid: order.status !== 'CANCELLED' && order.stripePaymentIntentId?.startsWith('ikhokha_'),
     };
   });
 
   // ============================================
-  // GET PAYFAST CONFIG (for frontend)
+  // GET CONFIG (for frontend)
   // ============================================
   fastify.get('/config', async () => {
     return {
-      merchantId: PAYFAST_CONFIG.merchantId,
-      sandbox: PAYFAST_CONFIG.sandbox,
-      processUrl: PAYFAST_CONFIG.processUrl,
+      provider: 'ikhokha',
+      configured: !!(IKHOKHA_CONFIG.applicationId && IKHOKHA_CONFIG.applicationSecret),
+    };
+  });
+
+  // ============================================
+  // HEALTH CHECK - Verify iKhokha connection
+  // ============================================
+  fastify.get('/health', async () => {
+    const isConfigured = !!(IKHOKHA_CONFIG.applicationId && IKHOKHA_CONFIG.applicationSecret);
+    
+    return {
+      provider: 'ikhokha',
+      configured: isConfigured,
+      applicationIdSet: !!IKHOKHA_CONFIG.applicationId,
+      applicationSecretSet: !!IKHOKHA_CONFIG.applicationSecret,
     };
   });
 };

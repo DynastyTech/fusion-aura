@@ -31,7 +31,7 @@ export default function CheckoutPage() {
   const [isGuest, setIsGuest] = useState(false);
   const [useCurrentLocation, setUseCurrentLocation] = useState(false);
   const [gettingLocation, setGettingLocation] = useState(false);
-  const [paymentMethod, setPaymentMethod] = useState<'cod' | 'payfast'>('cod');
+  const [paymentMethod, setPaymentMethod] = useState<'cod' | 'ikhokha'>('cod');
   const [formData, setFormData] = useState({
     name: '',
     email: '',
@@ -250,8 +250,8 @@ export default function CheckoutPage() {
       if (response.success && response.data) {
         const orderId = response.data.id || response.data.orderNumber;
 
-        // If PayFast selected, redirect to PayFast
-        if (paymentMethod === 'payfast' && !isGuest) {
+        // If iKhokha selected, redirect to iKhokha
+        if (paymentMethod === 'ikhokha' && !isGuest) {
           try {
             const paymentResponse = await apiRequest<{ redirectUrl: string }>('/api/payments/initiate', {
               method: 'POST',
@@ -366,37 +366,37 @@ export default function CheckoutPage() {
                     </p>
                   </button>
 
-                  {/* PayFast Option */}
+                  {/* iKhokha Option */}
                   <button
                     type="button"
-                    onClick={() => setPaymentMethod('payfast')}
+                    onClick={() => setPaymentMethod('ikhokha')}
                     className={`p-4 rounded-xl border-2 transition-all text-left ${
-                      paymentMethod === 'payfast'
-                        ? 'border-blue-500 bg-blue-500/10'
-                        : 'border-[rgb(var(--border))] hover:border-blue-500/50'
+                      paymentMethod === 'ikhokha'
+                        ? 'border-yellow-500 bg-yellow-500/10'
+                        : 'border-[rgb(var(--border))] hover:border-yellow-500/50'
                     }`}
                   >
                     <div className="flex items-center gap-3">
                       <div className={`w-5 h-5 rounded-full border-2 flex items-center justify-center ${
-                        paymentMethod === 'payfast' ? 'border-blue-500' : 'border-[rgb(var(--muted-foreground))]'
+                        paymentMethod === 'ikhokha' ? 'border-yellow-500' : 'border-[rgb(var(--muted-foreground))]'
                       }`}>
-                        {paymentMethod === 'payfast' && (
-                          <div className="w-3 h-3 rounded-full bg-blue-500" />
+                        {paymentMethod === 'ikhokha' && (
+                          <div className="w-3 h-3 rounded-full bg-yellow-500" />
                         )}
                       </div>
-                      <HiCreditCard className="w-6 h-6 text-blue-500" />
+                      <HiCreditCard className="w-6 h-6 text-yellow-500" />
                       <span className="font-semibold text-[rgb(var(--foreground))]">Pay Online</span>
                     </div>
                     <p className="text-[rgb(var(--muted-foreground))] text-sm mt-2 ml-8">
-                      Secure payment via PayFast
+                      Secure payment via iKhokha
                     </p>
                   </button>
                 </div>
                 
-                {paymentMethod === 'payfast' && (
-                  <div className="mt-4 bg-blue-500/10 border border-blue-500/30 rounded-xl p-4">
-                    <p className="text-blue-400 text-sm">
-                      💳 You&apos;ll be redirected to PayFast&apos;s secure payment page to complete your purchase.
+                {paymentMethod === 'ikhokha' && (
+                  <div className="mt-4 bg-yellow-500/10 border border-yellow-500/30 rounded-xl p-4">
+                    <p className="text-yellow-600 dark:text-yellow-400 text-sm">
+                      💳 You&apos;ll be redirected to iKhokha&apos;s secure payment page to complete your purchase.
                       Accepts cards, EFT, and mobile payments.
                     </p>
                   </div>
@@ -519,20 +519,20 @@ export default function CheckoutPage() {
                 type="submit"
                 disabled={processing}
                 className={`w-full py-4 text-lg font-semibold rounded-xl transition-all ${
-                  paymentMethod === 'payfast'
-                    ? 'bg-blue-600 hover:bg-blue-700 text-white'
+                  paymentMethod === 'ikhokha'
+                    ? 'bg-yellow-500 hover:bg-yellow-600 text-black'
                     : 'btn-primary'
                 }`}
               >
                 {processing 
                   ? 'Processing...' 
-                  : paymentMethod === 'payfast'
+                  : paymentMethod === 'ikhokha'
                     ? '💳 Proceed to Payment'
                     : '🚚 Place Order (Cash on Delivery)'
                 }
               </button>
 
-              {paymentMethod === 'payfast' && isGuest && (
+              {paymentMethod === 'ikhokha' && isGuest && (
                 <p className="text-amber-400 text-sm text-center mt-2">
                   ⚠️ Please log in to use online payment. Guest checkout only supports Cash on Delivery.
                 </p>
