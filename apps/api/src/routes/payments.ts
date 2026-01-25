@@ -118,34 +118,35 @@ export const paymentRoutes: FastifyPluginAsync = async (fastify) => {
     // Get order details (works for both authenticated and guest orders)
     const order = await prisma.order.findUnique({
       where: { id: orderId },
-      include: { 
+        include: {
         items: { include: { product: true } },
         user: true,
-      },
-    });
+        },
+      });
 
     if (!order) {
       return reply.status(404).send({ error: 'Order not found' });
     }
 
     // Optional: Verify ownership if user is authenticated
-    // But allow guest orders to proceed (they have no userId)
-    try {
-      const authHeader = request.headers.authorization;
-      if (authHeader && authHeader.startsWith('Bearer ')) {
+    // Guest orders (no userId) can proceed without authentication
+    if (order.userId) {
+      // This is a user order - verify authentication
+      try {
+        const authHeader = request.headers.authorization;
+        if (!authHeader || !authHeader.startsWith('Bearer ')) {
+          return reply.status(401).send({ error: 'Authentication required for this order' });
+        }
         const token = authHeader.substring(7);
         const decoded = fastify.jwt.verify(token) as { id: string };
-        // If authenticated user, verify they own this order (unless it's a guest order)
-        if (order.userId && order.userId !== decoded.id) {
-          return reply.status(403).send({ error: 'Unauthorized' });
+        if (order.userId !== decoded.id) {
+          return reply.status(403).send({ error: 'Unauthorized - this order belongs to another user' });
         }
-      }
-    } catch (error) {
-      // JWT verification failed - proceed if it's a guest order
-      if (order.userId) {
-        return reply.status(403).send({ error: 'Authentication required for this order' });
+      } catch (error) {
+        return reply.status(401).send({ error: 'Invalid or expired authentication token' });
       }
     }
+    // Guest orders (order.userId is null) proceed without authentication check
 
     // Build return URLs
     const baseUrl = process.env.FRONTEND_URL || 'https://www.fusionaura.co.za';
@@ -248,7 +249,7 @@ export const paymentRoutes: FastifyPluginAsync = async (fastify) => {
         // Payment successful
         await prisma.order.update({
           where: { id: externalId },
-          data: {
+        data: {
             status: 'PENDING', // Ready for admin to process
             stripePaymentIntentId: `ikhokha_${transactionId}`,
           },
@@ -260,8 +261,8 @@ export const paymentRoutes: FastifyPluginAsync = async (fastify) => {
           where: { id: externalId },
           data: {
             status: 'CANCELLED',
-          },
-        });
+        },
+      });
         console.log('⚠️ Order cancelled due to payment failure');
       } else {
         console.log('⏳ Payment status pending or unknown:', status);
@@ -292,8 +293,8 @@ export const paymentRoutes: FastifyPluginAsync = async (fastify) => {
         total: true,
         stripePaymentIntentId: true,
         userId: true,
-      },
-    });
+        },
+      });
 
     if (!order) {
       return reply.status(404).send({ error: 'Order not found' });
