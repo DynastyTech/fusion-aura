@@ -4,12 +4,24 @@ import { prisma } from '@fusionaura/db';
 import { authenticate } from '../middleware/auth';
 import crypto from 'crypto';
 
-// iKhokha Configuration
+// iKhokha Configuration - read at module load time
 const IKHOKHA_CONFIG = {
   appId: process.env.IKHOKHA_APPLICATION_ID || '',
   appSecret: process.env.IKHOKHA_APPLICATION_SECRET || '',
   apiUrl: 'https://api.ikhokha.com/public-api/v1/api/payment',
 };
+
+// Log iKhokha configuration status at startup
+console.log('🔧 iKhokha Configuration:');
+console.log('   IKHOKHA_APPLICATION_ID env var exists:', !!process.env.IKHOKHA_APPLICATION_ID);
+console.log('   IKHOKHA_APPLICATION_SECRET env var exists:', !!process.env.IKHOKHA_APPLICATION_SECRET);
+console.log('   appId loaded:', !!IKHOKHA_CONFIG.appId, IKHOKHA_CONFIG.appId ? `(${IKHOKHA_CONFIG.appId.substring(0, 8)}...)` : '');
+console.log('   appSecret loaded:', !!IKHOKHA_CONFIG.appSecret);
+if (IKHOKHA_CONFIG.appId && IKHOKHA_CONFIG.appSecret) {
+  console.log('✅ iKhokha payment gateway configured');
+} else {
+  console.log('⚠️  iKhokha payment gateway NOT configured - missing credentials');
+}
 
 // Generate HMAC-SHA256 signature for iKhokha API
 function generateSignature(path: string, body: string, secret: string): string {
