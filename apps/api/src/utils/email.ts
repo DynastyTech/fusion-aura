@@ -130,11 +130,13 @@ export interface OrderEmailData {
   };
 }
 
+// Admin emails to notify on new orders
+const ADMIN_EMAILS = ['lraseemela@gmail.com', 'alphageneralsol@gmail.com'];
+
+// Send notification to admins when a new order is placed
 export async function sendOrderEmail(orderData: OrderEmailData): Promise<void> {
-  const adminEmail = process.env.ADMIN_EMAIL || 'lraseemela@gmail.com';
-  
   if (!resend) {
-    console.log('⚠️  Email not configured. Order email would be sent to:', adminEmail);
+    console.log('⚠️  Email not configured. Order email would be sent to:', ADMIN_EMAILS.join(', '));
     console.log('Order details:', JSON.stringify(orderData, null, 2));
     return;
   }
@@ -160,28 +162,33 @@ export async function sendOrderEmail(orderData: OrderEmailData): Promise<void> {
         <style>
           body { font-family: Arial, sans-serif; line-height: 1.6; color: #333; }
           .container { max-width: 600px; margin: 0 auto; padding: 20px; }
-          .header { background: #4ade80; color: white; padding: 20px; text-align: center; }
-          .content { background: #f9f9f9; padding: 20px; }
+          .header { background: linear-gradient(135deg, #82aa5a, #418755); color: white; padding: 20px; text-align: center; border-radius: 10px 10px 0 0; }
+          .content { background: #f9f9f9; padding: 20px; border-radius: 0 0 10px 10px; }
           .order-details { background: white; padding: 20px; margin: 20px 0; border-radius: 5px; }
           table { width: 100%; border-collapse: collapse; margin: 20px 0; }
           th { background: #f0f0f0; padding: 10px; text-align: left; }
           .total { font-size: 18px; font-weight: bold; color: #22c55e; }
           .address { background: #f0f0f0; padding: 15px; border-radius: 5px; margin: 20px 0; }
+          .urgent { background: #fee2e2; border: 1px solid #ef4444; padding: 15px; border-radius: 8px; margin: 20px 0; }
         </style>
       </head>
       <body>
         <div class="container">
           <div class="header">
-            <h1>FusionAura - New Order</h1>
+            <h1>🛒 New Order Received</h1>
           </div>
           <div class="content">
+            <div class="urgent">
+              <p><strong>⚡ Action Required:</strong> A new order has been placed and requires your attention.</p>
+            </div>
+
             <h2>Order #${orderData.orderNumber}</h2>
-            <p>A new order has been placed and requires your attention.</p>
             
             <div class="order-details">
               <h3>Customer Information</h3>
               <p><strong>Name:</strong> ${orderData.customerName}</p>
               <p><strong>Email:</strong> ${orderData.customerEmail}</p>
+              ${orderData.shippingAddress.phone ? `<p><strong>Phone:</strong> ${orderData.shippingAddress.phone}</p>` : ''}
             </div>
 
             <div class="order-details">
@@ -190,7 +197,7 @@ export async function sendOrderEmail(orderData: OrderEmailData): Promise<void> {
                 <thead>
                   <tr>
                     <th>Product</th>
-                    <th style="text-align: center;">Quantity</th>
+                    <th style="text-align: center;">Qty</th>
                     <th style="text-align: right;">Price</th>
                     <th style="text-align: right;">Total</th>
                   </tr>
@@ -207,22 +214,144 @@ export async function sendOrderEmail(orderData: OrderEmailData): Promise<void> {
             </div>
 
             <div class="address">
-              <h3>Delivery Address</h3>
+              <h3>📍 Delivery Address</h3>
               <p>${orderData.shippingAddress.name}</p>
               <p>${orderData.shippingAddress.addressLine1}</p>
               ${orderData.shippingAddress.addressLine2 ? `<p>${orderData.shippingAddress.addressLine2}</p>` : ''}
               <p>${orderData.shippingAddress.city}${orderData.shippingAddress.province ? `, ${orderData.shippingAddress.province}` : ''}</p>
               <p>${orderData.shippingAddress.postalCode}</p>
-              ${orderData.shippingAddress.phone ? `<p><strong>Phone:</strong> ${orderData.shippingAddress.phone}</p>` : ''}
             </div>
 
             <p style="margin-top: 30px; padding: 15px; background: #fff3cd; border-radius: 5px;">
-              <strong>Payment Method:</strong> Cash on Delivery
+              <strong>💵 Payment Method:</strong> Cash on Delivery
             </p>
 
-            <p style="margin-top: 20px;">
-              Please log in to the admin dashboard to accept or decline this order.
+            <p style="margin-top: 20px; text-align: center;">
+              <a href="https://www.fusionaura.co.za/admin/orders" style="display: inline-block; background: linear-gradient(135deg, #82aa5a, #418755); color: white; padding: 12px 24px; text-decoration: none; border-radius: 8px; font-weight: bold;">View Order in Dashboard</a>
             </p>
+          </div>
+        </div>
+      </body>
+    </html>
+  `;
+
+  // Send to all admin emails
+  for (const adminEmail of ADMIN_EMAILS) {
+    try {
+      const result = await resend.emails.send({
+        from: getFromEmail(),
+        to: adminEmail,
+        subject: `🛒 New Order #${orderData.orderNumber} - FusionAura`,
+        html,
+      });
+
+      if (result.error) {
+        console.error(`❌ Resend API error for ${adminEmail}:`, result.error);
+        continue;
+      }
+
+      console.log(`✅ Admin order notification sent to ${adminEmail}. ID: ${result.data?.id}`);
+    } catch (error) {
+      console.error(`❌ Error sending admin email to ${adminEmail}:`, error);
+    }
+  }
+}
+
+// Send order confirmation to customer (only for registered customers)
+export async function sendOrderConfirmationToCustomer(orderData: OrderEmailData): Promise<void> {
+  if (!resend) {
+    console.log('⚠️  Email not configured. Customer confirmation would be sent to:', orderData.customerEmail);
+    return;
+  }
+
+  const itemsHtml = orderData.items
+    .map(
+      (item) => `
+    <tr>
+      <td style="padding: 12px; border-bottom: 1px solid #eee;">${item.name}</td>
+      <td style="padding: 12px; border-bottom: 1px solid #eee; text-align: center;">${item.quantity}</td>
+      <td style="padding: 12px; border-bottom: 1px solid #eee; text-align: right;">R${item.price.toFixed(2)}</td>
+      <td style="padding: 12px; border-bottom: 1px solid #eee; text-align: right;">R${(item.price * item.quantity).toFixed(2)}</td>
+    </tr>
+  `
+    )
+    .join('');
+
+  const html = `
+    <!DOCTYPE html>
+    <html>
+      <head>
+        <meta charset="utf-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <style>
+          body { font-family: Arial, sans-serif; line-height: 1.6; color: #333; margin: 0; padding: 0; }
+          .container { max-width: 600px; margin: 0 auto; padding: 20px; }
+          .header { background: linear-gradient(135deg, #82aa5a, #418755); color: white; padding: 30px 20px; text-align: center; border-radius: 10px 10px 0 0; }
+          .content { background: #f9f9f9; padding: 30px; border-radius: 0 0 10px 10px; }
+          .success-icon { font-size: 48px; margin-bottom: 10px; }
+          .order-box { background: white; padding: 20px; margin: 20px 0; border-radius: 8px; box-shadow: 0 2px 4px rgba(0,0,0,0.1); }
+          table { width: 100%; border-collapse: collapse; margin: 15px 0; }
+          th { background: #f0f0f0; padding: 12px; text-align: left; font-size: 14px; }
+          .total-row { font-size: 18px; font-weight: bold; color: #22c55e; }
+          .address-box { background: #e8f5e9; padding: 15px; border-radius: 8px; margin: 20px 0; border-left: 4px solid #4caf50; }
+          .payment-box { background: #fff3cd; padding: 15px; border-radius: 8px; margin: 20px 0; }
+          .footer { text-align: center; color: #666; font-size: 12px; margin-top: 30px; padding-top: 20px; border-top: 1px solid #eee; }
+          .track-button { display: inline-block; background: linear-gradient(135deg, #82aa5a, #418755); color: white; padding: 15px 30px; text-decoration: none; border-radius: 8px; font-weight: bold; margin: 20px 0; }
+        </style>
+      </head>
+      <body>
+        <div class="container">
+          <div class="header">
+            <div class="success-icon">✅</div>
+            <h1>Order Confirmed!</h1>
+            <p>Thank you for your order, ${orderData.customerName}!</p>
+          </div>
+          <div class="content">
+            <p>We've received your order and it's now being reviewed. You'll receive another email once your order has been accepted and is being prepared.</p>
+
+            <div class="order-box">
+              <h3 style="margin-top: 0; color: #333;">Order #${orderData.orderNumber}</h3>
+              <table>
+                <thead>
+                  <tr>
+                    <th>Item</th>
+                    <th style="text-align: center;">Qty</th>
+                    <th style="text-align: right;">Price</th>
+                    <th style="text-align: right;">Total</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  ${itemsHtml}
+                </tbody>
+              </table>
+              <div style="margin-top: 20px; text-align: right; border-top: 2px solid #eee; padding-top: 15px;">
+                <p style="margin: 5px 0;">Subtotal: R${orderData.subtotal.toFixed(2)}</p>
+                <p style="margin: 5px 0;">VAT (15%): R${orderData.tax.toFixed(2)}</p>
+                <p class="total-row" style="margin: 10px 0 0 0;">Total: R${orderData.total.toFixed(2)}</p>
+              </div>
+            </div>
+
+            <div class="address-box">
+              <h3 style="margin-top: 0; color: #2e7d32;">📍 Delivery Address</h3>
+              <p style="margin: 0;">${orderData.shippingAddress.name}</p>
+              <p style="margin: 0;">${orderData.shippingAddress.addressLine1}</p>
+              ${orderData.shippingAddress.addressLine2 ? `<p style="margin: 0;">${orderData.shippingAddress.addressLine2}</p>` : ''}
+              <p style="margin: 0;">${orderData.shippingAddress.city}${orderData.shippingAddress.province ? `, ${orderData.shippingAddress.province}` : ''} ${orderData.shippingAddress.postalCode}</p>
+            </div>
+
+            <div class="payment-box">
+              <p style="margin: 0;"><strong>💵 Payment Method:</strong> Cash on Delivery</p>
+              <p style="margin: 5px 0 0 0; font-size: 14px; color: #666;">Please have R${orderData.total.toFixed(2)} ready when your order arrives.</p>
+            </div>
+
+            <div style="text-align: center;">
+              <a href="https://www.fusionaura.co.za/orders" class="track-button">Track Your Order</a>
+            </div>
+
+            <div class="footer">
+              <p><strong>Questions?</strong> Reply to this email or contact us at support@fusionaura.co.za</p>
+              <p>© ${new Date().getFullYear()} FusionAura. All rights reserved.</p>
+            </div>
           </div>
         </div>
       </body>
@@ -232,8 +361,8 @@ export async function sendOrderEmail(orderData: OrderEmailData): Promise<void> {
   try {
     const result = await resend.emails.send({
       from: getFromEmail(),
-      to: adminEmail,
-      subject: `New Order #${orderData.orderNumber} - FusionAura`,
+      to: orderData.customerEmail,
+      subject: `✅ Order Confirmed - #${orderData.orderNumber}`,
       html,
     });
 
@@ -242,10 +371,9 @@ export async function sendOrderEmail(orderData: OrderEmailData): Promise<void> {
       return;
     }
 
-    console.log(`✅ Order email sent successfully to ${adminEmail}. ID: ${result.data?.id}`);
+    console.log(`✅ Order confirmation email sent to customer ${orderData.customerEmail}. ID: ${result.data?.id}`);
   } catch (error) {
-    console.error('❌ Error sending email:', error);
-    // Don't throw - email failure shouldn't block order creation
+    console.error('❌ Error sending customer confirmation email:', error);
   }
 }
 

@@ -3,7 +3,7 @@ import { z } from 'zod';
 import { prisma, OrderStatus } from '@fusionaura/db';
 import { authenticate, AuthenticatedRequest } from '../middleware/auth';
 import { requireRole } from '../middleware/auth';
-import { sendOrderEmail, sendOrderStatusUpdateEmail } from '../utils/email';
+import { sendOrderEmail, sendOrderConfirmationToCustomer, sendOrderStatusUpdateEmail } from '../utils/email';
 
 const createOrderSchema = z.object({
   items: z.array(
@@ -237,69 +237,58 @@ export async function orderRoutes(fastify: FastifyInstance) {
         });
       }
 
-      // Send email to admin
+      // Prepare order data for emails
+      const orderEmailData = {
+        orderNumber: order.orderNumber,
+        customerName: user 
+          ? (user.firstName && user.lastName ? `${user.firstName} ${user.lastName}` : user.email)
+          : body.shippingAddress.name,
+        customerEmail: user?.email || body.shippingAddress.email || body.shippingAddress.phone || 'guest@fusionaura.com',
+        items: order.items.map((item: any) => ({
+          name: item.product.name,
+          quantity: item.quantity,
+          price: Number(item.price),
+        })),
+        subtotal,
+        tax,
+        total,
+        shippingAddress: {
+          name: body.shippingAddress.name,
+          addressLine1: body.shippingAddress.addressLine1,
+          addressLine2: body.shippingAddress.addressLine2,
+          city: body.shippingAddress.city,
+          province: body.shippingAddress.province,
+          postalCode: body.shippingAddress.postalCode,
+          phone: body.shippingAddress.phone,
+        },
+      };
+
+      // Send notification to all admins (lraseemela@gmail.com & alphageneralsol@gmail.com)
       try {
-        await sendOrderEmail({
-          orderNumber: order.orderNumber,
-          customerName: user 
-            ? (user.firstName && user.lastName ? `${user.firstName} ${user.lastName}` : user.email)
-            : body.shippingAddress.name,
-          customerEmail: user?.email || body.shippingAddress.email || body.shippingAddress.phone || 'guest@fusionaura.com',
-          items: order.items.map((item: any) => ({
-            name: item.product.name,
-            quantity: item.quantity,
-            price: Number(item.price),
-          })),
-          subtotal,
-          tax,
-          total,
-          shippingAddress: {
-            name: body.shippingAddress.name,
-            addressLine1: body.shippingAddress.addressLine1,
-            addressLine2: body.shippingAddress.addressLine2,
-            city: body.shippingAddress.city,
-            province: body.shippingAddress.province,
-            postalCode: body.shippingAddress.postalCode,
-            phone: body.shippingAddress.phone,
-          },
-        });
+        console.log('📧 Sending admin notifications for new order...');
+        await sendOrderEmail(orderEmailData);
       } catch (error) {
-        console.error('Failed to send admin order email:', error);
+        console.error('Failed to send admin order notification:', error);
         // Continue even if email fails
       }
 
-      // Send order confirmation email to customer (using same email as admin notification)
-      const customerEmail = user?.email || body.shippingAddress.email;
-      if (customerEmail && customerEmail !== 'guest@fusionaura.com') {
+      // Send order confirmation to customer ONLY if they are a registered user
+      if (userId && user?.email) {
         try {
-          await sendOrderEmail({
-            orderNumber: order.orderNumber,
-            customerName: user 
-              ? (user.firstName && user.lastName ? `${user.firstName} ${user.lastName}` : user.email)
-              : body.shippingAddress.name,
-            customerEmail: customerEmail,
-            items: order.items.map((item: any) => ({
-              name: item.product.name,
-              quantity: item.quantity,
-              price: Number(item.price),
-            })),
-            subtotal,
-            tax,
-            total,
-            shippingAddress: {
-              name: body.shippingAddress.name,
-              addressLine1: body.shippingAddress.addressLine1,
-              addressLine2: body.shippingAddress.addressLine2,
-              city: body.shippingAddress.city,
-              province: body.shippingAddress.province,
-              postalCode: body.shippingAddress.postalCode,
-              phone: body.shippingAddress.phone,
-            },
+          console.log('📧 Sending order confirmation to registered customer:', user.email);
+          await sendOrderConfirmationToCustomer({
+            ...orderEmailData,
+            customerEmail: user.email,
+            customerName: user.firstName && user.lastName 
+              ? `${user.firstName} ${user.lastName}` 
+              : user.firstName || 'Valued Customer',
           });
         } catch (error) {
           console.error('Failed to send customer confirmation email:', error);
           // Continue even if email fails
         }
+      } else {
+        console.log('⚠️  Guest order - no confirmation email sent to customer');
       }
 
       return reply.status(201).send({
