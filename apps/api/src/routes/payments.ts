@@ -17,6 +17,19 @@ console.log('   IKHOKHA_APPLICATION_ID env var exists:', !!process.env.IKHOKHA_A
 console.log('   IKHOKHA_APPLICATION_SECRET env var exists:', !!process.env.IKHOKHA_APPLICATION_SECRET);
 console.log('   appId loaded:', !!IKHOKHA_CONFIG.appId, IKHOKHA_CONFIG.appId ? `(${IKHOKHA_CONFIG.appId.substring(0, 8)}...)` : '');
 console.log('   appSecret loaded:', !!IKHOKHA_CONFIG.appSecret);
+
+// Debug: List all env vars that contain "IKHOKHA" or start with "IK"
+const allEnvKeys = Object.keys(process.env);
+const ikhokhaKeys = allEnvKeys.filter(k => k.includes('IKHOKHA') || k.startsWith('IK'));
+console.log('   All env vars containing IKHOKHA or starting with IK:', ikhokhaKeys.length > 0 ? ikhokhaKeys : 'NONE FOUND');
+
+// Debug: Show if other known env vars exist (to confirm env vars work at all)
+console.log('   Other env vars check:');
+console.log('     - RESEND_API_KEY exists:', !!process.env.RESEND_API_KEY);
+console.log('     - DATABASE_URL exists:', !!process.env.DATABASE_URL);
+console.log('     - JWT_SECRET exists:', !!process.env.JWT_SECRET);
+console.log('     - NODE_ENV:', process.env.NODE_ENV);
+
 if (IKHOKHA_CONFIG.appId && IKHOKHA_CONFIG.appSecret) {
   console.log('✅ iKhokha payment gateway configured');
 } else {
