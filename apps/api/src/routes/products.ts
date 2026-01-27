@@ -122,9 +122,10 @@ export async function productRoutes(fastify: FastifyInstance) {
           products = products.sort((a, b) => b.name.localeCompare(a.name));
         } else {
           // Maintain search result order for relevance
-          products = productIds
+          const orderedProducts = productIds
             .map((id: string) => products.find((p: any) => p.id === id))
-            .filter((p: any) => p !== undefined);
+            .filter((p: any): p is typeof products[0] => p !== undefined);
+          products = orderedProducts;
         }
 
         return reply.send({
