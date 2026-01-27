@@ -236,7 +236,7 @@ export default function OrdersPage() {
                     <p className="text-xl font-bold text-primary-dark">
                       R{toNumber(order.total).toFixed(2)}
                     </p>
-                    <p className="text-sm text-gray-500">Cash on Delivery</p>
+                    <p className="text-sm text-gray-500">Online Payment</p>
                     <Link
                       href={`/orders/${order.id}`}
                       className="mt-2 inline-block text-sm text-primary-dark hover:underline"

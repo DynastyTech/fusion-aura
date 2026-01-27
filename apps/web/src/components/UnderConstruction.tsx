@@ -74,9 +74,9 @@ export default function UnderConstruction({ pageName }: UnderConstructionProps) 
         <p className="mt-8 text-sm text-[rgb(var(--muted-foreground))] animate-fade-in-up"
            style={{ animationDelay: '0.4s' }}>
           Questions? Contact us at{' '}
-          <a href="mailto:alphageneralsol@gmail.com" 
+          <a href="mailto:fusionauraza@gmail.com" 
              className="text-primary-dark hover:underline">
-            alphageneralsol@gmail.com
+            fusionauraza@gmail.com
           </a>
         </p>
       </div>

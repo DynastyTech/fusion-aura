@@ -5,7 +5,7 @@ import { useRouter } from 'next/navigation';
 import Link from 'next/link';
 import { apiRequest } from '@/lib/api';
 import { getGuestCart, getGuestCartTotal, clearGuestCart } from '@/lib/guestCart';
-import { HiCurrencyDollar, HiCreditCard } from 'react-icons/hi2';
+import { HiCreditCard } from 'react-icons/hi2';
 
 interface CartItem {
   id: string;
@@ -31,7 +31,7 @@ export default function CheckoutPage() {
   const [isGuest, setIsGuest] = useState(false);
   const [useCurrentLocation, setUseCurrentLocation] = useState(false);
   const [gettingLocation, setGettingLocation] = useState(false);
-  const [paymentMethod, setPaymentMethod] = useState<'cod' | 'ikhokha'>('cod');
+  const [paymentMethod] = useState<'ikhokha'>('ikhokha'); // Only iKhokha payment
   const [formData, setFormData] = useState({
     name: '',
     email: '',
@@ -234,7 +234,7 @@ export default function CheckoutPage() {
         method: 'POST',
         body: JSON.stringify({
           items,
-          paymentMethod, // 'cod' or 'ikhokha' - used to determine when to notify admin
+          paymentMethod, // iKhokha online payment
           shippingAddress: {
             name: isGuest ? 'anonymous' : formData.name,
             addressLine1: formData.addressLine1,
@@ -279,19 +279,19 @@ export default function CheckoutPage() {
             } else {
               const errorMsg = (paymentResponse as any).error || 'Failed to initiate payment';
               console.error('Payment initiation failed:', errorMsg);
-              alert(`Payment error: ${errorMsg}\n\nPlease try again or use Cash on Delivery.`);
+              alert(`Payment error: ${errorMsg}\n\nPlease try again.`);
               setProcessing(false);
               return;
             }
           } catch (paymentError: any) {
             console.error('Payment initiation error:', paymentError);
-            alert(`Payment initiation failed: ${paymentError.message || 'Unknown error'}\n\nPlease try Cash on Delivery.`);
+            alert(`Payment initiation failed: ${paymentError.message || 'Unknown error'}\n\nPlease try again.`);
             setProcessing(false);
             return;
           }
         }
 
-        // Clear cart for COD orders
+        // This block is reached if payment flow exits unexpectedly
         if (isGuest) {
           clearGuestCart();
         } else {
@@ -352,71 +352,23 @@ export default function CheckoutPage() {
           {/* Shipping Form */}
           <div className="lg:col-span-2">
             <form onSubmit={handleCheckout} className="card p-6 space-y-6">
-              {/* Payment Method Selection */}
+              {/* Payment Method - iKhokha Only */}
               <div>
                 <h2 className="text-xl font-bold text-[rgb(var(--foreground))] mb-4">Payment Method</h2>
-                <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-                  {/* Cash on Delivery Option */}
-                  <button
-                    type="button"
-                    onClick={() => setPaymentMethod('cod')}
-                    className={`p-4 rounded-xl border-2 transition-all text-left ${
-                      paymentMethod === 'cod'
-                        ? 'border-primary-dark bg-primary-dark/10'
-                        : 'border-[rgb(var(--border))] hover:border-primary-dark/50'
-                    }`}
-                  >
-                    <div className="flex items-center gap-3">
-                      <div className={`w-5 h-5 rounded-full border-2 flex items-center justify-center ${
-                        paymentMethod === 'cod' ? 'border-primary-dark' : 'border-[rgb(var(--muted-foreground))]'
-                      }`}>
-                        {paymentMethod === 'cod' && (
-                          <div className="w-3 h-3 rounded-full bg-primary-dark" />
-                        )}
-                      </div>
-                      <HiCurrencyDollar className="w-6 h-6 text-primary-dark" />
-                      <span className="font-semibold text-[rgb(var(--foreground))]">Cash on Delivery</span>
-                    </div>
-                    <p className="text-[rgb(var(--muted-foreground))] text-sm mt-2 ml-8">
-                      Pay when your order arrives
-                    </p>
-                  </button>
-
-                  {/* iKhokha Option */}
-                  <button
-                    type="button"
-                    onClick={() => setPaymentMethod('ikhokha')}
-                    className={`p-4 rounded-xl border-2 transition-all text-left ${
-                      paymentMethod === 'ikhokha'
-                        ? 'border-yellow-500 bg-yellow-500/10'
-                        : 'border-[rgb(var(--border))] hover:border-yellow-500/50'
-                    }`}
-                  >
-                    <div className="flex items-center gap-3">
-                      <div className={`w-5 h-5 rounded-full border-2 flex items-center justify-center ${
-                        paymentMethod === 'ikhokha' ? 'border-yellow-500' : 'border-[rgb(var(--muted-foreground))]'
-                      }`}>
-                        {paymentMethod === 'ikhokha' && (
-                          <div className="w-3 h-3 rounded-full bg-yellow-500" />
-                        )}
-                      </div>
-                      <HiCreditCard className="w-6 h-6 text-yellow-500" />
-                      <span className="font-semibold text-[rgb(var(--foreground))]">Pay Online</span>
-                    </div>
-                    <p className="text-[rgb(var(--muted-foreground))] text-sm mt-2 ml-8">
-                      Secure payment via iKhokha
-                    </p>
-                  </button>
-                </div>
-                
-                {paymentMethod === 'ikhokha' && (
-                  <div className="mt-4 bg-yellow-500/10 border border-yellow-500/30 rounded-xl p-4">
-                    <p className="text-yellow-600 dark:text-yellow-400 text-sm">
-                      💳 You&apos;ll be redirected to iKhokha&apos;s secure payment page to complete your purchase.
-                      Accepts cards, EFT, and mobile payments.
-                    </p>
+                <div className="p-4 rounded-xl border-2 border-primary-dark bg-primary-dark/10">
+                  <div className="flex items-center gap-3">
+                    <HiCreditCard className="w-6 h-6 text-primary-dark" />
+                    <span className="font-semibold text-[rgb(var(--foreground))]">Pay Online with iKhokha</span>
                   </div>
-                )}
+                  <p className="text-[rgb(var(--muted-foreground))] text-sm mt-2">
+                    Secure payment via iKhokha - Accepts cards, EFT, and mobile payments.
+                  </p>
+                </div>
+                <div className="mt-4 bg-primary-dark/10 border border-primary-dark/30 rounded-xl p-4">
+                  <p className="text-[rgb(var(--foreground))] text-sm">
+                    💳 You&apos;ll be redirected to iKhokha&apos;s secure payment page to complete your purchase.
+                  </p>
+                </div>
               </div>
 
               <h2 className="text-xl font-bold text-[rgb(var(--foreground))]">Delivery Information</h2>
@@ -534,18 +486,9 @@ export default function CheckoutPage() {
               <button
                 type="submit"
                 disabled={processing}
-                className={`w-full py-4 text-lg font-semibold rounded-xl transition-all ${
-                  paymentMethod === 'ikhokha'
-                    ? 'bg-yellow-500 hover:bg-yellow-600 text-black'
-                    : 'btn-primary'
-                }`}
+                className="w-full py-4 text-lg font-semibold rounded-xl transition-all btn-primary"
               >
-                {processing 
-                  ? 'Processing...' 
-                  : paymentMethod === 'ikhokha'
-                    ? '💳 Proceed to Payment'
-                    : '🚚 Place Order (Cash on Delivery)'
-                }
+                {processing ? 'Processing...' : '💳 Proceed to Payment'}
               </button>
 
             </form>

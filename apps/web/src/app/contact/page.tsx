@@ -103,7 +103,7 @@ export default function ContactPage() {
               {/* Contact Cards */}
               <div className="grid sm:grid-cols-2 gap-4">
                 <a 
-                  href="mailto:alphageneralsol@gmail.com"
+                  href="mailto:fusionauraza@gmail.com"
                   className="card-hover p-6 group"
                 >
                   <div className="flex items-center gap-4">
@@ -114,7 +114,7 @@ export default function ContactPage() {
                     <div>
                       <p className="font-semibold text-[rgb(var(--foreground))]">Email Us</p>
                       <p className="text-sm text-[rgb(var(--muted-foreground))]">
-                        alphageneralsol@gmail.com
+                        fusionauraza@gmail.com
                       </p>
                     </div>
                   </div>

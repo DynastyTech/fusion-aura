@@ -230,7 +230,7 @@ export default function TrackOrderPage() {
                   R{toNumber(order.total).toFixed(2)}
                 </span>
               </div>
-              <p className="text-sm text-gray-500 mt-2">Cash on Delivery</p>
+              <p className="text-sm text-gray-500 mt-2">Online Payment</p>
             </div>
 
             {/* Delivery Info */}

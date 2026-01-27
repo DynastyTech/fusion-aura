@@ -131,7 +131,7 @@ export interface OrderEmailData {
 }
 
 // Admin emails to notify on new orders
-const ADMIN_EMAILS = ['lraseemela@gmail.com', 'alphageneralsol@gmail.com'];
+const ADMIN_EMAILS = ['lraseemela@gmail.com', 'fusionauraza@gmail.com'];
 
 // Send notification to admins when a new order is placed
 export async function sendOrderEmail(orderData: OrderEmailData): Promise<void> {
@@ -223,7 +223,7 @@ export async function sendOrderEmail(orderData: OrderEmailData): Promise<void> {
             </div>
 
             <p style="margin-top: 30px; padding: 15px; background: #fff3cd; border-radius: 5px;">
-              <strong>💵 Payment Method:</strong> Cash on Delivery
+              <strong>💳 Payment Method:</strong> Online Payment (iKhokha)
             </p>
 
             <p style="margin-top: 20px; text-align: center;">
@@ -340,7 +340,7 @@ export async function sendOrderConfirmationToCustomer(orderData: OrderEmailData)
             </div>
 
             <div class="payment-box">
-              <p style="margin: 0;"><strong>💵 Payment Method:</strong> Cash on Delivery</p>
+              <p style="margin: 0;"><strong>💳 Payment Method:</strong> Online Payment (iKhokha)</p>
               <p style="margin: 5px 0 0 0; font-size: 14px; color: #666;">Please have R${orderData.total.toFixed(2)} ready when your order arrives.</p>
             </div>
 
@@ -503,7 +503,7 @@ export async function sendOrderStatusUpdateEmail(orderData: OrderStatusUpdateDat
             </div>
 
             <p style="margin-top: 20px; padding: 15px; background: #e0f2fe; border-radius: 5px;">
-              <strong>Payment Method:</strong> Cash on Delivery
+              <strong>Payment Method:</strong> Online Payment (iKhokha)
             </p>
 
             <p style="margin-top: 20px; color: #6b7280; font-size: 14px;">

@@ -207,7 +207,7 @@ export const paymentRoutes: FastifyPluginAsync = async (fastify) => {
       console.error('   IKHOKHA_APPLICATION_ID:', IKHOKHA_CONFIG.appId ? 'SET' : 'MISSING');
       console.error('   IKHOKHA_APPLICATION_SECRET:', IKHOKHA_CONFIG.appSecret ? 'SET' : 'MISSING');
       return reply.status(500).send({ 
-        error: 'Payment gateway not configured. Please contact support or use Cash on Delivery.' 
+        error: 'Payment gateway not configured. Please contact support.' 
       });
     }
 
@@ -267,7 +267,7 @@ export const paymentRoutes: FastifyPluginAsync = async (fastify) => {
     if (!paymentResult.success) {
       console.error('❌ Failed to create payment link:', paymentResult.error);
       return reply.status(500).send({ 
-        error: 'Failed to initiate payment. Please try again or use Cash on Delivery.',
+        error: 'Failed to initiate payment. Please try again.',
         details: paymentResult.error
       });
     }

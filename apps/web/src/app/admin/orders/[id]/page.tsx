@@ -671,10 +671,6 @@ export default function AdminOrderDetailPage() {
                   <span>VAT (15%)</span>
                   <span>R{toNumber(order.tax).toFixed(2)}</span>
                 </div>
-                <div className="flex justify-between text-[rgb(var(--muted-foreground))]">
-                  <span>Shipping</span>
-                  <span>R{toNumber(order.shipping).toFixed(2)}</span>
-                </div>
                 <div className="border-t border-[rgb(var(--border))] pt-3 flex justify-between font-bold text-lg">
                   <span className="text-[rgb(var(--foreground))]">Total</span>
                   <span className="text-primary-dark">R{toNumber(order.total).toFixed(2)}</span>
@@ -684,7 +680,7 @@ export default function AdminOrderDetailPage() {
               <div className="mt-6 p-4 rounded-xl bg-blue-50 dark:bg-blue-900/20 border border-blue-200 dark:border-blue-800">
                 <p className="text-blue-700 dark:text-blue-400 font-semibold text-sm flex items-center gap-2">
                   <HiCurrencyDollar className="w-5 h-5" />
-                  Cash on Delivery
+                  Online Payment
                 </p>
               </div>
             </div>

@@ -229,10 +229,6 @@ export default function OrderConfirmationPage() {
               <span>VAT (15%)</span>
               <span>R{toNumber(order.tax).toFixed(2)}</span>
             </div>
-            <div className="flex justify-between">
-              <span>Shipping</span>
-              <span>R{toNumber(order.shipping).toFixed(2)}</span>
-            </div>
             <div className="border-t pt-2 flex justify-between font-bold text-lg">
               <span>Total</span>
               <span className="text-primary-dark">R{toNumber(order.total).toFixed(2)}</span>
@@ -261,7 +257,7 @@ export default function OrderConfirmationPage() {
           <div className="flex items-start">
             <HiCurrencyDollar className="w-8 h-8 text-primary-dark" />
             <div>
-              <p className="text-blue-800 font-semibold">Cash on Delivery</p>
+              <p className="text-blue-800 font-semibold">Online Payment</p>
               <p className="text-blue-700 text-sm mt-1">
                 You will pay R{toNumber(order.total).toFixed(2)} when your order is delivered.
               </p>

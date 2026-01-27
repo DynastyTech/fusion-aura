@@ -160,7 +160,7 @@ export default async function ProductDetailPage({
             {/* Add to Cart Button */}
             <AddToCartButton product={product} />
             <p className="text-sm text-[rgb(var(--muted-foreground))] text-center mt-4">
-              Free shipping on orders over R500
+              Secure online payment via iKhokha
             </p>
           </div>
         </div>

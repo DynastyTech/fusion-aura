@@ -239,10 +239,6 @@ export default function OrderDetailPage() {
                   <span>VAT (15%)</span>
                   <span>R{toNumber(order.tax).toFixed(2)}</span>
                 </div>
-                <div className="flex justify-between">
-                  <span>Shipping</span>
-                  <span>R{toNumber(order.shipping).toFixed(2)}</span>
-                </div>
                 <div className="border-t pt-2 flex justify-between font-bold text-lg">
                   <span>Total</span>
                   <span className="text-primary-dark">R{toNumber(order.total).toFixed(2)}</span>
@@ -251,7 +247,7 @@ export default function OrderDetailPage() {
               <div className="bg-blue-50 border border-blue-200 rounded-lg p-4">
                 <div className="flex items-center gap-2">
                   <HiCurrencyDollar className="w-4 h-4 text-blue-800" />
-                  <p className="text-blue-800 font-semibold text-sm">Cash on Delivery</p>
+                  <p className="text-blue-800 font-semibold text-sm">Online Payment</p>
                 </div>
                 <p className="text-blue-700 text-xs mt-1">
                   Pay when your order is delivered

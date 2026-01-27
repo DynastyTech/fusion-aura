@@ -51,7 +51,7 @@ export const config = {
 const requiredVars = [
   'DATABASE_URL',
   'JWT_SECRET',
-  // 'STRIPE_SECRET_KEY', // Not required for COD
+  // 'STRIPE_SECRET_KEY', // Not using Stripe
 ];
 
 for (const varName of requiredVars) {

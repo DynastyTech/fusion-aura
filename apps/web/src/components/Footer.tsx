@@ -17,7 +17,7 @@ const footerLinks = {
   ],
   support: [
     { name: 'Track Order', href: '/track-order' },
-    { name: 'Shipping Info', href: '/shipping' },
+    { name: 'Payment Info', href: '/payment-info' },
     { name: 'Returns & Refunds', href: '/returns' },
     { name: 'FAQs', href: '/faq' },
   ],
@@ -81,12 +81,12 @@ export default function Footer() {
             {/* Contact Info */}
             <div className="space-y-3">
               <a 
-                href="mailto:alphageneralsol@gmail.com" 
+                href="mailto:fusionauraza@gmail.com" 
                 className="flex items-center gap-2 text-[rgb(var(--muted-foreground))] 
                            hover:text-primary-dark transition-colors"
               >
                 <HiEnvelope className="w-4 h-4" />
-                <span>alphageneralsol@gmail.com</span>
+                <span>fusionauraza@gmail.com</span>
               </a>
               <a 
                 href="tel:+27658090794" 
