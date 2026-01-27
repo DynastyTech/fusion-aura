@@ -1,84 +1,25 @@
-import { config } from '../config';
+import { Resend } from 'resend';
 
-// Optional nodemailer import - won't break if not configured
-let nodemailer: any;
-let transporter: any;
-let transporterVerified = false;
+// Initialize Resend client if API key is available
+let resend: Resend | null = null;
 
-async function createAndVerifyTransporter() {
-  if (!process.env.SMTP_USER || !process.env.SMTP_PASS) {
-    console.warn('⚠️  SMTP credentials not configured');
-    return null;
-  }
-
-  const smtpHost = process.env.SMTP_HOST || 'smtp.gmail.com';
-  const smtpPort = parseInt(process.env.SMTP_PORT || '587', 10);
-  const isGmail = smtpHost.includes('gmail');
-
-  console.log('📧 Creating SMTP transporter...');
-  console.log(`   Host: ${smtpHost}`);
-  console.log(`   Port: ${smtpPort}`);
-  console.log(`   User: ${process.env.SMTP_USER}`);
-  console.log(`   Pass: ${process.env.SMTP_PASS ? '****' + process.env.SMTP_PASS.slice(-4) : 'NOT SET'}`);
-
-  const transporterConfig: any = {
-    host: smtpHost,
-    port: smtpPort,
-    secure: smtpPort === 465, // true for 465, false for other ports
-    auth: {
-      user: process.env.SMTP_USER,
-      pass: process.env.SMTP_PASS,
-    },
-  };
-
-  // Gmail-specific settings for port 587
-  if (smtpPort === 587) {
-    transporterConfig.requireTLS = true;
-    transporterConfig.tls = {
-      ciphers: 'SSLv3',
-      rejectUnauthorized: false, // Allow self-signed certificates in some environments
-    };
-  }
-
-  // For Gmail, use service shorthand which handles TLS properly
-  if (isGmail) {
-    return nodemailer.createTransport({
-      service: 'gmail',
-      auth: {
-        user: process.env.SMTP_USER,
-        pass: process.env.SMTP_PASS,
-      },
-    });
-  }
-
-  return nodemailer.createTransport(transporterConfig);
+if (process.env.RESEND_API_KEY) {
+  resend = new Resend(process.env.RESEND_API_KEY);
+  console.log('✅ Resend email service initialized');
+} else {
+  console.warn('⚠️  RESEND_API_KEY not configured - email functionality disabled');
+  console.warn('   Get a free API key at https://resend.com');
 }
 
-try {
-  nodemailer = require('nodemailer');
-  // Create transporter asynchronously and verify
-  createAndVerifyTransporter().then(async (t) => {
-    if (t) {
-      transporter = t;
-      // Verify connection on startup
-      try {
-        await transporter.verify();
-        transporterVerified = true;
-        console.log('✅ SMTP connection verified successfully');
-      } catch (verifyError: any) {
-        console.error('❌ SMTP verification failed:', verifyError.message);
-        console.error('   Code:', verifyError.code);
-        console.error('   Command:', verifyError.command);
-        // Keep transporter but mark as unverified - might still work for sending
-        transporterVerified = false;
-      }
-    }
-  }).catch((err) => {
-    console.error('Failed to create transporter:', err);
-  });
-} catch (error) {
-  console.warn('Nodemailer not available, email functionality disabled');
-}
+// Email sender - use verified domain or Resend's default for testing
+const getFromEmail = () => {
+  // If you have a verified domain, use it
+  if (process.env.EMAIL_FROM) {
+    return process.env.EMAIL_FROM;
+  }
+  // Resend's default sender for testing (works without domain verification)
+  return 'FusionAura <onboarding@resend.dev>';
+};
 
 // Password Reset Email
 export interface PasswordResetEmailData {
@@ -88,45 +29,9 @@ export interface PasswordResetEmailData {
 }
 
 export async function sendPasswordResetEmail(data: PasswordResetEmailData): Promise<void> {
-  // Check SMTP credentials
-  if (!process.env.SMTP_USER || !process.env.SMTP_PASS) {
-    console.log('⚠️  SMTP credentials not set. Password reset email would be sent to:', data.email);
+  if (!resend) {
+    console.log('⚠️  Email service not configured. Password reset email would be sent to:', data.email);
     console.log('Reset URL:', data.resetUrl);
-    throw new Error('Email service not configured. Please contact support.');
-  }
-
-  // If transporter not ready yet (async initialization), create one now
-  if (!transporter) {
-    console.log('📧 Transporter not ready, creating on-demand...');
-    try {
-      const isGmail = (process.env.SMTP_HOST || 'smtp.gmail.com').includes('gmail');
-      if (isGmail) {
-        transporter = nodemailer.createTransport({
-          service: 'gmail',
-          auth: {
-            user: process.env.SMTP_USER,
-            pass: process.env.SMTP_PASS,
-          },
-        });
-      } else {
-        transporter = nodemailer.createTransport({
-          host: process.env.SMTP_HOST || 'smtp.gmail.com',
-          port: parseInt(process.env.SMTP_PORT || '587', 10),
-          secure: parseInt(process.env.SMTP_PORT || '587', 10) === 465,
-          auth: {
-            user: process.env.SMTP_USER,
-            pass: process.env.SMTP_PASS,
-          },
-        });
-      }
-    } catch (createError: any) {
-      console.error('❌ Failed to create transporter:', createError.message);
-      throw new Error('Email service not configured. Please contact support.');
-    }
-  }
-
-  if (!transporter) {
-    console.log('⚠️  Transporter still not available after creation attempt');
     throw new Error('Email service not configured. Please contact support.');
   }
 
@@ -172,7 +77,7 @@ export async function sendPasswordResetEmail(data: PasswordResetEmailData): Prom
 
             <div class="footer">
               <p>This email was sent by FusionAura</p>
-              <p>If you have any questions, contact us at alphageneralsol@gmail.com</p>
+              <p>If you have any questions, contact us at support@fusionaura.co.za</p>
             </div>
           </div>
         </div>
@@ -181,36 +86,24 @@ export async function sendPasswordResetEmail(data: PasswordResetEmailData): Prom
   `;
 
   try {
-    console.log('📧 Attempting to send password reset email to:', data.email);
-    console.log('   SMTP User:', process.env.SMTP_USER);
-    console.log('   SMTP Host:', process.env.SMTP_HOST || 'smtp.gmail.com (using service: gmail)');
-    console.log('   Transporter verified:', transporterVerified);
+    console.log('📧 Sending password reset email via Resend to:', data.email);
     
-    const result = await transporter.sendMail({
-      from: `"FusionAura" <${process.env.SMTP_USER || 'noreply@fusionaura.com'}>`,
+    const result = await resend.emails.send({
+      from: getFromEmail(),
       to: data.email,
       subject: 'Reset Your Password - FusionAura',
       html,
     });
-    console.log(`✅ Password reset email sent to ${data.email}`, result.messageId);
+
+    if (result.error) {
+      console.error('❌ Resend API error:', result.error);
+      throw new Error(`Failed to send email: ${result.error.message}`);
+    }
+
+    console.log(`✅ Password reset email sent to ${data.email}`, result.data?.id);
   } catch (error: any) {
     console.error('❌ Error sending password reset email:', error.message);
-    console.error('   Error code:', error.code);
-    console.error('   Error command:', error.command);
-    console.error('   Error response:', error.response);
-    console.error('   Error responseCode:', error.responseCode);
-    console.error('   Full error:', JSON.stringify(error, Object.getOwnPropertyNames(error), 2));
-    
-    // Provide more specific error messages
-    if (error.code === 'EAUTH') {
-      throw new Error('Failed to send email: Authentication failed. Please check SMTP credentials.');
-    } else if (error.code === 'ECONNECTION' || error.code === 'ESOCKET') {
-      throw new Error('Failed to send email: Could not connect to mail server.');
-    } else if (error.code === 'ETIMEDOUT') {
-      throw new Error('Failed to send email: Connection timed out.');
-    } else {
-      throw new Error(`Failed to send email: ${error.message}`);
-    }
+    throw new Error(`Failed to send email: ${error.message}`);
   }
 }
 
@@ -240,8 +133,7 @@ export interface OrderEmailData {
 export async function sendOrderEmail(orderData: OrderEmailData): Promise<void> {
   const adminEmail = process.env.ADMIN_EMAIL || 'lraseemela@gmail.com';
   
-  // Skip email if SMTP not configured or transporter not available
-  if (!transporter || !process.env.SMTP_USER || !process.env.SMTP_PASS) {
+  if (!resend) {
     console.log('⚠️  Email not configured. Order email would be sent to:', adminEmail);
     console.log('Order details:', JSON.stringify(orderData, null, 2));
     return;
@@ -338,13 +230,19 @@ export async function sendOrderEmail(orderData: OrderEmailData): Promise<void> {
   `;
 
   try {
-    const result = await transporter.sendMail({
-      from: `"FusionAura" <${process.env.SMTP_USER || 'noreply@fusionaura.com'}>`,
+    const result = await resend.emails.send({
+      from: getFromEmail(),
       to: adminEmail,
       subject: `New Order #${orderData.orderNumber} - FusionAura`,
       html,
     });
-    console.log(`✅ Order email sent successfully to ${adminEmail}. Message ID: ${result.messageId}`);
+
+    if (result.error) {
+      console.error('❌ Resend API error:', result.error);
+      return;
+    }
+
+    console.log(`✅ Order email sent successfully to ${adminEmail}. ID: ${result.data?.id}`);
   } catch (error) {
     console.error('❌ Error sending email:', error);
     // Don't throw - email failure shouldn't block order creation
@@ -372,8 +270,7 @@ export async function sendOrderStatusUpdateEmail(orderData: OrderStatusUpdateDat
     return;
   }
 
-  // Skip email if SMTP not configured
-  if (!transporter || !process.env.SMTP_USER || !process.env.SMTP_PASS) {
+  if (!resend) {
     console.log('⚠️  Email not configured. Order status update would be sent to:', orderData.customerEmail || orderData.customerPhone);
     console.log('Order status update:', JSON.stringify(orderData, null, 2));
     return;
@@ -493,23 +390,26 @@ export async function sendOrderStatusUpdateEmail(orderData: OrderStatusUpdateDat
   // Send email if email is provided
   if (orderData.customerEmail) {
     try {
-      await transporter.sendMail({
-        from: `"FusionAura" <${process.env.SMTP_USER || 'noreply@fusionaura.com'}>`,
+      const result = await resend.emails.send({
+        from: getFromEmail(),
         to: orderData.customerEmail,
         subject: `${statusInfo.title} - Order #${orderData.orderNumber}`,
         html,
       });
-      console.log(`Order status update email sent to ${orderData.customerEmail}`);
+
+      if (result.error) {
+        console.error('❌ Resend API error:', result.error);
+        return;
+      }
+
+      console.log(`✅ Order status update email sent to ${orderData.customerEmail}`);
     } catch (error) {
       console.error('Error sending order status email:', error);
     }
   }
 
   // Note: SMS would require a service like Twilio, AWS SNS, etc.
-  // For now, we'll log it
   if (orderData.customerPhone) {
     console.log(`📱 SMS notification would be sent to ${orderData.customerPhone}: ${statusInfo.title} - Order #${orderData.orderNumber}`);
-    // TODO: Integrate SMS service (Twilio, AWS SNS, etc.)
   }
 }
-

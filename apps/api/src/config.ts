@@ -35,10 +35,9 @@ export const config = {
     useSSL: process.env.MINIO_USE_SSL === 'true',
   },
   email: {
-    smtpHost: process.env.SMTP_HOST || 'smtp.gmail.com',
-    smtpPort: parseInt(process.env.SMTP_PORT || '587', 10),
-    smtpUser: process.env.SMTP_USER || '',
-    smtpPass: process.env.SMTP_PASS || '',
+    // Resend API (recommended for production - uses HTTPS, not blocked by cloud providers)
+    resendApiKey: process.env.RESEND_API_KEY || '',
+    emailFrom: process.env.EMAIL_FROM || 'FusionAura <onboarding@resend.dev>',
     adminEmail: process.env.ADMIN_EMAIL || 'lraseemela@gmail.com',
   },
   cloudinary: {
