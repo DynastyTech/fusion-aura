@@ -237,3 +237,4 @@ if (require.main === module) {
 
 export { build, start };
 
+// Deployment trigger - Tue Jan 27 20:17:53 SAST 2026
