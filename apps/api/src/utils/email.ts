@@ -3,21 +3,79 @@ import { config } from '../config';
 // Optional nodemailer import - won't break if not configured
 let nodemailer: any;
 let transporter: any;
+let transporterVerified = false;
 
-try {
-  nodemailer = require('nodemailer');
-  // Create reusable transporter only if SMTP is configured
-  if (process.env.SMTP_USER && process.env.SMTP_PASS) {
-    transporter = nodemailer.createTransport({
-      host: process.env.SMTP_HOST || 'smtp.gmail.com',
-      port: parseInt(process.env.SMTP_PORT || '587', 10),
-      secure: false, // true for 465, false for other ports
+async function createAndVerifyTransporter() {
+  if (!process.env.SMTP_USER || !process.env.SMTP_PASS) {
+    console.warn('⚠️  SMTP credentials not configured');
+    return null;
+  }
+
+  const smtpHost = process.env.SMTP_HOST || 'smtp.gmail.com';
+  const smtpPort = parseInt(process.env.SMTP_PORT || '587', 10);
+  const isGmail = smtpHost.includes('gmail');
+
+  console.log('📧 Creating SMTP transporter...');
+  console.log(`   Host: ${smtpHost}`);
+  console.log(`   Port: ${smtpPort}`);
+  console.log(`   User: ${process.env.SMTP_USER}`);
+  console.log(`   Pass: ${process.env.SMTP_PASS ? '****' + process.env.SMTP_PASS.slice(-4) : 'NOT SET'}`);
+
+  const transporterConfig: any = {
+    host: smtpHost,
+    port: smtpPort,
+    secure: smtpPort === 465, // true for 465, false for other ports
+    auth: {
+      user: process.env.SMTP_USER,
+      pass: process.env.SMTP_PASS,
+    },
+  };
+
+  // Gmail-specific settings for port 587
+  if (smtpPort === 587) {
+    transporterConfig.requireTLS = true;
+    transporterConfig.tls = {
+      ciphers: 'SSLv3',
+      rejectUnauthorized: false, // Allow self-signed certificates in some environments
+    };
+  }
+
+  // For Gmail, use service shorthand which handles TLS properly
+  if (isGmail) {
+    return nodemailer.createTransport({
+      service: 'gmail',
       auth: {
         user: process.env.SMTP_USER,
-        pass: process.env.SMTP_PASS, // App password for Gmail
+        pass: process.env.SMTP_PASS,
       },
     });
   }
+
+  return nodemailer.createTransport(transporterConfig);
+}
+
+try {
+  nodemailer = require('nodemailer');
+  // Create transporter asynchronously and verify
+  createAndVerifyTransporter().then(async (t) => {
+    if (t) {
+      transporter = t;
+      // Verify connection on startup
+      try {
+        await transporter.verify();
+        transporterVerified = true;
+        console.log('✅ SMTP connection verified successfully');
+      } catch (verifyError: any) {
+        console.error('❌ SMTP verification failed:', verifyError.message);
+        console.error('   Code:', verifyError.code);
+        console.error('   Command:', verifyError.command);
+        // Keep transporter but mark as unverified - might still work for sending
+        transporterVerified = false;
+      }
+    }
+  }).catch((err) => {
+    console.error('Failed to create transporter:', err);
+  });
 } catch (error) {
   console.warn('Nodemailer not available, email functionality disabled');
 }
@@ -30,10 +88,45 @@ export interface PasswordResetEmailData {
 }
 
 export async function sendPasswordResetEmail(data: PasswordResetEmailData): Promise<void> {
-  // Skip if SMTP not configured - but throw error so the caller knows
-  if (!transporter || !process.env.SMTP_USER || !process.env.SMTP_PASS) {
-    console.log('⚠️  Email not configured. Password reset email would be sent to:', data.email);
+  // Check SMTP credentials
+  if (!process.env.SMTP_USER || !process.env.SMTP_PASS) {
+    console.log('⚠️  SMTP credentials not set. Password reset email would be sent to:', data.email);
     console.log('Reset URL:', data.resetUrl);
+    throw new Error('Email service not configured. Please contact support.');
+  }
+
+  // If transporter not ready yet (async initialization), create one now
+  if (!transporter) {
+    console.log('📧 Transporter not ready, creating on-demand...');
+    try {
+      const isGmail = (process.env.SMTP_HOST || 'smtp.gmail.com').includes('gmail');
+      if (isGmail) {
+        transporter = nodemailer.createTransport({
+          service: 'gmail',
+          auth: {
+            user: process.env.SMTP_USER,
+            pass: process.env.SMTP_PASS,
+          },
+        });
+      } else {
+        transporter = nodemailer.createTransport({
+          host: process.env.SMTP_HOST || 'smtp.gmail.com',
+          port: parseInt(process.env.SMTP_PORT || '587', 10),
+          secure: parseInt(process.env.SMTP_PORT || '587', 10) === 465,
+          auth: {
+            user: process.env.SMTP_USER,
+            pass: process.env.SMTP_PASS,
+          },
+        });
+      }
+    } catch (createError: any) {
+      console.error('❌ Failed to create transporter:', createError.message);
+      throw new Error('Email service not configured. Please contact support.');
+    }
+  }
+
+  if (!transporter) {
+    console.log('⚠️  Transporter still not available after creation attempt');
     throw new Error('Email service not configured. Please contact support.');
   }
 
@@ -90,7 +183,8 @@ export async function sendPasswordResetEmail(data: PasswordResetEmailData): Prom
   try {
     console.log('📧 Attempting to send password reset email to:', data.email);
     console.log('   SMTP User:', process.env.SMTP_USER);
-    console.log('   SMTP Host:', process.env.SMTP_HOST || 'smtp.gmail.com');
+    console.log('   SMTP Host:', process.env.SMTP_HOST || 'smtp.gmail.com (using service: gmail)');
+    console.log('   Transporter verified:', transporterVerified);
     
     const result = await transporter.sendMail({
       from: `"FusionAura" <${process.env.SMTP_USER || 'noreply@fusionaura.com'}>`,
@@ -102,8 +196,21 @@ export async function sendPasswordResetEmail(data: PasswordResetEmailData): Prom
   } catch (error: any) {
     console.error('❌ Error sending password reset email:', error.message);
     console.error('   Error code:', error.code);
+    console.error('   Error command:', error.command);
     console.error('   Error response:', error.response);
-    throw new Error(`Failed to send email: ${error.message}`);
+    console.error('   Error responseCode:', error.responseCode);
+    console.error('   Full error:', JSON.stringify(error, Object.getOwnPropertyNames(error), 2));
+    
+    // Provide more specific error messages
+    if (error.code === 'EAUTH') {
+      throw new Error('Failed to send email: Authentication failed. Please check SMTP credentials.');
+    } else if (error.code === 'ECONNECTION' || error.code === 'ESOCKET') {
+      throw new Error('Failed to send email: Could not connect to mail server.');
+    } else if (error.code === 'ETIMEDOUT') {
+      throw new Error('Failed to send email: Connection timed out.');
+    } else {
+      throw new Error(`Failed to send email: ${error.message}`);
+    }
   }
 }
 
