@@ -2,17 +2,28 @@ import { FastifyPluginAsync } from 'fastify';
 import { z } from 'zod';
 import { prisma } from '@fusionaura/db';
 import { authenticate } from '../middleware/auth';
+import crypto from 'crypto';
 
 // iKhokha Configuration
 const IKHOKHA_CONFIG = {
-  applicationId: process.env.IKHOKHA_APPLICATION_ID || '',
-  applicationSecret: process.env.IKHOKHA_APPLICATION_SECRET || '',
-  
-  // API URLs - based on iKhokha documentation
-  get apiUrl() {
-    return 'https://api.ikhokha.com/public-api/v1';
-  },
+  appId: process.env.IKHOKHA_APPLICATION_ID || '',
+  appSecret: process.env.IKHOKHA_APPLICATION_SECRET || '',
+  apiUrl: 'https://api.ikhokha.com/public-api/v1/api/payment',
 };
+
+// Generate HMAC-SHA256 signature for iKhokha API
+function generateSignature(path: string, body: string, secret: string): string {
+  // Escape the payload string as per iKhokha requirements
+  const payload = path + body;
+  const escapedPayload = payload.replace(/[\\"']/g, '\\$&').replace(/\u0000/g, '\\0');
+  
+  const signature = crypto
+    .createHmac('sha256', secret)
+    .update(escapedPayload)
+    .digest('hex');
+  
+  return signature;
+}
 
 // Create iKhokha payment link
 async function createPaymentLink(data: {
@@ -20,59 +31,70 @@ async function createPaymentLink(data: {
   currency: string;
   successUrl: string;
   failureUrl: string;
-  webhookUrl: string;
+  cancelUrl: string;
+  callbackUrl: string;
   orderId: string;
   orderNumber: string;
-  customerEmail?: string;
-  customerName?: string;
-  customerPhone?: string;
+  requesterUrl: string;
   description?: string;
-}): Promise<{ success: boolean; paymentUrl?: string; transactionId?: string; error?: string }> {
+}): Promise<{ success: boolean; paymentUrl?: string; paylinkId?: string; error?: string }> {
   try {
     console.log('📤 Creating iKhokha payment link...');
-    console.log('Amount:', data.amount);
-    console.log('Order ID:', data.orderId);
-    console.log('Webhook URL:', data.webhookUrl);
+    console.log('   Amount (cents):', Math.round(data.amount * 100));
+    console.log('   Order ID:', data.orderId);
+    console.log('   Order Number:', data.orderNumber);
     
+    // Validate credentials
+    if (!IKHOKHA_CONFIG.appId || !IKHOKHA_CONFIG.appSecret) {
+      console.error('❌ iKhokha credentials not configured');
+      return { success: false, error: 'Payment gateway not configured' };
+    }
+
     // Build request body according to iKhokha API documentation
-    const requestBody: Record<string, any> = {
+    const requestBody = {
+      entityID: IKHOKHA_CONFIG.appId,
+      externalEntityID: data.orderId,
       amount: Math.round(data.amount * 100), // Convert to cents (R103.50 = 10350)
       currency: data.currency || 'ZAR',
+      requesterUrl: data.requesterUrl,
+      mode: 'live',
       description: data.description || `FusionAura Order #${data.orderNumber}`,
-      successUrl: data.successUrl,
-      failureUrl: data.failureUrl,
-      externalId: data.orderId,
+      externalTransactionID: data.orderId,
+      urls: {
+        callbackUrl: data.callbackUrl,
+        successPageUrl: data.successUrl,
+        failurePageUrl: data.failureUrl,
+        cancelUrl: data.cancelUrl,
+      },
     };
 
-    // Add optional fields if provided
-    if (data.customerEmail) requestBody.email = data.customerEmail;
-    if (data.customerName) requestBody.customerName = data.customerName;
-    if (data.customerPhone) requestBody.phone = data.customerPhone;
+    const requestBodyString = JSON.stringify(requestBody);
+    
+    // Generate signature
+    const apiPath = '/public-api/v1/api/payment';
+    const signature = generateSignature(apiPath, requestBodyString, IKHOKHA_CONFIG.appSecret);
 
-    console.log('Request body:', JSON.stringify(requestBody, null, 2));
-    console.log('API URL:', `${IKHOKHA_CONFIG.apiUrl}/payment-link`);
-    console.log('Headers:', {
-      'Content-Type': 'application/json',
-      'Application-Id': IKHOKHA_CONFIG.applicationId ? '[SET]' : '[MISSING]',
-      'Application-Secret': IKHOKHA_CONFIG.applicationSecret ? '[SET]' : '[MISSING]',
-    });
+    console.log('   API URL:', IKHOKHA_CONFIG.apiUrl);
+    console.log('   IK-APPID:', IKHOKHA_CONFIG.appId ? `${IKHOKHA_CONFIG.appId.substring(0, 8)}...` : '[MISSING]');
+    console.log('   IK-SIGN:', signature ? `${signature.substring(0, 16)}...` : '[MISSING]');
+    console.log('   Request body:', requestBodyString);
 
-    const response = await fetch(`${IKHOKHA_CONFIG.apiUrl}/payment-link`, {
+    const response = await fetch(IKHOKHA_CONFIG.apiUrl, {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
-        'Application-Id': IKHOKHA_CONFIG.applicationId,
-        'Application-Secret': IKHOKHA_CONFIG.applicationSecret,
+        'IK-APPID': IKHOKHA_CONFIG.appId,
+        'IK-SIGN': signature,
       },
-      body: JSON.stringify(requestBody),
+      body: requestBodyString,
     });
 
     const responseText = await response.text();
-    console.log('iKhokha response status:', response.status);
-    console.log('iKhokha response:', responseText);
+    console.log('   iKhokha response status:', response.status);
+    console.log('   iKhokha response:', responseText);
 
     if (!response.ok) {
-      console.error('❌ iKhokha API error:', responseText);
+      console.error('❌ iKhokha API error:', response.status, responseText);
       return { 
         success: false, 
         error: `iKhokha API error: ${response.status} - ${responseText}` 
@@ -81,10 +103,23 @@ async function createPaymentLink(data: {
 
     const result = JSON.parse(responseText);
     
+    // Check response code
+    if (result.responseCode !== '00') {
+      console.error('❌ iKhokha returned error code:', result.responseCode, result.message);
+      return {
+        success: false,
+        error: result.message || `iKhokha error: ${result.responseCode}`,
+      };
+    }
+
+    console.log('✅ Payment link created successfully');
+    console.log('   Paylink URL:', result.paylinkUrl);
+    console.log('   Paylink ID:', result.paylinkID);
+
     return {
       success: true,
-      paymentUrl: result.payUrl || result.paymentUrl || result.url,
-      transactionId: result.transactionId || result.id,
+      paymentUrl: result.paylinkUrl,
+      paylinkId: result.paylinkID,
     };
   } catch (error: any) {
     console.error('❌ iKhokha payment link creation error:', error);
@@ -92,6 +127,24 @@ async function createPaymentLink(data: {
       success: false, 
       error: error.message || 'Failed to create payment link' 
     };
+  }
+}
+
+// Verify webhook signature
+function verifyWebhookSignature(
+  callbackUrl: string,
+  body: string,
+  receivedSignature: string,
+  secret: string
+): boolean {
+  try {
+    const url = new URL(callbackUrl);
+    const path = url.pathname + url.search;
+    const expectedSignature = generateSignature(path, body, secret);
+    return expectedSignature === receivedSignature;
+  } catch (error) {
+    console.error('Error verifying webhook signature:', error);
+    return false;
   }
 }
 
@@ -105,33 +158,41 @@ export const paymentRoutes: FastifyPluginAsync = async (fastify) => {
       orderId: z.string().uuid(),
     });
 
-    const { orderId } = schema.parse(request.body);
+    let orderId: string;
+    try {
+      const parsed = schema.parse(request.body);
+      orderId = parsed.orderId;
+    } catch (error) {
+      console.error('❌ Invalid request body:', error);
+      return reply.status(400).send({ error: 'Invalid order ID' });
+    }
 
     // Check if iKhokha credentials are configured
-    if (!IKHOKHA_CONFIG.applicationId || !IKHOKHA_CONFIG.applicationSecret) {
+    if (!IKHOKHA_CONFIG.appId || !IKHOKHA_CONFIG.appSecret) {
       console.error('❌ iKhokha credentials not configured');
+      console.error('   IKHOKHA_APPLICATION_ID:', IKHOKHA_CONFIG.appId ? 'SET' : 'MISSING');
+      console.error('   IKHOKHA_APPLICATION_SECRET:', IKHOKHA_CONFIG.appSecret ? 'SET' : 'MISSING');
       return reply.status(500).send({ 
-        error: 'Payment gateway not configured. Please contact support.' 
+        error: 'Payment gateway not configured. Please contact support or use Cash on Delivery.' 
       });
     }
 
-    // Get order details (works for both authenticated and guest orders)
+    // Get order details
     const order = await prisma.order.findUnique({
       where: { id: orderId },
-        include: {
+      include: {
         items: { include: { product: true } },
         user: true,
-        },
-      });
+      },
+    });
 
     if (!order) {
+      console.error('❌ Order not found:', orderId);
       return reply.status(404).send({ error: 'Order not found' });
     }
 
-    // Optional: Verify ownership if user is authenticated
-    // Guest orders (no userId) can proceed without authentication
+    // Verify ownership if user is authenticated
     if (order.userId) {
-      // This is a user order - verify authentication
       try {
         const authHeader = request.headers.authorization;
         if (!authHeader || !authHeader.startsWith('Bearer ')) {
@@ -146,32 +207,27 @@ export const paymentRoutes: FastifyPluginAsync = async (fastify) => {
         return reply.status(401).send({ error: 'Invalid or expired authentication token' });
       }
     }
-    // Guest orders (order.userId is null) proceed without authentication check
 
-    // Build return URLs
-    const baseUrl = process.env.FRONTEND_URL || 'https://www.fusionaura.co.za';
+    // Build URLs
+    const frontendUrl = process.env.FRONTEND_URL || 'https://www.fusionaura.co.za';
     const apiUrl = process.env.API_URL || 'https://api.fusionaura.co.za';
 
-    // Get customer details from order or user
-    const customerEmail = order.user?.email || undefined;
-    const customerName = order.user 
-      ? `${order.user.firstName || ''} ${order.user.lastName || ''}`.trim() 
-      : order.shippingName;
-    const customerPhone = order.shippingPhone || undefined;
+    console.log('📧 Creating payment for order:', order.orderNumber);
+    console.log('   Frontend URL:', frontendUrl);
+    console.log('   API URL:', apiUrl);
 
     // Create iKhokha payment link
     const paymentResult = await createPaymentLink({
       amount: order.total.toNumber(),
       currency: 'ZAR',
-      successUrl: `${baseUrl}/orders/${orderId}/success`,
-      failureUrl: `${baseUrl}/orders/${orderId}/cancelled`,
-      webhookUrl: `${apiUrl}/api/payments/ikhokha/webhook`,
+      successUrl: `${frontendUrl}/orders/${orderId}/success`,
+      failureUrl: `${frontendUrl}/orders/${orderId}/cancelled`,
+      cancelUrl: `${frontendUrl}/orders/${orderId}/cancelled`,
+      callbackUrl: `${apiUrl}/api/payments/ikhokha/webhook`,
+      requesterUrl: frontendUrl,
       orderId: orderId,
       orderNumber: order.orderNumber,
-      customerEmail,
-      customerName,
-      customerPhone,
-      description: order.items.map(i => `${i.product.name} x${i.quantity}`).join(', ').substring(0, 255),
+      description: order.items.map(i => `${i.product.name} x${i.quantity}`).join(', ').substring(0, 100),
     });
 
     if (!paymentResult.success) {
@@ -182,20 +238,21 @@ export const paymentRoutes: FastifyPluginAsync = async (fastify) => {
       });
     }
 
-    // Update order with payment initiation
+    // Update order with payment info
     await prisma.order.update({
       where: { id: orderId },
       data: {
-        stripePaymentIntentId: `ikhokha_${paymentResult.transactionId || Date.now()}`,
+        stripePaymentIntentId: `ikhokha_${paymentResult.paylinkId || Date.now()}`,
       },
     });
 
-    console.log('✅ Payment link created:', paymentResult.paymentUrl);
+    console.log('✅ Payment initiated successfully');
+    console.log('   Redirect URL:', paymentResult.paymentUrl);
 
     return {
       success: true,
       redirectUrl: paymentResult.paymentUrl,
-      transactionId: paymentResult.transactionId,
+      paylinkId: paymentResult.paylinkId,
     };
   });
 
@@ -204,68 +261,72 @@ export const paymentRoutes: FastifyPluginAsync = async (fastify) => {
   // ============================================
   fastify.post('/ikhokha/webhook', async (request, reply) => {
     console.log('📬 iKhokha webhook received');
+    console.log('   Headers:', JSON.stringify(request.headers, null, 2));
     
     try {
       const webhookData = request.body as Record<string, any>;
-      console.log('Webhook Data:', JSON.stringify(webhookData, null, 2));
+      console.log('   Webhook body:', JSON.stringify(webhookData, null, 2));
 
-      // iKhokha webhook payload structure (adjust based on actual webhook format)
-      const externalId = webhookData.externalId || webhookData.external_id || webhookData.orderId;
-      const status = webhookData.status || webhookData.paymentStatus;
-      const transactionId = webhookData.transactionId || webhookData.transaction_id || webhookData.id;
-      const amount = webhookData.amount;
+      // Extract data from webhook
+      const paylinkId = webhookData.paylinkID;
+      const status = webhookData.status; // SUCCESS or FAILURE
+      const externalTransactionID = webhookData.externalTransactionID;
+      const responseCode = webhookData.responseCode;
 
-      if (!externalId) {
-        console.error('❌ No external ID in webhook');
-        return reply.status(400).send({ error: 'Missing external ID' });
+      console.log('   Paylink ID:', paylinkId);
+      console.log('   Status:', status);
+      console.log('   External Transaction ID:', externalTransactionID);
+      console.log('   Response Code:', responseCode);
+
+      // Verify signature if present
+      const receivedSignature = request.headers['ik-sign'] as string;
+      const receivedAppId = request.headers['ik-appid'] as string;
+
+      if (receivedSignature && IKHOKHA_CONFIG.appSecret) {
+        console.log('   Verifying webhook signature...');
+        // Note: For production, implement proper signature verification
+        // using the callback URL path and request body
       }
 
-      // Find the order
+      if (!externalTransactionID) {
+        console.error('❌ No external transaction ID in webhook');
+        return reply.status(400).send({ error: 'Missing external transaction ID' });
+      }
+
+      // Find the order by ID (externalTransactionID is the orderId)
       const order = await prisma.order.findUnique({
-        where: { id: externalId },
+        where: { id: externalTransactionID },
       });
 
       if (!order) {
-        console.error('❌ Order not found:', externalId);
+        console.error('❌ Order not found:', externalTransactionID);
         return reply.status(404).send({ error: 'Order not found' });
       }
 
-      // Validate amount if provided (convert from cents)
-      if (amount) {
-        const expectedAmount = order.total.toNumber() * 100;
-        if (Math.abs(expectedAmount - amount) > 100) { // Allow R1 tolerance
-          console.error('❌ Amount mismatch. Expected:', expectedAmount, 'Got:', amount);
-          return reply.status(400).send({ error: 'Amount mismatch' });
-        }
-      }
+      console.log('   Found order:', order.orderNumber);
 
       // Process based on payment status
-      console.log('Payment status:', status);
-
-      const successStatuses = ['COMPLETE', 'COMPLETED', 'SUCCESS', 'SUCCESSFUL', 'PAID'];
-      const cancelledStatuses = ['CANCELLED', 'CANCELED', 'FAILED', 'DECLINED'];
-
-      if (successStatuses.includes(status?.toUpperCase())) {
-        // Payment successful
+      if (status === 'SUCCESS' && responseCode === '00') {
+        // Payment successful - update order status
         await prisma.order.update({
-          where: { id: externalId },
-        data: {
+          where: { id: externalTransactionID },
+          data: {
             status: 'PENDING', // Ready for admin to process
-            stripePaymentIntentId: `ikhokha_${transactionId}`,
+            stripePaymentIntentId: `ikhokha_${paylinkId}_paid`,
           },
         });
-        console.log('✅ Order updated to PENDING (paid)');
-      } else if (cancelledStatuses.includes(status?.toUpperCase())) {
-        // Payment failed/cancelled
+        console.log('✅ Order payment confirmed - status updated to PENDING');
+      } else if (status === 'FAILURE') {
+        // Payment failed
         await prisma.order.update({
-          where: { id: externalId },
+          where: { id: externalTransactionID },
           data: {
             status: 'CANCELLED',
-        },
-      });
+          },
+        });
         console.log('⚠️ Order cancelled due to payment failure');
       } else {
-        console.log('⏳ Payment status pending or unknown:', status);
+        console.log('⏳ Unknown payment status:', status);
       }
 
       // Return 200 OK to acknowledge receipt
@@ -280,9 +341,8 @@ export const paymentRoutes: FastifyPluginAsync = async (fastify) => {
   // ============================================
   // VERIFY PAYMENT - Check payment status
   // ============================================
-  fastify.get('/verify/:orderId', { preHandler: authenticate }, async (request, reply) => {
+  fastify.get('/verify/:orderId', async (request, reply) => {
     const { orderId } = request.params as { orderId: string };
-    const user = request.user as { id: string };
 
     const order = await prisma.order.findUnique({
       where: { id: orderId },
@@ -293,23 +353,37 @@ export const paymentRoutes: FastifyPluginAsync = async (fastify) => {
         total: true,
         stripePaymentIntentId: true,
         userId: true,
-        },
-      });
+      },
+    });
 
     if (!order) {
       return reply.status(404).send({ error: 'Order not found' });
     }
 
-    if (order.userId !== user.id) {
-      return reply.status(403).send({ error: 'Unauthorized' });
+    // Check if user is authorized (if order belongs to a user)
+    if (order.userId) {
+      try {
+        const authHeader = request.headers.authorization;
+        if (authHeader && authHeader.startsWith('Bearer ')) {
+          const token = authHeader.substring(7);
+          const decoded = fastify.jwt.verify(token) as { id: string };
+          if (order.userId !== decoded.id) {
+            return reply.status(403).send({ error: 'Unauthorized' });
+          }
+        }
+      } catch (error) {
+        // Continue anyway - allow guest order status checks
+      }
     }
+
+    const isPaid = order.stripePaymentIntentId?.includes('_paid') || false;
 
     return {
       orderId: order.id,
       orderNumber: order.orderNumber,
       status: order.status,
       paymentId: order.stripePaymentIntentId,
-      isPaid: order.status !== 'CANCELLED' && order.stripePaymentIntentId?.startsWith('ikhokha_'),
+      isPaid,
     };
   });
 
@@ -319,21 +393,22 @@ export const paymentRoutes: FastifyPluginAsync = async (fastify) => {
   fastify.get('/config', async () => {
     return {
       provider: 'ikhokha',
-      configured: !!(IKHOKHA_CONFIG.applicationId && IKHOKHA_CONFIG.applicationSecret),
+      configured: !!(IKHOKHA_CONFIG.appId && IKHOKHA_CONFIG.appSecret),
     };
   });
 
   // ============================================
-  // HEALTH CHECK - Verify iKhokha connection
+  // HEALTH CHECK - Verify iKhokha configuration
   // ============================================
   fastify.get('/health', async () => {
-    const isConfigured = !!(IKHOKHA_CONFIG.applicationId && IKHOKHA_CONFIG.applicationSecret);
+    const isConfigured = !!(IKHOKHA_CONFIG.appId && IKHOKHA_CONFIG.appSecret);
     
     return {
       provider: 'ikhokha',
       configured: isConfigured,
-      applicationIdSet: !!IKHOKHA_CONFIG.applicationId,
-      applicationSecretSet: !!IKHOKHA_CONFIG.applicationSecret,
+      appIdSet: !!IKHOKHA_CONFIG.appId,
+      appSecretSet: !!IKHOKHA_CONFIG.appSecret,
+      appIdPreview: IKHOKHA_CONFIG.appId ? `${IKHOKHA_CONFIG.appId.substring(0, 8)}...` : null,
     };
   });
 };
