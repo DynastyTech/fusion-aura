@@ -23,6 +23,14 @@ const allEnvKeys = Object.keys(process.env);
 const ikhokhaKeys = allEnvKeys.filter(k => k.includes('IKHOKHA') || k.startsWith('IK'));
 console.log('   All env vars containing IKHOKHA or starting with IK:', ikhokhaKeys.length > 0 ? ikhokhaKeys : 'NONE FOUND');
 
+// Debug: Show actual values (lengths and first few chars for non-sensitive check)
+const ikAppId = process.env.IKHOKHA_APPLICATION_ID;
+const ikAppSecret = process.env.IKHOKHA_APPLICATION_SECRET;
+console.log('   IKHOKHA_APPLICATION_ID value type:', typeof ikAppId);
+console.log('   IKHOKHA_APPLICATION_ID value length:', ikAppId ? ikAppId.length : 'N/A (falsy)');
+console.log('   IKHOKHA_APPLICATION_ID raw value:', JSON.stringify(ikAppId));
+console.log('   IKHOKHA_APPLICATION_SECRET value length:', ikAppSecret ? ikAppSecret.length : 'N/A (falsy)');
+
 // Debug: Show if other known env vars exist (to confirm env vars work at all)
 console.log('   Other env vars check:');
 console.log('     - RESEND_API_KEY exists:', !!process.env.RESEND_API_KEY);
