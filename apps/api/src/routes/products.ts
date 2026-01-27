@@ -31,11 +31,33 @@ export async function productRoutes(fastify: FastifyInstance) {
       categoryId?: string;
       isFeatured?: string;
       search?: string;
+      sortBy?: string; // 'price_asc', 'price_desc', 'newest', 'name_asc', 'name_desc'
     };
 
     const page = parseInt(query.page || '1', 10);
     const limit = Math.min(parseInt(query.limit || '20', 10), 100);
     const skip = (page - 1) * limit;
+
+    // Determine sort order
+    let orderBy: any = { createdAt: 'desc' }; // default: newest first
+    switch (query.sortBy) {
+      case 'price_asc':
+        orderBy = { price: 'asc' };
+        break;
+      case 'price_desc':
+        orderBy = { price: 'desc' };
+        break;
+      case 'name_asc':
+        orderBy = { name: 'asc' };
+        break;
+      case 'name_desc':
+        orderBy = { name: 'desc' };
+        break;
+      case 'newest':
+      default:
+        orderBy = { createdAt: 'desc' };
+        break;
+    }
 
     const where: any = {
       deletedAt: null,
@@ -67,7 +89,7 @@ export async function productRoutes(fastify: FastifyInstance) {
       if (searchResult) {
         // Get full product details from database
         const productIds = searchResult.hits.map((hit: any) => hit.id);
-        const products = await prisma.product.findMany({
+        let products = await prisma.product.findMany({
           where: {
             id: { in: productIds },
             deletedAt: null,
@@ -89,14 +111,25 @@ export async function productRoutes(fastify: FastifyInstance) {
           },
         });
 
-        // Maintain search result order
-        const orderedProducts = productIds
-          .map((id: string) => products.find((p: any) => p.id === id))
-          .filter((p: any) => p !== undefined);
+        // Apply sorting to search results
+        if (query.sortBy === 'price_asc') {
+          products = products.sort((a, b) => Number(a.price) - Number(b.price));
+        } else if (query.sortBy === 'price_desc') {
+          products = products.sort((a, b) => Number(b.price) - Number(a.price));
+        } else if (query.sortBy === 'name_asc') {
+          products = products.sort((a, b) => a.name.localeCompare(b.name));
+        } else if (query.sortBy === 'name_desc') {
+          products = products.sort((a, b) => b.name.localeCompare(a.name));
+        } else {
+          // Maintain search result order for relevance
+          products = productIds
+            .map((id: string) => products.find((p: any) => p.id === id))
+            .filter((p: any) => p !== undefined);
+        }
 
         return reply.send({
           success: true,
-          data: orderedProducts,
+          data: products,
           pagination: {
             page,
             limit,
@@ -131,9 +164,7 @@ export async function productRoutes(fastify: FastifyInstance) {
         },
         skip,
         take: limit,
-        orderBy: {
-          createdAt: 'desc',
-        },
+        orderBy,
       }),
       prisma.product.count({ where }),
     ]);
