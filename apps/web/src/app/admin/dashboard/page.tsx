@@ -159,8 +159,8 @@ export default function AdminDashboard() {
 
           <div className="card p-4 lg:p-6">
             <div className="flex items-center gap-3 mb-2">
-              <div className="p-2 rounded-xl bg-green-100 dark:bg-green-900/20">
-                <HiCheckCircle className="w-5 h-5 text-green-600" />
+              <div className="p-2 rounded-xl bg-[#569330]/10 dark:bg-[#569330]/20">
+                <HiCheckCircle className="w-5 h-5 text-[#569330]" />
               </div>
               <span className="text-xs lg:text-sm text-[rgb(var(--muted-foreground))]">
                 Active
@@ -310,7 +310,7 @@ export default function AdminDashboard() {
                         <div className="flex flex-wrap gap-2">
                           <span className={`px-2.5 py-1 rounded-full text-xs font-semibold ${
                             product.isActive
-                              ? 'bg-green-100 text-green-700 dark:bg-green-900/30 dark:text-green-400'
+                              ? 'bg-[#569330]/10 text-[#569330] dark:bg-[#569330]/20 dark:text-[#7ab356]'
                               : 'bg-red-100 text-red-700 dark:bg-red-900/30 dark:text-red-400'
                           }`}>
                             {product.isActive ? 'Active' : 'Inactive'}
@@ -406,7 +406,7 @@ export default function AdminDashboard() {
                     <div className="flex gap-2">
                       <span className={`px-2 py-0.5 rounded-full text-xs font-semibold ${
                         product.isActive
-                          ? 'bg-green-100 text-green-700 dark:bg-green-900/30 dark:text-green-400'
+                          ? 'bg-[#569330]/10 text-[#569330] dark:bg-[#569330]/20 dark:text-[#7ab356]'
                           : 'bg-red-100 text-red-700 dark:bg-red-900/30 dark:text-red-400'
                       }`}>
                         {product.isActive ? 'Active' : 'Inactive'}

@@ -58,8 +58,8 @@ const features = [
     icon: FaLeaf,
     title: 'Sustainable',
     description: 'Eco-friendly products for a better tomorrow',
-    gradient: 'from-emerald-400 to-green-500',
-    bgColor: 'bg-emerald-50 dark:bg-emerald-900/20',
+    gradient: 'from-[#7ab356] to-[#569330]',
+    bgColor: 'bg-[#569330]/10 dark:bg-[#569330]/20',
   },
   {
     icon: HiClock,

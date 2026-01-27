@@ -76,7 +76,7 @@ function getStatusColor(status: string): string {
     case 'OUT_FOR_DELIVERY':
       return 'bg-indigo-100 text-indigo-700 dark:bg-indigo-900/30 dark:text-indigo-400';
     case 'COMPLETED':
-      return 'bg-green-100 text-green-700 dark:bg-green-900/30 dark:text-green-400';
+      return 'bg-[#569330]/10 text-[#569330] dark:bg-[#569330]/20 dark:text-[#7ab356]';
     case 'CANCELLED':
       return 'bg-gray-100 text-gray-700 dark:bg-gray-900/30 dark:text-gray-400';
     default:
@@ -345,7 +345,7 @@ export default function AdminOrderDetailPage() {
                 <button
                   onClick={() => updateOrderStatus('ACCEPTED')}
                   disabled={updating}
-                  className="btn-primary !bg-green-600 hover:!bg-green-700 flex-1 sm:flex-none justify-center touch-target"
+                  className="btn-primary !bg-[#569330] hover:!bg-[#4a802a] flex-1 sm:flex-none justify-center touch-target"
                 >
                   {updating ? (
                     <HiArrowPath className="w-5 h-5 animate-spin" />
@@ -411,7 +411,7 @@ export default function AdminOrderDetailPage() {
               <button
                 onClick={() => updateOrderStatus('COMPLETED')}
                 disabled={updating}
-                className="btn-primary !bg-green-600 hover:!bg-green-700 w-full sm:w-auto justify-center touch-target"
+                className="btn-primary !bg-[#569330] hover:!bg-[#4a802a] w-full sm:w-auto justify-center touch-target"
               >
                 {updating ? (
                   <HiArrowPath className="w-5 h-5 animate-spin" />

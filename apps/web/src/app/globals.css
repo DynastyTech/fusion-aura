@@ -12,13 +12,13 @@
     --muted-foreground: 100 116 139;
     --border: 226 232 240;
     --input: 241 245 249;
-    --primary: 101 163 13;
+    --primary: 86 147 48;
     --primary-foreground: 255 255 255;
-    --accent: 130 170 90;
+    --accent: 122 179 86;
     --accent-foreground: 15 23 42;
-    /* Natural, subtle green theme */
-    --primary-light: 130 170 90;
-    --primary-dark: 65 135 85;
+    /* Natural, subtle green theme - #569330 */
+    --primary-light: 122 179 86;
+    --primary-dark: 86 147 48;
   }
 
   .dark {
@@ -30,13 +30,13 @@
     --muted-foreground: 161 161 170;
     --border: 39 39 42;
     --input: 39 39 42;
-    --primary: 132 204 22;
-    --primary-foreground: 9 9 11;
-    --accent: 130 170 90;
+    --primary: 86 147 48;
+    --primary-foreground: 255 255 255;
+    --accent: 122 179 86;
     --accent-foreground: 9 9 11;
-    /* Natural, subtle green theme */
-    --primary-light: 130 170 90;
-    --primary-dark: 75 150 100;
+    /* Natural, subtle green theme - #569330 */
+    --primary-light: 122 179 86;
+    --primary-dark: 86 147 48;
   }
 
   * {
@@ -184,7 +184,7 @@
   }
 
   .badge-success {
-    @apply badge bg-green-100 text-green-700 dark:bg-green-900/30 dark:text-green-400;
+    @apply badge bg-[#569330]/10 text-[#569330] dark:bg-[#569330]/20 dark:text-[#7ab356];
   }
 
   .badge-warning {
@@ -201,11 +201,11 @@
 
   /* Glow effects */
   .glow-green {
-    box-shadow: 0 0 20px rgba(34, 197, 94, 0.3);
+    box-shadow: 0 0 20px rgba(86, 147, 48, 0.3);
   }
 
   .glow-green-lg {
-    box-shadow: 0 0 40px rgba(34, 197, 94, 0.4);
+    box-shadow: 0 0 40px rgba(86, 147, 48, 0.4);
   }
 
   /* Gradient borders */
@@ -220,7 +220,7 @@
     position: absolute;
     inset: -1px;
     border-radius: inherit;
-    background: linear-gradient(135deg, #86efac, #22c55e, #4ade80);
+    background: linear-gradient(135deg, #7ab356, #569330, #6ba344);
     z-index: -1;
     opacity: 0.5;
     transition: opacity 0.3s;

@@ -55,7 +55,7 @@ function getStatusColor(status: string): string {
     case 'OUT_FOR_DELIVERY':
       return 'bg-indigo-100 text-indigo-700 dark:bg-indigo-900/30 dark:text-indigo-400';
     case 'COMPLETED':
-      return 'bg-green-100 text-green-700 dark:bg-green-900/30 dark:text-green-400';
+      return 'bg-[#569330]/10 text-[#569330] dark:bg-[#569330]/20 dark:text-[#7ab356]';
     case 'CANCELLED':
       return 'bg-gray-100 text-gray-700 dark:bg-gray-900/30 dark:text-gray-400';
     default:
@@ -410,7 +410,7 @@ export default function AdminOrdersPage() {
                               updateOrderStatus(order.id, 'ACCEPTED');
                             }}
                             disabled={updating === order.id}
-                            className="flex-1 sm:flex-none btn-primary !bg-green-600 hover:!bg-green-700 
+                            className="flex-1 sm:flex-none btn-primary !bg-[#569330] hover:!bg-[#4a802a] 
                                      !py-2 text-sm"
                           >
                             {updating === order.id ? (
@@ -486,7 +486,7 @@ export default function AdminOrdersPage() {
                             updateOrderStatus(order.id, 'COMPLETED');
                           }}
                           disabled={updating === order.id}
-                          className="flex-1 sm:flex-none btn-primary !bg-green-600 hover:!bg-green-700 
+                          className="flex-1 sm:flex-none btn-primary !bg-[#569330] hover:!bg-[#4a802a] 
                                    !py-2 text-sm"
                         >
                           {updating === order.id ? (

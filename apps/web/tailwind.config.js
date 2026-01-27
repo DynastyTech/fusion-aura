@@ -10,9 +10,9 @@ module.exports = {
     extend: {
       colors: {
         primary: {
-          light: '#a3e635', // Yellow-green (lime-400)
-          DEFAULT: '#84cc16', // Lime-500
-          dark: '#22c55e', // Green-500
+          light: '#7ab356', // Lighter shade of brand green
+          DEFAULT: '#569330', // Brand green
+          dark: '#569330', // Brand green (main)
         },
         dark: {
           bg: '#09090b',
@@ -104,8 +104,8 @@ module.exports = {
           '50%': { transform: 'translateY(-5px)' },
         },
         pulseGlow: {
-          '0%, 100%': { boxShadow: '0 0 20px rgba(34, 197, 94, 0.3)' },
-          '50%': { boxShadow: '0 0 40px rgba(34, 197, 94, 0.6)' },
+          '0%, 100%': { boxShadow: '0 0 20px rgba(86, 147, 48, 0.3)' },
+          '50%': { boxShadow: '0 0 40px rgba(86, 147, 48, 0.6)' },
         },
         float: {
           '0%, 100%': { transform: 'translateY(0)' },
@@ -166,9 +166,9 @@ module.exports = {
         'shimmer': 'linear-gradient(90deg, transparent 0%, rgba(255, 255, 255, 0.1) 50%, transparent 100%)',
       },
       boxShadow: {
-        'glow': '0 0 20px rgba(34, 197, 94, 0.3)',
-        'glow-lg': '0 0 40px rgba(34, 197, 94, 0.4)',
-        'inner-glow': 'inset 0 0 20px rgba(34, 197, 94, 0.1)',
+        'glow': '0 0 20px rgba(86, 147, 48, 0.3)',
+        'glow-lg': '0 0 40px rgba(86, 147, 48, 0.4)',
+        'inner-glow': 'inset 0 0 20px rgba(86, 147, 48, 0.1)',
       },
       transitionTimingFunction: {
         'bounce-in': 'cubic-bezier(0.68, -0.55, 0.265, 1.55)',

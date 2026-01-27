@@ -25,7 +25,7 @@ const socialLinks = [
     href: 'https://wa.me/27658090794', 
     icon: FaWhatsapp,
     handle: '+27 65 809 0794',
-    color: 'bg-green-500',
+    color: 'bg-[#569330]',
   },
   { 
     name: 'Facebook', 
@@ -212,9 +212,9 @@ export default function ContactPage() {
             <div className="card p-6 lg:p-8">
               {submitted ? (
                 <div className="text-center py-12">
-                  <div className="w-20 h-20 mx-auto mb-6 rounded-full bg-green-100 dark:bg-green-900/30 
+                  <div className="w-20 h-20 mx-auto mb-6 rounded-full bg-[#569330]/10 dark:bg-[#569330]/20 
                                 flex items-center justify-center">
-                    <HiCheckCircle className="w-12 h-12 text-green-600" />
+                    <HiCheckCircle className="w-12 h-12 text-[#569330]" />
                   </div>
                   <h3 className="text-2xl font-bold text-[rgb(var(--foreground))] mb-2">
                     Message Sent!

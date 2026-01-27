@@ -53,7 +53,7 @@ function getStatusColor(status: string): string {
     case 'OUT_FOR_DELIVERY':
       return 'bg-indigo-100 text-indigo-800';
     case 'COMPLETED':
-      return 'bg-green-100 text-green-800';
+      return 'bg-[#569330]/10 text-[#569330]';
     case 'CANCELLED':
       return 'bg-gray-100 text-gray-800';
     default:
@@ -146,8 +146,8 @@ export default function OrderConfirmationPage() {
       <main className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
         {/* Success Message */}
         <div className="text-center mb-8">
-          <div className="inline-flex items-center justify-center w-20 h-20 bg-green-100 rounded-full mb-4">
-            <svg className="w-12 h-12 text-green-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <div className="inline-flex items-center justify-center w-20 h-20 bg-[#569330]/10 rounded-full mb-4">
+            <svg className="w-12 h-12 text-[#569330]" fill="none" stroke="currentColor" viewBox="0 0 24 24">
               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
             </svg>
           </div>
@@ -270,9 +270,9 @@ export default function OrderConfirmationPage() {
         </div>
 
         {/* Next Steps */}
-        <div className="bg-green-50 border border-green-200 rounded-lg p-6 mb-6">
-          <h3 className="text-lg font-semibold text-green-800 mb-2">What&apos;s Next?</h3>
-          <ul className="text-green-700 space-y-1 text-sm">
+        <div className="bg-[#569330]/5 border border-[#569330]/20 rounded-lg p-6 mb-6">
+          <h3 className="text-lg font-semibold text-[#569330] mb-2">What&apos;s Next?</h3>
+          <ul className="text-[#569330] space-y-1 text-sm">
             <li>• Your order is being reviewed by our team</li>
             <li>• You&apos;ll receive updates via {order.shippingPhone ? 'SMS/WhatsApp' : 'email'} when your order status changes</li>
             <li>• Our delivery team will contact you before delivery</li>

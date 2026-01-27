@@ -53,7 +53,7 @@ function getStatusColor(status: string): string {
     case 'OUT_FOR_DELIVERY':
       return 'bg-indigo-100 text-indigo-800';
     case 'COMPLETED':
-      return 'bg-green-100 text-green-800';
+      return 'bg-[#569330]/10 text-[#569330]';
     case 'CANCELLED':
       return 'bg-gray-100 text-gray-800';
     default:

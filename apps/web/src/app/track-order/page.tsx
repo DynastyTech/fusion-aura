@@ -37,7 +37,7 @@ function getStatusColor(status: string): string {
     case 'OUT_FOR_DELIVERY':
       return 'bg-indigo-100 text-indigo-800';
     case 'COMPLETED':
-      return 'bg-green-100 text-green-800';
+      return 'bg-[#569330]/10 text-[#569330]';
     case 'CANCELLED':
       return 'bg-gray-100 text-gray-800';
     default:
@@ -247,7 +247,7 @@ export default function TrackOrderPage() {
                 <div className="flex items-center">
                   <div className={`w-3 h-3 rounded-full mr-3 ${
                     ['PENDING', 'ACCEPTED', 'PENDING_DELIVERY', 'OUT_FOR_DELIVERY', 'COMPLETED'].includes(order.status)
-                      ? 'bg-green-500' : 'bg-gray-300'
+                      ? 'bg-[#569330]' : 'bg-gray-300'
                   }`} />
                   <span className={['PENDING', 'ACCEPTED', 'PENDING_DELIVERY', 'OUT_FOR_DELIVERY', 'COMPLETED'].includes(order.status) ? 'text-gray-900' : 'text-gray-400'}>
                     Order Placed
@@ -256,7 +256,7 @@ export default function TrackOrderPage() {
                 <div className="flex items-center">
                   <div className={`w-3 h-3 rounded-full mr-3 ${
                     ['ACCEPTED', 'PENDING_DELIVERY', 'OUT_FOR_DELIVERY', 'COMPLETED'].includes(order.status)
-                      ? 'bg-green-500' : 'bg-gray-300'
+                      ? 'bg-[#569330]' : 'bg-gray-300'
                   }`} />
                   <span className={['ACCEPTED', 'PENDING_DELIVERY', 'OUT_FOR_DELIVERY', 'COMPLETED'].includes(order.status) ? 'text-gray-900' : 'text-gray-400'}>
                     Order Accepted
@@ -265,7 +265,7 @@ export default function TrackOrderPage() {
                 <div className="flex items-center">
                   <div className={`w-3 h-3 rounded-full mr-3 ${
                     ['OUT_FOR_DELIVERY', 'COMPLETED'].includes(order.status)
-                      ? 'bg-green-500' : 'bg-gray-300'
+                      ? 'bg-[#569330]' : 'bg-gray-300'
                   }`} />
                   <span className={['OUT_FOR_DELIVERY', 'COMPLETED'].includes(order.status) ? 'text-gray-900' : 'text-gray-400'}>
                     Out for Delivery
@@ -273,7 +273,7 @@ export default function TrackOrderPage() {
                 </div>
                 <div className="flex items-center">
                   <div className={`w-3 h-3 rounded-full mr-3 ${
-                    order.status === 'COMPLETED' ? 'bg-green-500' : 'bg-gray-300'
+                    order.status === 'COMPLETED' ? 'bg-[#569330]' : 'bg-gray-300'
                   }`} />
                   <span className={order.status === 'COMPLETED' ? 'text-gray-900' : 'text-gray-400'}>
                     Delivered

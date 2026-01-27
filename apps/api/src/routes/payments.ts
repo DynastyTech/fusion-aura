@@ -3,6 +3,7 @@ import { z } from 'zod';
 import { prisma } from '@fusionaura/db';
 import { authenticate } from '../middleware/auth';
 import crypto from 'crypto';
+import { sendOrderEmail, OrderEmailData } from '../utils/email';
 
 // iKhokha Configuration - read at module load time
 const IKHOKHA_CONFIG = {
@@ -326,9 +327,29 @@ export const paymentRoutes: FastifyPluginAsync = async (fastify) => {
         return reply.status(400).send({ error: 'Missing external transaction ID' });
       }
 
-      // Find the order by ID (externalTransactionID is the orderId)
+      // Find the order by ID (externalTransactionID is the orderId) with full details for email
       const order = await prisma.order.findUnique({
         where: { id: externalTransactionID },
+        include: {
+          items: {
+            include: {
+              product: {
+                select: {
+                  id: true,
+                  name: true,
+                },
+              },
+            },
+          },
+          user: {
+            select: {
+              id: true,
+              email: true,
+              firstName: true,
+              lastName: true,
+            },
+          },
+        },
       });
 
       if (!order) {
@@ -349,6 +370,40 @@ export const paymentRoutes: FastifyPluginAsync = async (fastify) => {
           },
         });
         console.log('✅ Order payment confirmed - status updated to PENDING');
+
+        // Send admin notification now that payment is confirmed
+        try {
+          console.log('📧 Payment confirmed - Sending admin notifications...');
+          const orderEmailData: OrderEmailData = {
+            orderNumber: order.orderNumber,
+            customerName: order.user 
+              ? `${order.user.firstName || ''} ${order.user.lastName || ''}`.trim() || 'Registered Customer'
+              : order.shippingName,
+            customerEmail: order.user?.email || 'guest@fusionaura.co.za',
+            items: order.items.map((item) => ({
+              name: item.product.name,
+              quantity: item.quantity,
+              price: Number(item.price),
+            })),
+            subtotal: Number(order.subtotal),
+            tax: Number(order.tax),
+            total: Number(order.total),
+            shippingAddress: {
+              name: order.shippingName,
+              addressLine1: order.shippingAddressLine1,
+              addressLine2: order.shippingAddressLine2 || undefined,
+              city: order.shippingCity,
+              province: order.shippingProvince || undefined,
+              postalCode: order.shippingPostalCode,
+              phone: order.shippingPhone || undefined,
+            },
+          };
+          await sendOrderEmail(orderEmailData);
+          console.log('✅ Admin notification sent for paid order');
+        } catch (emailError) {
+          console.error('Failed to send admin order notification:', emailError);
+          // Continue even if email fails
+        }
       } else if (status === 'FAILURE') {
         // Payment failed
         await prisma.order.update({

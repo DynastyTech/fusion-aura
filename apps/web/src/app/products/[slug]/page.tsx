@@ -138,7 +138,7 @@ export default async function ProductDetailPage({
                 <span
                   className={`inline-block px-4 py-2 rounded-lg font-semibold ${
                     product.inventory.quantity > 0
-                      ? 'bg-green-100 text-green-800'
+                      ? 'bg-[#569330]/10 text-[#569330]'
                       : 'bg-red-100 text-red-800'
                   }`}
                 >

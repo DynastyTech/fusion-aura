@@ -44,9 +44,9 @@ export async function sendPasswordResetEmail(data: PasswordResetEmailData): Prom
         <style>
           body { font-family: Arial, sans-serif; line-height: 1.6; color: #333; margin: 0; padding: 0; }
           .container { max-width: 600px; margin: 0 auto; padding: 20px; }
-          .header { background: linear-gradient(135deg, #82aa5a, #418755); color: white; padding: 30px 20px; text-align: center; border-radius: 10px 10px 0 0; }
+          .header { background: linear-gradient(135deg, #7ab356, #569330); color: white; padding: 30px 20px; text-align: center; border-radius: 10px 10px 0 0; }
           .content { background: #f9f9f9; padding: 30px; border-radius: 0 0 10px 10px; }
-          .button { display: inline-block; background: linear-gradient(135deg, #82aa5a, #418755); color: white; padding: 15px 30px; text-decoration: none; border-radius: 8px; font-weight: bold; margin: 20px 0; }
+          .button { display: inline-block; background: linear-gradient(135deg, #7ab356, #569330); color: white; padding: 15px 30px; text-decoration: none; border-radius: 8px; font-weight: bold; margin: 20px 0; }
           .button:hover { opacity: 0.9; }
           .warning { background: #fff3cd; border: 1px solid #ffc107; padding: 15px; border-radius: 8px; margin: 20px 0; }
           .footer { text-align: center; color: #666; font-size: 12px; margin-top: 30px; }
@@ -162,12 +162,12 @@ export async function sendOrderEmail(orderData: OrderEmailData): Promise<void> {
         <style>
           body { font-family: Arial, sans-serif; line-height: 1.6; color: #333; }
           .container { max-width: 600px; margin: 0 auto; padding: 20px; }
-          .header { background: linear-gradient(135deg, #82aa5a, #418755); color: white; padding: 20px; text-align: center; border-radius: 10px 10px 0 0; }
+          .header { background: linear-gradient(135deg, #7ab356, #569330); color: white; padding: 20px; text-align: center; border-radius: 10px 10px 0 0; }
           .content { background: #f9f9f9; padding: 20px; border-radius: 0 0 10px 10px; }
           .order-details { background: white; padding: 20px; margin: 20px 0; border-radius: 5px; }
           table { width: 100%; border-collapse: collapse; margin: 20px 0; }
           th { background: #f0f0f0; padding: 10px; text-align: left; }
-          .total { font-size: 18px; font-weight: bold; color: #22c55e; }
+          .total { font-size: 18px; font-weight: bold; color: #569330; }
           .address { background: #f0f0f0; padding: 15px; border-radius: 5px; margin: 20px 0; }
           .urgent { background: #fee2e2; border: 1px solid #ef4444; padding: 15px; border-radius: 8px; margin: 20px 0; }
         </style>
@@ -227,7 +227,7 @@ export async function sendOrderEmail(orderData: OrderEmailData): Promise<void> {
             </p>
 
             <p style="margin-top: 20px; text-align: center;">
-              <a href="https://www.fusionaura.co.za/admin/orders" style="display: inline-block; background: linear-gradient(135deg, #82aa5a, #418755); color: white; padding: 12px 24px; text-decoration: none; border-radius: 8px; font-weight: bold;">View Order in Dashboard</a>
+              <a href="https://www.fusionaura.co.za/admin/orders" style="display: inline-block; background: linear-gradient(135deg, #7ab356, #569330); color: white; padding: 12px 24px; text-decoration: none; border-radius: 8px; font-weight: bold;">View Order in Dashboard</a>
             </p>
           </div>
         </div>
@@ -286,17 +286,17 @@ export async function sendOrderConfirmationToCustomer(orderData: OrderEmailData)
         <style>
           body { font-family: Arial, sans-serif; line-height: 1.6; color: #333; margin: 0; padding: 0; }
           .container { max-width: 600px; margin: 0 auto; padding: 20px; }
-          .header { background: linear-gradient(135deg, #82aa5a, #418755); color: white; padding: 30px 20px; text-align: center; border-radius: 10px 10px 0 0; }
+          .header { background: linear-gradient(135deg, #7ab356, #569330); color: white; padding: 30px 20px; text-align: center; border-radius: 10px 10px 0 0; }
           .content { background: #f9f9f9; padding: 30px; border-radius: 0 0 10px 10px; }
           .success-icon { font-size: 48px; margin-bottom: 10px; }
           .order-box { background: white; padding: 20px; margin: 20px 0; border-radius: 8px; box-shadow: 0 2px 4px rgba(0,0,0,0.1); }
           table { width: 100%; border-collapse: collapse; margin: 15px 0; }
           th { background: #f0f0f0; padding: 12px; text-align: left; font-size: 14px; }
-          .total-row { font-size: 18px; font-weight: bold; color: #22c55e; }
+          .total-row { font-size: 18px; font-weight: bold; color: #569330; }
           .address-box { background: #e8f5e9; padding: 15px; border-radius: 8px; margin: 20px 0; border-left: 4px solid #4caf50; }
           .payment-box { background: #fff3cd; padding: 15px; border-radius: 8px; margin: 20px 0; }
           .footer { text-align: center; color: #666; font-size: 12px; margin-top: 30px; padding-top: 20px; border-top: 1px solid #eee; }
-          .track-button { display: inline-block; background: linear-gradient(135deg, #82aa5a, #418755); color: white; padding: 15px 30px; text-decoration: none; border-radius: 8px; font-weight: bold; margin: 20px 0; }
+          .track-button { display: inline-block; background: linear-gradient(135deg, #7ab356, #569330); color: white; padding: 15px 30px; text-decoration: none; border-radius: 8px; font-weight: bold; margin: 20px 0; }
         </style>
       </head>
       <body>
@@ -408,7 +408,7 @@ export async function sendOrderStatusUpdateEmail(orderData: OrderStatusUpdateDat
     ACCEPTED: {
       title: 'Order Accepted',
       message: 'Your order has been accepted and is being prepared for delivery.',
-      color: '#22c55e',
+      color: '#569330',
     },
     DECLINED: {
       title: 'Order Declined',
@@ -428,7 +428,7 @@ export async function sendOrderStatusUpdateEmail(orderData: OrderStatusUpdateDat
     COMPLETED: {
       title: 'Order Delivered',
       message: 'Your order has been successfully delivered. Thank you for shopping with us!',
-      color: '#22c55e',
+      color: '#569330',
     },
     CANCELLED: {
       title: 'Order Cancelled',

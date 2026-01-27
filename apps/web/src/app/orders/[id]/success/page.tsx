@@ -64,10 +64,10 @@ export default function PaymentSuccessPage() {
       <div className="max-w-md w-full text-center">
         {/* Success Animation */}
         <div className="relative mb-8">
-          <div className="w-24 h-24 mx-auto bg-green-500/20 rounded-full flex items-center justify-center animate-pulse">
-            <HiCheckCircle className="w-16 h-16 text-green-500" />
+          <div className="w-24 h-24 mx-auto bg-[#569330]/20 rounded-full flex items-center justify-center animate-pulse">
+            <HiCheckCircle className="w-16 h-16 text-[#569330]" />
           </div>
-          <div className="absolute inset-0 w-24 h-24 mx-auto border-4 border-green-500 rounded-full animate-ping opacity-20" />
+          <div className="absolute inset-0 w-24 h-24 mx-auto border-4 border-[#569330] rounded-full animate-ping opacity-20" />
         </div>
 
         <h1 className="text-3xl font-bold text-[rgb(var(--foreground))] mb-4">
@@ -87,7 +87,7 @@ export default function PaymentSuccessPage() {
               </div>
               <div className="flex justify-between">
                 <span className="text-[rgb(var(--muted-foreground))]">Status</span>
-                <span className="font-semibold text-green-500">Paid</span>
+                <span className="font-semibold text-[#569330]">Paid</span>
               </div>
               <div className="flex justify-between border-t border-[rgb(var(--border))] pt-3">
                 <span className="text-[rgb(var(--muted-foreground))]">Total Paid</span>

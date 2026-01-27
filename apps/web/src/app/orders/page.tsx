@@ -46,7 +46,7 @@ function getStatusColor(status: string): string {
     case 'OUT_FOR_DELIVERY':
       return 'bg-indigo-100 text-indigo-800';
     case 'COMPLETED':
-      return 'bg-green-100 text-green-800';
+      return 'bg-[#569330]/10 text-[#569330]';
     case 'CANCELLED':
       return 'bg-gray-100 text-gray-800';
     default:
@@ -206,27 +206,27 @@ export default function OrdersPage() {
                     <div className="mt-3 flex items-center space-x-2 text-xs">
                       <div className={`w-2 h-2 rounded-full ${
                         ['PENDING', 'ACCEPTED', 'PENDING_DELIVERY', 'OUT_FOR_DELIVERY', 'COMPLETED'].includes(order.status)
-                          ? 'bg-green-500' : 'bg-gray-300'
+                          ? 'bg-[#569330]' : 'bg-gray-300'
                       }`} />
                       <span className="text-gray-500">Order Placed</span>
                       {['ACCEPTED', 'PENDING_DELIVERY', 'OUT_FOR_DELIVERY', 'COMPLETED'].includes(order.status) && (
                         <>
                           <span className="text-gray-300">→</span>
-                          <div className="w-2 h-2 rounded-full bg-green-500" />
+                          <div className="w-2 h-2 rounded-full bg-[#569330]" />
                           <span className="text-gray-500">Accepted</span>
                         </>
                       )}
                       {['OUT_FOR_DELIVERY', 'COMPLETED'].includes(order.status) && (
                         <>
                           <span className="text-gray-300">→</span>
-                          <div className="w-2 h-2 rounded-full bg-green-500" />
+                          <div className="w-2 h-2 rounded-full bg-[#569330]" />
                           <span className="text-gray-500">Out for Delivery</span>
                         </>
                       )}
                       {order.status === 'COMPLETED' && (
                         <>
                           <span className="text-gray-300">→</span>
-                          <div className="w-2 h-2 rounded-full bg-green-500" />
+                          <div className="w-2 h-2 rounded-full bg-[#569330]" />
                           <span className="text-gray-500">Delivered</span>
                         </>
                       )}

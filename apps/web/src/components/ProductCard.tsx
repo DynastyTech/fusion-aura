@@ -190,7 +190,7 @@ export default function ProductCard({ product, index = 0, showCategory = true, c
                 className={`w-full py-2 px-3 rounded-lg font-medium text-[12px] flex items-center justify-center gap-1.5 
                             transition-all duration-200 touch-manipulation ${
                   addedToCart
-                    ? 'bg-green-500 text-white'
+                    ? 'bg-[#569330] text-white'
                     : !inStock
                     ? 'bg-gray-400 text-white cursor-not-allowed'
                     : 'bg-primary-dark text-white active:scale-[0.98]'

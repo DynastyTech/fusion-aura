@@ -12,6 +12,7 @@ const createOrderSchema = z.object({
       quantity: z.number().int().positive(),
     })
   ),
+  paymentMethod: z.enum(['cod', 'ikhokha']).default('cod'), // Payment method determines when admin is notified
   shippingAddress: z.object({
     name: z.string().min(1),
     email: z.string().email().optional(), // Optional for guest orders
@@ -263,13 +264,18 @@ export async function orderRoutes(fastify: FastifyInstance) {
         },
       };
 
-      // Send notification to all admins (lraseemela@gmail.com & alphageneralsol@gmail.com)
-      try {
-        console.log('📧 Sending admin notifications for new order...');
-        await sendOrderEmail(orderEmailData);
-      } catch (error) {
-        console.error('Failed to send admin order notification:', error);
-        // Continue even if email fails
+      // Only send admin notification for COD orders immediately
+      // For online payments (iKhokha), admin is notified via webhook when payment is confirmed
+      if (body.paymentMethod === 'cod') {
+        try {
+          console.log('📧 COD order - Sending admin notifications for new order...');
+          await sendOrderEmail(orderEmailData);
+        } catch (error) {
+          console.error('Failed to send admin order notification:', error);
+          // Continue even if email fails
+        }
+      } else {
+        console.log('💳 Online payment selected - Admin will be notified after payment is confirmed');
       }
 
       // Send order confirmation to customer ONLY if they are a registered user

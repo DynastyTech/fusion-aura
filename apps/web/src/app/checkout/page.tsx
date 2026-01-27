@@ -234,6 +234,7 @@ export default function CheckoutPage() {
         method: 'POST',
         body: JSON.stringify({
           items,
+          paymentMethod, // 'cod' or 'ikhokha' - used to determine when to notify admin
           shippingAddress: {
             name: isGuest ? 'anonymous' : formData.name,
             addressLine1: formData.addressLine1,

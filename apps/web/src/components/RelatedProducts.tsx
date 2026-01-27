@@ -75,7 +75,7 @@ export default function RelatedProducts({ products, currentProductId }: RelatedP
                   R{toNumber(product.price).toFixed(2)}
                 </span>
                 {product.inventory && product.inventory.quantity > 0 && (
-                  <span className="text-xs bg-green-100 text-green-800 px-2 py-1 rounded">
+                  <span className="text-xs bg-[#569330]/10 text-[#569330] px-2 py-1 rounded">
                     In Stock
                   </span>
                 )}
