@@ -12,7 +12,8 @@
     "seed": "tsx prisma/seed.ts",
     "create-admin": "tsx prisma/create-admin.ts",
     "update-admin-password": "tsx prisma/update-admin-password.ts",
-    "update-admin-password-production": "tsx prisma/update-admin-password-production.ts"
+    "update-admin-password-production": "tsx prisma/update-admin-password-production.ts",
+    "update-admin-email": "tsx prisma/update-admin-email.ts"
   },
   "dependencies": {
     "@prisma/client": "^5.7.1",

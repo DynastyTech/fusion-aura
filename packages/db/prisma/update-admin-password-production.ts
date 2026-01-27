@@ -7,7 +7,7 @@ import bcrypt from 'bcryptjs';
 const prisma = new PrismaClient();
 
 async function updateAdminPassword() {
-  const adminEmail = 'admin@fusionaura.com';
+  const adminEmail = 'fusionauraza@gmail.com';
   const newPassword = '$fusionAURA26#';
 
   if (!process.env.DATABASE_URL) {

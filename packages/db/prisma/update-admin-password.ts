@@ -42,7 +42,7 @@ if (!process.env.DATABASE_URL) {
 const prisma = new PrismaClient();
 
 async function updateAdminPassword() {
-  const adminEmail = 'admin@fusionaura.com';
+  const adminEmail = 'fusionauraza@gmail.com';
   const newPassword = '$fusionAURA26#';
 
   // Find the admin user

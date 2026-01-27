@@ -38,7 +38,7 @@ export const config = {
     // Resend API (recommended for production - uses HTTPS, not blocked by cloud providers)
     resendApiKey: process.env.RESEND_API_KEY || '',
     emailFrom: process.env.EMAIL_FROM || 'FusionAura <onboarding@resend.dev>',
-    adminEmail: process.env.ADMIN_EMAIL || 'lraseemela@gmail.com',
+    adminEmail: process.env.ADMIN_EMAIL || 'fusionauraza@gmail.com',
   },
   cloudinary: {
     cloudName: process.env.CLOUDINARY_CLOUD_NAME || '',
