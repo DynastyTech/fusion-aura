@@ -405,34 +405,39 @@ export async function sendOrderStatusUpdateEmail(orderData: OrderStatusUpdateDat
   }
 
   const statusMessages: Record<string, { title: string; message: string; color: string }> = {
+    PENDING: {
+      title: 'Payment Confirmed',
+      message: 'Your payment has been received and your order is now being processed. We will notify you once it has been accepted.',
+      color: '#3b82f6',
+    },
     ACCEPTED: {
       title: 'Order Accepted',
-      message: 'Your order has been accepted and is being prepared for delivery.',
+      message: 'Great news! Your order has been accepted and is being prepared for delivery.',
       color: '#569330',
     },
     DECLINED: {
       title: 'Order Declined',
-      message: 'Unfortunately, your order could not be processed at this time. Please contact us for assistance.',
+      message: 'Unfortunately, your order could not be processed at this time. Your payment will be refunded. Please contact us for assistance.',
       color: '#ef4444',
     },
     PENDING_DELIVERY: {
       title: 'Ready for Delivery',
-      message: 'Your order is ready and awaiting delivery.',
+      message: 'Your order is packed and ready for delivery. You will receive another update when it is dispatched.',
       color: '#3b82f6',
     },
     OUT_FOR_DELIVERY: {
       title: 'Out for Delivery',
-      message: 'Your order is on its way! Please ensure someone is available to receive it.',
+      message: 'Exciting news! Your order is on its way to you. Please ensure someone is available to receive it.',
       color: '#f59e0b',
     },
     COMPLETED: {
       title: 'Order Delivered',
-      message: 'Your order has been successfully delivered. Thank you for shopping with us!',
+      message: 'Your order has been successfully delivered. Thank you for shopping with FusionAura!',
       color: '#569330',
     },
     CANCELLED: {
       title: 'Order Cancelled',
-      message: 'Your order has been cancelled. If you have any questions, please contact us.',
+      message: 'Your order has been cancelled. If a payment was made, it will be refunded. Please contact us if you have any questions.',
       color: '#ef4444',
     },
   };

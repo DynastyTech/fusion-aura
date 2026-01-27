@@ -27,6 +27,9 @@ const createOrderSchema = z.object({
 });
 
 const updateOrderStatusSchema = z.object({
+  // Note: AWAITING_PAYMENT and PENDING cannot be set manually
+  // AWAITING_PAYMENT is set automatically when order is created
+  // PENDING is set automatically when payment is confirmed via iKhokha
   status: z.enum(['ACCEPTED', 'DECLINED', 'PENDING_DELIVERY', 'OUT_FOR_DELIVERY', 'COMPLETED', 'CANCELLED']),
 });
 
@@ -170,9 +173,10 @@ export async function orderRoutes(fastify: FastifyInstance) {
       }
 
       // Create order in database (userId is optional for guest orders)
+      // Order starts as AWAITING_PAYMENT - will change to PENDING after payment is confirmed
       const orderData: any = {
         orderNumber: `FUS-${Date.now()}-${Math.random().toString(36).substr(2, 9).toUpperCase()}-${Math.random().toString(36).substr(2, 4).toUpperCase()}`,
-        status: 'PENDING', // Awaiting admin approval
+        status: 'AWAITING_PAYMENT', // Will change to PENDING after payment confirmation
         subtotal,
         tax,
         shipping,
@@ -264,28 +268,9 @@ export async function orderRoutes(fastify: FastifyInstance) {
         },
       };
 
-      // Admin notifications are sent via webhook after payment is confirmed
-      // This is because all payments are now online via iKhokha
-      console.log('💳 Order created - Admin will be notified after payment is confirmed via iKhokha');
-
-      // Send order confirmation to customer ONLY if they are a registered user
-      if (userId && user?.email) {
-        try {
-          console.log('📧 Sending order confirmation to registered customer:', user.email);
-          await sendOrderConfirmationToCustomer({
-            ...orderEmailData,
-            customerEmail: user.email,
-            customerName: user.firstName && user.lastName 
-              ? `${user.firstName} ${user.lastName}` 
-              : user.firstName || 'Valued Customer',
-          });
-        } catch (error) {
-          console.error('Failed to send customer confirmation email:', error);
-          // Continue even if email fails
-        }
-      } else {
-        console.log('⚠️  Guest order - no confirmation email sent to customer');
-      }
+      // Order is in AWAITING_PAYMENT status
+      // Admin notifications and customer confirmation will be sent via webhook after payment is confirmed
+      console.log('💳 Order created with AWAITING_PAYMENT status - waiting for iKhokha payment confirmation');
 
       return reply.status(201).send({
         success: true,
@@ -303,9 +288,15 @@ export async function orderRoutes(fastify: FastifyInstance) {
     const limit = Math.min(parseInt(query.limit || '20', 10), 100);
     const skip = (page - 1) * limit;
 
+    // Only show orders that have been paid (not AWAITING_PAYMENT)
+    const whereClause = { 
+      userId, 
+      status: { not: 'AWAITING_PAYMENT' as const },
+    };
+    
     const [orders, total] = await Promise.all([
       prisma.order.findMany({
-        where: { userId },
+        where: whereClause,
         include: {
           items: {
             include: {
@@ -326,7 +317,7 @@ export async function orderRoutes(fastify: FastifyInstance) {
           createdAt: 'desc',
         },
       }),
-      prisma.order.count({ where: { userId } }),
+      prisma.order.count({ where: whereClause }),
     ]);
 
     console.log(`📋 Found ${orders.length} orders for userId: ${userId} (total: ${total})`);
@@ -441,7 +432,12 @@ export async function orderRoutes(fastify: FastifyInstance) {
 
       const where: any = {
         deletedAt: null, // Exclude soft-deleted orders by default
+        // Exclude AWAITING_PAYMENT orders - these are not yet paid
+        // Only show orders that have been paid (status is anything except AWAITING_PAYMENT)
+        status: { not: 'AWAITING_PAYMENT' },
       };
+      
+      // If specific status filter is provided, use that instead
       if (query.status) {
         where.status = query.status;
       }

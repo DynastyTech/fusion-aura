@@ -3,7 +3,7 @@ import { z } from 'zod';
 import { prisma } from '@fusionaura/db';
 import { authenticate } from '../middleware/auth';
 import crypto from 'crypto';
-import { sendOrderEmail, OrderEmailData } from '../utils/email';
+import { sendOrderEmail, sendOrderConfirmationToCustomer, OrderEmailData } from '../utils/email';
 
 // iKhokha Configuration - read at module load time
 const IKHOKHA_CONFIG = {
@@ -413,19 +413,36 @@ export const paymentRoutes: FastifyPluginAsync = async (fastify) => {
           };
           await sendOrderEmail(orderEmailData);
           console.log('✅ Admin notification sent for paid order');
+          
+          // Also send order confirmation to customer
+          if (order.user?.email) {
+            try {
+              await sendOrderConfirmationToCustomer({
+                ...orderEmailData,
+                customerEmail: order.user.email,
+              });
+              console.log('✅ Customer confirmation sent to:', order.user.email);
+            } catch (customerEmailError) {
+              console.error('Failed to send customer confirmation:', customerEmailError);
+            }
+          }
         } catch (emailError) {
           console.error('Failed to send admin order notification:', emailError);
           // Continue even if email fails
         }
-      } else if (status === 'FAILURE') {
-        // Payment failed
-        await prisma.order.update({
-          where: { id: externalTransactionID },
-          data: {
-            status: 'CANCELLED',
-          },
+      } else if (status === 'FAILURE' || status === 'CANCELLED') {
+        // Payment failed or cancelled - DELETE the order entirely
+        // Since payment was not completed, the order should not exist
+        console.log(`⚠️ Payment ${status} - Deleting unpaid order: ${order.orderNumber}`);
+        
+        // First delete order items, then delete the order
+        await prisma.orderItem.deleteMany({
+          where: { orderId: externalTransactionID },
         });
-        console.log('⚠️ Order cancelled due to payment failure');
+        await prisma.order.delete({
+          where: { id: externalTransactionID },
+        });
+        console.log('🗑️ Unpaid order deleted successfully');
       } else {
         console.log('⏳ Unknown payment status:', status);
       }

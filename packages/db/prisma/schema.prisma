@@ -17,7 +17,8 @@ enum UserRole {
 }
 
 enum OrderStatus {
-  PENDING        // Order placed, awaiting admin approval
+  AWAITING_PAYMENT // Order created, waiting for payment confirmation
+  PENDING        // Payment confirmed, awaiting admin approval
   ACCEPTED       // Admin accepted the order
   DECLINED       // Admin declined the order
   PENDING_DELIVERY // Accepted, waiting for delivery
@@ -208,7 +209,7 @@ model Order {
   userId String? // Optional for guest orders
   user   User?   @relation(fields: [userId], references: [id])
   
-  status OrderStatus @default(PENDING)
+  status OrderStatus @default(AWAITING_PAYMENT)
   
   // Pricing (ZAR)
   subtotal    Decimal @db.Decimal(10, 2)
