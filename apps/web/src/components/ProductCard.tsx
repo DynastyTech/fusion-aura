@@ -65,7 +65,7 @@ export default function ProductCard({ product, index = 0, showCategory = true, c
       const token = localStorage.getItem('token');
       
       if (token) {
-        await apiRequest('/api/cart/add', {
+        await apiRequest('/api/cart', {
           method: 'POST',
           body: JSON.stringify({
             productId: product.id,

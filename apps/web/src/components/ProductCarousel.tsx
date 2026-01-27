@@ -64,7 +64,7 @@ export default function ProductCarousel({ products }: ProductCarouselProps) {
       
       if (token) {
         // Authenticated user - use API
-        await apiRequest('/api/cart/add', {
+        await apiRequest('/api/cart', {
           method: 'POST',
           body: JSON.stringify({
             productId: product.id,
