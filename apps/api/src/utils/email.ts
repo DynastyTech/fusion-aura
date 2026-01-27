@@ -463,22 +463,27 @@ export async function sendOrderStatusUpdateEmail(orderData: OrderStatusUpdateDat
         <style>
           body { font-family: Arial, sans-serif; line-height: 1.6; color: #333; }
           .container { max-width: 600px; margin: 0 auto; padding: 20px; }
-          .header { background: ${statusInfo.color}; color: white; padding: 20px; text-align: center; }
-          .content { background: #f9f9f9; padding: 20px; }
-          .status-box { background: white; padding: 20px; margin: 20px 0; border-radius: 5px; border-left: 4px solid ${statusInfo.color}; }
+          .header { background: ${statusInfo.color}; color: white; padding: 20px; text-align: center; border-radius: 10px 10px 0 0; }
+          .content { background: #f9f9f9; padding: 20px; border-radius: 0 0 10px 10px; }
+          .greeting { font-size: 16px; margin-bottom: 20px; }
+          .status-box { background: white; padding: 20px; margin: 20px 0; border-radius: 8px; border-left: 4px solid ${statusInfo.color}; box-shadow: 0 2px 4px rgba(0,0,0,0.1); }
           table { width: 100%; border-collapse: collapse; margin: 20px 0; }
           th { background: #f0f0f0; padding: 10px; text-align: left; }
           .total { font-size: 18px; font-weight: bold; color: ${statusInfo.color}; }
+          .footer { text-align: center; color: #666; font-size: 12px; margin-top: 30px; padding-top: 20px; border-top: 1px solid #eee; }
         </style>
       </head>
       <body>
         <div class="container">
           <div class="header">
-            <h1>FusionAura - ${statusInfo.title}</h1>
+            <h1>FusionAura</h1>
+            <p style="margin: 0; font-size: 18px;">${statusInfo.title}</p>
           </div>
           <div class="content">
+            <p class="greeting">Hi ${orderData.customerName},</p>
+            
             <div class="status-box">
-              <h2>Order #${orderData.orderNumber}</h2>
+              <h2 style="margin-top: 0;">Order #${orderData.orderNumber}</h2>
               <p><strong>${statusInfo.title}</strong></p>
               <p>${statusInfo.message}</p>
             </div>
@@ -506,9 +511,14 @@ export async function sendOrderStatusUpdateEmail(orderData: OrderStatusUpdateDat
               <strong>Payment Method:</strong> Online Payment (iKhokha)
             </p>
 
-            <p style="margin-top: 20px; color: #6b7280; font-size: 14px;">
-              If you have any questions about your order, please contact us.
-            </p>
+            <div style="text-align: center; margin-top: 30px;">
+              <a href="https://www.fusionaura.co.za/track-order" style="display: inline-block; background: linear-gradient(135deg, #7ab356, #569330); color: white; padding: 12px 24px; text-decoration: none; border-radius: 8px; font-weight: bold;">Track Your Order</a>
+            </div>
+
+            <div class="footer">
+              <p>If you have any questions about your order, please contact us at <a href="mailto:fusionauraza@gmail.com">fusionauraza@gmail.com</a></p>
+              <p>© ${new Date().getFullYear()} FusionAura. All rights reserved.</p>
+            </div>
           </div>
         </div>
       </body>

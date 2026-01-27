@@ -374,11 +374,24 @@ export const paymentRoutes: FastifyPluginAsync = async (fastify) => {
         // Send admin notification now that payment is confirmed
         try {
           console.log('📧 Payment confirmed - Sending admin notifications...');
+          
+          // Get proper customer name - never use email as name
+          let customerName = 'Anonymous Customer';
+          if (order.user) {
+            const firstName = order.user.firstName?.trim() || '';
+            const lastName = order.user.lastName?.trim() || '';
+            if (firstName || lastName) {
+              customerName = `${firstName} ${lastName}`.trim();
+            } else {
+              customerName = 'Valued Customer';
+            }
+          } else if (order.shippingName && order.shippingName !== 'anonymous') {
+            customerName = order.shippingName;
+          }
+          
           const orderEmailData: OrderEmailData = {
             orderNumber: order.orderNumber,
-            customerName: order.user 
-              ? `${order.user.firstName || ''} ${order.user.lastName || ''}`.trim() || 'Registered Customer'
-              : order.shippingName,
+            customerName,
             customerEmail: order.user?.email || 'guest@fusionaura.co.za',
             items: order.items.map((item) => ({
               name: item.product.name,

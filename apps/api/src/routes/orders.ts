@@ -632,11 +632,22 @@ export async function orderRoutes(fastify: FastifyInstance) {
       try {
         const customerEmail = updatedOrder.user?.email || undefined;
         const customerPhone = updatedOrder.shippingPhone || undefined;
-        const customerName = updatedOrder.user
-          ? (updatedOrder.user.firstName && updatedOrder.user.lastName
-              ? `${updatedOrder.user.firstName} ${updatedOrder.user.lastName}`
-              : updatedOrder.user.email)
-          : updatedOrder.shippingName || 'Customer';
+        
+        // Get proper customer name - never use email as name
+        let customerName = 'Anonymous Customer';
+        if (updatedOrder.user) {
+          // Registered user - use their name if available
+          const firstName = updatedOrder.user.firstName?.trim() || '';
+          const lastName = updatedOrder.user.lastName?.trim() || '';
+          if (firstName || lastName) {
+            customerName = `${firstName} ${lastName}`.trim();
+          } else {
+            customerName = 'Valued Customer'; // Registered but no name set
+          }
+        } else if (updatedOrder.shippingName && updatedOrder.shippingName !== 'anonymous') {
+          // Guest order with shipping name
+          customerName = updatedOrder.shippingName;
+        }
 
         if (customerEmail || customerPhone) {
           await sendOrderStatusUpdateEmail({
