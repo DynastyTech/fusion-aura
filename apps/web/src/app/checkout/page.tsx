@@ -261,7 +261,10 @@ export default function CheckoutPage() {
 
             console.log('Payment response:', paymentResponse);
 
-            if (paymentResponse.success && paymentResponse.data?.redirectUrl) {
+            // The apiRequest spreads the response at top level, so redirectUrl is directly on paymentResponse
+            const redirectUrl = (paymentResponse as any).redirectUrl || paymentResponse.data?.redirectUrl;
+            
+            if (paymentResponse.success && redirectUrl) {
               // Clear cart before redirecting
               if (isGuest) {
                 clearGuestCart();
@@ -270,7 +273,7 @@ export default function CheckoutPage() {
               }
               window.dispatchEvent(new Event('cartUpdated'));
               // Redirect to iKhokha payment page
-              window.location.href = paymentResponse.data.redirectUrl;
+              window.location.href = redirectUrl;
               return;
             } else {
               const errorMsg = (paymentResponse as any).error || 'Failed to initiate payment';
