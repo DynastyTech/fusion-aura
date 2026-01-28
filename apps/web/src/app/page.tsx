@@ -19,15 +19,15 @@ interface Product {
   } | null;
 }
 
-// Mark page as dynamic to allow no-store fetches
-export const dynamic = 'force-dynamic';
+// Use ISR - revalidate every 60 seconds for fresh data with caching benefits
+export const revalidate = 60;
 
 async function getFeaturedProducts(): Promise<Product[]> {
   const apiUrl = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:3001';
   
   try {
     const res = await fetch(`${apiUrl}/api/products?isFeatured=true&limit=6`, {
-      cache: 'no-store',
+      next: { revalidate: 60 }, // Cache for 60 seconds, then revalidate
     });
 
     if (!res.ok) {

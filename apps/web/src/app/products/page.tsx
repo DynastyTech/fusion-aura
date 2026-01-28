@@ -29,8 +29,6 @@ interface Category {
   slug: string;
 }
 
-export const dynamic = 'force-dynamic';
-
 interface SearchParams {
   search?: string;
   category?: string;
@@ -52,8 +50,9 @@ async function getProducts(params: SearchParams): Promise<Product[]> {
   const url = `${apiUrl}/api/products?${queryString}`;
   
   try {
+    // Use short revalidation for products - keeps data fresh but enables caching
     const res = await fetch(url, {
-      cache: 'no-store',
+      next: { revalidate: 30 }, // Cache for 30 seconds
     });
 
     if (!res.ok) {
@@ -73,8 +72,9 @@ async function getCategories(): Promise<Category[]> {
   const apiUrl = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:3001';
   
   try {
+    // Categories rarely change - cache for longer
     const res = await fetch(`${apiUrl}/api/categories`, {
-      cache: 'no-store',
+      next: { revalidate: 300 }, // Cache for 5 minutes
     });
 
     if (!res.ok) {
