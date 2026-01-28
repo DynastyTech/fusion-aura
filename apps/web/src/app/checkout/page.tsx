@@ -3,6 +3,7 @@
 import { useEffect, useState, useCallback } from 'react';
 import { useRouter } from 'next/navigation';
 import Link from 'next/link';
+import Image from 'next/image';
 import { apiRequest } from '@/lib/api';
 import { HiCreditCard, HiUser } from 'react-icons/hi2';
 import AddressAutocomplete from '@/components/AddressAutocomplete';
@@ -14,6 +15,7 @@ interface CartItem {
     id: string;
     name: string;
     price: number | string;
+    images?: string[];
   };
   subtotal: number;
 }
@@ -409,14 +411,40 @@ export default function CheckoutPage() {
           <div className="lg:col-span-1">
             <div className="card p-6 lg:sticky lg:top-24">
               <h2 className="text-xl font-bold text-[rgb(var(--foreground))] mb-4">Order Summary</h2>
-              <div className="space-y-3 mb-4">
+              <div className="space-y-4 mb-4">
                 {cart?.items.map((item) => (
-                  <div key={item.id} className="flex justify-between text-sm text-[rgb(var(--foreground))]">
-                    <span className="flex-1">{item.product.name} x{item.quantity}</span>
-                    <span className="font-medium">R{item.subtotal.toFixed(2)}</span>
+                  <div key={item.id} className="flex items-center gap-3">
+                    <div className="relative w-16 h-16 flex-shrink-0 rounded-lg overflow-hidden bg-[rgb(var(--muted))]">
+                      {item.product.images && item.product.images.length > 0 ? (
+                        <Image
+                          src={item.product.images[0]}
+                          alt={item.product.name}
+                          fill
+                          className="object-cover"
+                          sizes="64px"
+                        />
+                      ) : (
+                        <div className="w-full h-full flex items-center justify-center text-[rgb(var(--muted-foreground))]">
+                          <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z" />
+                          </svg>
+                        </div>
+                      )}
+                    </div>
+                    <div className="flex-1 min-w-0">
+                      <p className="text-sm font-medium text-[rgb(var(--foreground))] truncate">
+                        {item.product.name}
+                      </p>
+                      <p className="text-xs text-[rgb(var(--muted-foreground))]">
+                        Qty: {item.quantity}
+                      </p>
+                    </div>
+                    <span className="text-sm font-semibold text-[rgb(var(--foreground))]">
+                      R{item.subtotal.toFixed(2)}
+                    </span>
                   </div>
                 ))}
-                <div className="border-t border-[rgb(var(--border))] pt-3 mt-3">
+                <div className="border-t border-[rgb(var(--border))] pt-4 mt-4">
                   <div className="flex justify-between font-bold text-xl text-[rgb(var(--foreground))]">
                     <span>Total</span>
                     <span className="text-primary-dark">R{(cart?.total || 0).toFixed(2)}</span>
