@@ -42,6 +42,8 @@ interface Order {
 
 function getStatusColor(status: string): string {
   switch (status) {
+    case 'AWAITING_PAYMENT':
+      return 'bg-orange-100 text-orange-800';
     case 'PENDING':
       return 'bg-yellow-100 text-yellow-800';
     case 'ACCEPTED':
@@ -63,23 +65,39 @@ function getStatusColor(status: string): string {
 
 function getStatusLabel(status: string): string {
   switch (status) {
+    case 'AWAITING_PAYMENT':
+      return 'Awaiting Payment';
     case 'PENDING':
-      return 'Pending Approval';
+      return 'Payment Confirmed';
     case 'ACCEPTED':
-      return 'Accepted';
+      return 'Order Accepted';
     case 'DECLINED':
-      return 'Declined';
+      return 'Order Declined';
     case 'PENDING_DELIVERY':
-      return 'Pending Delivery';
+      return 'Preparing for Delivery';
     case 'OUT_FOR_DELIVERY':
       return 'Out for Delivery';
     case 'COMPLETED':
-      return 'Completed';
+      return 'Delivered';
     case 'CANCELLED':
       return 'Cancelled';
     default:
       return status;
   }
+}
+
+// Delivery status order for timeline
+const deliverySteps = [
+  { status: 'PENDING', label: 'Payment Confirmed', icon: '✓' },
+  { status: 'ACCEPTED', label: 'Order Accepted', icon: '📦' },
+  { status: 'PENDING_DELIVERY', label: 'Preparing', icon: '🎁' },
+  { status: 'OUT_FOR_DELIVERY', label: 'Out for Delivery', icon: '🚚' },
+  { status: 'COMPLETED', label: 'Delivered', icon: '✅' },
+];
+
+function getStatusIndex(status: string): number {
+  const index = deliverySteps.findIndex((step) => step.status === status);
+  return index >= 0 ? index : -1;
 }
 
 export default function OrderConfirmationPage() {
@@ -158,7 +176,7 @@ export default function OrderConfirmationPage() {
 
         {/* Order Status */}
         <div className="bg-white rounded-lg shadow p-6 mb-6">
-          <div className="flex items-center justify-between">
+          <div className="flex items-center justify-between mb-6">
             <div>
               <p className="text-sm text-gray-500">Order Status</p>
               <span
@@ -174,6 +192,47 @@ export default function OrderConfirmationPage() {
               </p>
             </div>
           </div>
+          
+          {/* Delivery Timeline */}
+          {order.status !== 'DECLINED' && order.status !== 'CANCELLED' && order.status !== 'AWAITING_PAYMENT' && (
+            <div className="mt-4 pt-4 border-t">
+              <h3 className="text-sm font-semibold text-gray-700 mb-4">Delivery Progress</h3>
+              <div className="flex items-center justify-between overflow-x-auto pb-2">
+                {deliverySteps.map((step, index) => {
+                  const currentIndex = getStatusIndex(order.status);
+                  const isCompleted = currentIndex >= index;
+                  const isCurrent = currentIndex === index;
+                  
+                  return (
+                    <div key={step.status} className="flex flex-col items-center min-w-[80px]">
+                      <div className="flex items-center w-full">
+                        {index > 0 && (
+                          <div 
+                            className={`flex-1 h-1 ${isCompleted ? 'bg-[#569330]' : 'bg-gray-200'}`}
+                          />
+                        )}
+                        <div 
+                          className={`w-10 h-10 rounded-full flex items-center justify-center text-lg
+                            ${isCompleted ? 'bg-[#569330] text-white' : 'bg-gray-200 text-gray-400'}
+                            ${isCurrent ? 'ring-4 ring-[#569330]/30' : ''}`}
+                        >
+                          {step.icon}
+                        </div>
+                        {index < deliverySteps.length - 1 && (
+                          <div 
+                            className={`flex-1 h-1 ${currentIndex > index ? 'bg-[#569330]' : 'bg-gray-200'}`}
+                          />
+                        )}
+                      </div>
+                      <span className={`text-xs mt-2 text-center ${isCurrent ? 'font-semibold text-[#569330]' : 'text-gray-500'}`}>
+                        {step.label}
+                      </span>
+                    </div>
+                  );
+                })}
+              </div>
+            </div>
+          )}
         </div>
 
         {/* Order Items */}
@@ -253,26 +312,26 @@ export default function OrderConfirmationPage() {
         </div>
 
         {/* Payment Info */}
-        <div className="bg-blue-50 border border-blue-200 rounded-lg p-6 mb-6">
-          <div className="flex items-start">
-            <HiCurrencyDollar className="w-8 h-8 text-primary-dark" />
+        <div className="bg-[#569330]/5 border border-[#569330]/20 rounded-lg p-6 mb-6">
+          <div className="flex items-start gap-4">
+            <HiCurrencyDollar className="w-8 h-8 text-[#569330] flex-shrink-0" />
             <div>
-              <p className="text-blue-800 font-semibold">Online Payment</p>
-              <p className="text-blue-700 text-sm mt-1">
-                You will pay R{toNumber(order.total).toFixed(2)} when your order is delivered.
+              <p className="text-[#569330] font-semibold">Payment Confirmed</p>
+              <p className="text-[#569330] text-sm mt-1">
+                Your payment of R{toNumber(order.total).toFixed(2)} has been successfully processed.
               </p>
             </div>
           </div>
         </div>
 
         {/* Next Steps */}
-        <div className="bg-[#569330]/5 border border-[#569330]/20 rounded-lg p-6 mb-6">
-          <h3 className="text-lg font-semibold text-[#569330] mb-2">What&apos;s Next?</h3>
-          <ul className="text-[#569330] space-y-1 text-sm">
+        <div className="bg-blue-50 border border-blue-200 rounded-lg p-6 mb-6">
+          <h3 className="text-lg font-semibold text-blue-800 mb-2">What&apos;s Next?</h3>
+          <ul className="text-blue-700 space-y-1 text-sm">
             <li>• Your order is being reviewed by our team</li>
-            <li>• You&apos;ll receive updates via {order.shippingPhone ? 'SMS/WhatsApp' : 'email'} when your order status changes</li>
+            <li>• You&apos;ll receive email updates when your order status changes</li>
             <li>• Our delivery team will contact you before delivery</li>
-            <li>• Payment will be collected upon delivery</li>
+            <li>• Track your order status on this page anytime</li>
           </ul>
         </div>
 

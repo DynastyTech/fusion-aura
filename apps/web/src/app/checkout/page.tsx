@@ -4,8 +4,8 @@ import { useEffect, useState, useCallback } from 'react';
 import { useRouter } from 'next/navigation';
 import Link from 'next/link';
 import { apiRequest } from '@/lib/api';
-import { getGuestCart, getGuestCartTotal, clearGuestCart } from '@/lib/guestCart';
-import { HiCreditCard } from 'react-icons/hi2';
+import { HiCreditCard, HiUser } from 'react-icons/hi2';
+import AddressAutocomplete from '@/components/AddressAutocomplete';
 
 interface CartItem {
   id: string;
@@ -28,10 +28,7 @@ export default function CheckoutPage() {
   const [cart, setCart] = useState<CartData | null>(null);
   const [loading, setLoading] = useState(true);
   const [processing, setProcessing] = useState(false);
-  const [isGuest, setIsGuest] = useState(false);
-  const [useCurrentLocation, setUseCurrentLocation] = useState(false);
-  const [gettingLocation, setGettingLocation] = useState(false);
-  const [paymentMethod] = useState<'ikhokha'>('ikhokha'); // Only iKhokha payment
+  const [isAuthenticated, setIsAuthenticated] = useState(false);
   const [formData, setFormData] = useState({
     name: '',
     email: '',
@@ -46,78 +43,67 @@ export default function CheckoutPage() {
   const loadCart = useCallback(async () => {
     const token = localStorage.getItem('token');
     
-    if (token) {
-      // Authenticated user
-      try {
-        // Fetch cart and user profile in parallel
-        interface UserProfile {
-          firstName?: string;
-          lastName?: string;
-          email?: string;
-          phone?: string;
-          addressLine1?: string;
-          addressLine2?: string;
-          city?: string;
-          province?: string;
-          postalCode?: string;
-        }
-        
-        const [cartResponse, userResponse] = await Promise.all([
-          apiRequest<CartData>('/api/cart'),
-          apiRequest<UserProfile>('/api/auth/me'),
-        ]);
-        
-        if (cartResponse.success && cartResponse.data) {
-          setCart(cartResponse.data);
-          setIsGuest(false);
-          if (cartResponse.data.items.length === 0) {
-            router.push('/cart');
-            return;
-          }
-        }
-        
-        // Pre-fill form with user profile data
-        if (userResponse.success && userResponse.data) {
-          const user = userResponse.data;
-          setFormData((prev) => ({
-            ...prev,
-            name: user.firstName && user.lastName 
-              ? `${user.firstName} ${user.lastName}` 
-              : user.firstName || prev.name,
-            email: user.email || prev.email,
-            phone: user.phone || prev.phone,
-            addressLine1: user.addressLine1 || prev.addressLine1,
-            addressLine2: user.addressLine2 || prev.addressLine2,
-            city: user.city || prev.city,
-            province: user.province || prev.province,
-            postalCode: user.postalCode || prev.postalCode,
-          }));
-        }
-      } catch (error) {
-        console.error('Error fetching cart:', error);
-      } finally {
-        setLoading(false);
-      }
-    } else {
-      // Guest user
-      const guestItems = getGuestCart();
-      const total = getGuestCartTotal();
+    if (!token) {
+      // Not authenticated - redirect to login
+      setIsAuthenticated(false);
+      setLoading(false);
+      return;
+    }
+
+    // Authenticated user
+    try {
+      setIsAuthenticated(true);
       
-      if (guestItems.length === 0) {
+      // Fetch cart and user profile in parallel
+      interface UserProfile {
+        firstName?: string;
+        lastName?: string;
+        email?: string;
+        phone?: string;
+        addressLine1?: string;
+        addressLine2?: string;
+        city?: string;
+        province?: string;
+        postalCode?: string;
+      }
+      
+      const [cartResponse, userResponse] = await Promise.all([
+        apiRequest<CartData>('/api/cart'),
+        apiRequest<UserProfile>('/api/auth/me'),
+      ]);
+      
+      if (cartResponse.success && cartResponse.data) {
+        setCart(cartResponse.data);
+        if (cartResponse.data.items.length === 0) {
+          router.push('/cart');
+          return;
+        }
+      } else {
         router.push('/cart');
         return;
       }
       
-      setCart({
-        items: guestItems.map((item) => ({
-          id: item.productId,
-          quantity: item.quantity,
-          product: item.product,
-          subtotal: (typeof item.product.price === 'string' ? parseFloat(item.product.price) : item.product.price) * item.quantity,
-        })),
-        total,
-      });
-      setIsGuest(true);
+      // Pre-fill form with user profile data
+      if (userResponse.success && userResponse.data) {
+        const user = userResponse.data;
+        setFormData((prev) => ({
+          ...prev,
+          name: user.firstName && user.lastName 
+            ? `${user.firstName} ${user.lastName}` 
+            : user.firstName || prev.name,
+          email: user.email || prev.email,
+          phone: user.phone || prev.phone,
+          addressLine1: user.addressLine1 || prev.addressLine1,
+          addressLine2: user.addressLine2 || prev.addressLine2,
+          city: user.city || prev.city,
+          province: user.province || prev.province,
+          postalCode: user.postalCode || prev.postalCode,
+        }));
+      }
+    } catch (error) {
+      console.error('Error fetching cart:', error);
+      router.push('/cart');
+    } finally {
       setLoading(false);
     }
   }, [router]);
@@ -127,103 +113,23 @@ export default function CheckoutPage() {
     loadCart();
   }, [loadCart]);
 
-  const getCurrentLocation = async () => {
-    if (!navigator.geolocation) {
-      alert('Geolocation is not supported by your browser.');
-      return;
-    }
-
-    try {
-      // Show loading state
-      setGettingLocation(true);
-      
-      // Get current position
-      const position = await new Promise<GeolocationPosition>((resolve, reject) => {
-        navigator.geolocation.getCurrentPosition(resolve, reject, {
-          enableHighAccuracy: true,
-          timeout: 10000,
-          maximumAge: 0,
-        });
-      });
-
-      const { latitude, longitude } = position.coords;
-
-      // Reverse geocode using our API
-      const response = await apiRequest<{
-        addressLine1: string;
-        city: string;
-        province: string;
-        postalCode: string;
-        country: string;
-        formattedAddress: string;
-      }>('/api/geocoding/reverse', {
-        method: 'POST',
-        body: JSON.stringify({
-          lat: latitude,
-          lng: longitude,
-        }),
-      });
-
-      if (response.success && response.data) {
-        const address = response.data;
-        
-        // Pre-fill address fields
-        setFormData((prev) => ({
-          ...prev,
-          addressLine1: address.addressLine1 || prev.addressLine1,
-          city: address.city || prev.city,
-          province: address.province || prev.province,
-          postalCode: address.postalCode || prev.postalCode,
-        }));
-
-        setUseCurrentLocation(true);
-        alert(`Location found! Address pre-filled. Please review and confirm.`);
-      } else {
-        alert(response.error || 'Could not find address for your location. Please enter it manually.');
-      }
-    } catch (error: any) {
-      console.error('Geolocation error:', error);
-      if (error.code === 1) {
-        alert('Location access denied. Please enable location permissions and try again.');
-      } else if (error.code === 2) {
-        alert('Location unavailable. Please enter your address manually.');
-      } else if (error.code === 3) {
-        alert('Location request timed out. Please try again or enter your address manually.');
-      } else {
-        alert('Unable to get your location. Please enter your address manually.');
-      }
-    } finally {
-      setGettingLocation(false);
-    }
-  };
-
   const handleCheckout = async (e: React.FormEvent) => {
     e.preventDefault();
     setProcessing(true);
 
     try {
-      let items: Array<{ productId: string; quantity: number }>;
-      
-      if (isGuest) {
-        // Guest checkout - use guest cart
-        const guestItems = getGuestCart();
-        items = guestItems.map((item) => ({
-          productId: item.productId,
-          quantity: item.quantity,
-        }));
-      } else {
-        // Authenticated checkout - fetch from API
-        const cartResponse = await apiRequest<CartData>('/api/cart');
-        if (!cartResponse.success || !cartResponse.data) {
-          alert('Error loading cart');
-          setProcessing(false);
-          return;
-        }
-        items = cartResponse.data.items.map((item: any) => ({
-          productId: item.product.id,
-          quantity: item.quantity,
-        }));
+      // Authenticated checkout - fetch from API
+      const cartResponse = await apiRequest<CartData>('/api/cart');
+      if (!cartResponse.success || !cartResponse.data) {
+        alert('Error loading cart');
+        setProcessing(false);
+        return;
       }
+      
+      const items = cartResponse.data.items.map((item: any) => ({
+        productId: item.product.id,
+        quantity: item.quantity,
+      }));
 
       interface OrderResponse {
         id: string;
@@ -234,16 +140,16 @@ export default function CheckoutPage() {
         method: 'POST',
         body: JSON.stringify({
           items,
-          paymentMethod, // iKhokha online payment
+          paymentMethod: 'ikhokha',
           shippingAddress: {
-            name: isGuest ? 'anonymous' : formData.name,
+            name: formData.name,
             addressLine1: formData.addressLine1,
             addressLine2: formData.addressLine2 || undefined,
             city: formData.city,
             province: formData.province || undefined,
             postalCode: formData.postalCode,
-            phone: formData.phone, // Required for guest orders
-            email: formData.email || undefined, // Optional
+            phone: formData.phone,
+            email: formData.email || undefined,
           },
         }),
       });
@@ -251,62 +157,43 @@ export default function CheckoutPage() {
       if (response.success && response.data) {
         const orderId = response.data.id || response.data.orderNumber;
 
-        // If iKhokha selected, redirect to iKhokha payment page
-        if (paymentMethod === 'ikhokha') {
-          try {
-            console.log('Initiating iKhokha payment for order:', response.data.id);
-            const paymentResponse = await apiRequest<{ redirectUrl: string; error?: string }>('/api/payments/initiate', {
-              method: 'POST',
-              body: JSON.stringify({ orderId: response.data.id }),
-            });
+        // Redirect to iKhokha payment page
+        try {
+          console.log('Initiating iKhokha payment for order:', response.data.id);
+          const paymentResponse = await apiRequest<{ redirectUrl: string; error?: string }>('/api/payments/initiate', {
+            method: 'POST',
+            body: JSON.stringify({ orderId: response.data.id }),
+          });
 
-            console.log('Payment response:', paymentResponse);
+          console.log('Payment response:', paymentResponse);
 
-            // The apiRequest spreads the response at top level, so redirectUrl is directly on paymentResponse
-            const redirectUrl = (paymentResponse as any).redirectUrl || paymentResponse.data?.redirectUrl;
-            
-            if (paymentResponse.success && redirectUrl) {
-              // Clear cart before redirecting
-              if (isGuest) {
-                clearGuestCart();
-              } else {
-                await apiRequest('/api/cart', { method: 'DELETE' });
-              }
-              window.dispatchEvent(new Event('cartUpdated'));
-              // Redirect to iKhokha payment page
-              window.location.href = redirectUrl;
-              return;
-            } else {
-              const errorMsg = (paymentResponse as any).error || 'Failed to initiate payment';
-              console.error('Payment initiation failed:', errorMsg);
-              alert(`Payment error: ${errorMsg}\n\nPlease try again.`);
-              setProcessing(false);
-              return;
-            }
-          } catch (paymentError: any) {
-            console.error('Payment initiation error:', paymentError);
-            alert(`Payment initiation failed: ${paymentError.message || 'Unknown error'}\n\nPlease try again.`);
+          const redirectUrl = (paymentResponse as any).redirectUrl || paymentResponse.data?.redirectUrl;
+          
+          if (paymentResponse.success && redirectUrl) {
+            // Clear cart before redirecting
+            await apiRequest('/api/cart', { method: 'DELETE' });
+            window.dispatchEvent(new Event('cartUpdated'));
+            // Redirect to iKhokha payment page
+            window.location.href = redirectUrl;
+            return;
+          } else {
+            const errorMsg = (paymentResponse as any).error || 'Failed to initiate payment';
+            console.error('Payment initiation failed:', errorMsg);
+            alert(`Payment error: ${errorMsg}\n\nPlease try again.`);
             setProcessing(false);
             return;
           }
+        } catch (paymentError: any) {
+          console.error('Payment initiation error:', paymentError);
+          alert(`Payment initiation failed: ${paymentError.message || 'Unknown error'}\n\nPlease try again.`);
+          setProcessing(false);
+          return;
         }
-
-        // This block is reached if payment flow exits unexpectedly
-        if (isGuest) {
-          clearGuestCart();
-        } else {
-          await apiRequest('/api/cart', { method: 'DELETE' });
-        }
-        window.dispatchEvent(new Event('cartUpdated'));
-        // Redirect to order confirmation page (works for both guests and logged-in users)
-        router.push(`/order-confirmation/${orderId}`);
       } else {
-        // Show detailed error info for debugging
         const errorDetails = (response as any).details || '';
         const errorCode = (response as any).code || '';
-        const errorMeta = (response as any).meta ? JSON.stringify((response as any).meta) : '';
-        console.error('Order error:', { error: response.error, details: errorDetails, code: errorCode, meta: errorMeta });
-        alert(`${response.error || 'Failed to place order'}${errorDetails ? `\n\nDetails: ${errorDetails}` : ''}${errorCode ? `\nCode: ${errorCode}` : ''}`);
+        console.error('Order error:', { error: response.error, details: errorDetails, code: errorCode });
+        alert(`${response.error || 'Failed to place order'}${errorDetails ? `\n\nDetails: ${errorDetails}` : ''}`);
         setProcessing(false);
       }
     } catch (error: any) {
@@ -328,9 +215,44 @@ export default function CheckoutPage() {
     );
   }
 
+  // Not authenticated - show login prompt
+  if (!isAuthenticated) {
+    return (
+      <div className="min-h-screen bg-[rgb(var(--background))] flex items-center justify-center px-4">
+        <div className="max-w-md w-full text-center">
+          <div className="card p-8">
+            <div className="w-16 h-16 mx-auto mb-6 rounded-full bg-primary-dark/10 flex items-center justify-center">
+              <HiUser className="w-8 h-8 text-primary-dark" />
+            </div>
+            <h1 className="text-2xl font-bold text-[rgb(var(--foreground))] mb-4">
+              Login Required
+            </h1>
+            <p className="text-[rgb(var(--muted-foreground))] mb-6">
+              Please login or create an account to complete your purchase. This helps us process your order and keep you updated on delivery.
+            </p>
+            <div className="space-y-3">
+              <Link
+                href="/login?redirect=/checkout"
+                className="w-full btn-primary py-3 flex items-center justify-center gap-2"
+              >
+                <HiUser className="w-5 h-5" />
+                Login to Continue
+              </Link>
+              <Link
+                href="/cart"
+                className="block text-primary-dark hover:underline text-sm"
+              >
+                ← Back to Cart
+              </Link>
+            </div>
+          </div>
+        </div>
+      </div>
+    );
+  }
+
   return (
     <div className="min-h-screen bg-[rgb(var(--background))]">
-      {/* Checkout Content */}
       <main className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
         <div className="flex items-center justify-between mb-8">
           <h1 className="text-2xl sm:text-3xl font-bold text-[rgb(var(--foreground))]">Checkout</h1>
@@ -338,15 +260,6 @@ export default function CheckoutPage() {
             ← Back to Cart
           </Link>
         </div>
-
-        {isGuest && (
-          <div className="bg-blue-500/10 border border-blue-500/30 rounded-xl p-4 mb-6">
-            <p className="text-blue-400 font-semibold">🛒 Guest Checkout</p>
-            <p className="text-blue-300 text-sm mt-1">
-              You can complete your purchase without creating an account. Just provide your delivery details below.
-            </p>
-          </div>
-        )}
 
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
           {/* Shipping Form */}
@@ -373,53 +286,49 @@ export default function CheckoutPage() {
 
               <h2 className="text-xl font-bold text-[rgb(var(--foreground))]">Delivery Information</h2>
 
-              {isGuest && (
-                <div>
-                  <label className="block text-sm font-medium text-[rgb(var(--foreground))] mb-1">Name</label>
-                  <input
-                    type="text"
-                    value={formData.name}
-                    onChange={(e) => setFormData({ ...formData, name: e.target.value })}
-                    className="input-field bg-[rgb(var(--muted))]/50"
-                    readOnly
-                  />
-                  <p className="mt-1 text-xs text-[rgb(var(--muted-foreground))]">Guest orders are anonymous</p>
-                </div>
-              )}
+              <div>
+                <label className="block text-sm font-medium text-[rgb(var(--foreground))] mb-1">Full Name *</label>
+                <input
+                  type="text"
+                  required
+                  value={formData.name}
+                  onChange={(e) => setFormData({ ...formData, name: e.target.value })}
+                  className="input-field"
+                  placeholder="Your full name"
+                />
+              </div>
 
-              {!isGuest && (
-                <div>
-                  <label className="block text-sm font-medium text-[rgb(var(--foreground))] mb-1">Full Name *</label>
-                  <input
-                    type="text"
-                    required
-                    value={formData.name}
-                    onChange={(e) => setFormData({ ...formData, name: e.target.value })}
-                    className="input-field"
-                  />
-                </div>
-              )}
+              <div>
+                <label className="block text-sm font-medium text-[rgb(var(--foreground))] mb-1">Email Address *</label>
+                <input
+                  type="email"
+                  required
+                  value={formData.email}
+                  onChange={(e) => setFormData({ ...formData, email: e.target.value })}
+                  className="input-field"
+                  placeholder="Your email address"
+                />
+                <p className="mt-1 text-xs text-[rgb(var(--muted-foreground))]">Order confirmation will be sent here</p>
+              </div>
 
               <div>
                 <label className="block text-sm font-medium text-[rgb(var(--foreground))] mb-1">Delivery Address *</label>
-                <div className="flex flex-col sm:flex-row gap-2">
-                  <input
-                    type="text"
-                    required
-                    value={formData.addressLine1}
-                    onChange={(e) => setFormData({ ...formData, addressLine1: e.target.value })}
-                    placeholder="Street address"
-                    className="input-field flex-1"
-                  />
-                  <button
-                    type="button"
-                    onClick={getCurrentLocation}
-                    disabled={gettingLocation}
-                    className="btn-secondary whitespace-nowrap"
-                  >
-                    {gettingLocation ? '📍 Getting...' : '📍 Use Location'}
-                  </button>
-                </div>
+                <AddressAutocomplete
+                  value={formData.addressLine1}
+                  onChange={(address) => {
+                    setFormData((prev) => ({
+                      ...prev,
+                      addressLine1: address.addressLine1,
+                      city: address.city || prev.city,
+                      province: address.province || prev.province,
+                      postalCode: address.postalCode || prev.postalCode,
+                    }));
+                  }}
+                  placeholder="Start typing your address..."
+                />
+                <p className="mt-1 text-xs text-[rgb(var(--muted-foreground))]">
+                  Type your address and select from suggestions. A map will show your location.
+                </p>
               </div>
 
               <div>
@@ -442,6 +351,7 @@ export default function CheckoutPage() {
                     value={formData.city}
                     onChange={(e) => setFormData({ ...formData, city: e.target.value })}
                     className="input-field"
+                    placeholder="City will be auto-filled from address"
                   />
                 </div>
 
@@ -451,7 +361,7 @@ export default function CheckoutPage() {
                     type="text"
                     value={formData.province}
                     onChange={(e) => setFormData({ ...formData, province: e.target.value })}
-                    placeholder="e.g., Gauteng"
+                    placeholder="Province will be auto-filled from address"
                     className="input-field"
                   />
                 </div>
@@ -502,22 +412,17 @@ export default function CheckoutPage() {
                 {cart?.items.map((item) => (
                   <div key={item.id} className="flex justify-between text-sm text-[rgb(var(--foreground))]">
                     <span className="flex-1">{item.product.name} x{item.quantity}</span>
-                    <span className="font-medium">R{item.subtotal.toFixed(2)}</span>
+                    <span className="font-medium">R{(item.subtotal * 1.15).toFixed(2)}</span>
                   </div>
                 ))}
                 <div className="border-t border-[rgb(var(--border))] pt-3 mt-3 space-y-2">
-                  <div className="flex justify-between text-[rgb(var(--muted-foreground))]">
-                    <span>Subtotal</span>
-                    <span>R{cart?.total.toFixed(2)}</span>
-                  </div>
-                  <div className="flex justify-between text-[rgb(var(--muted-foreground))]">
-                    <span>VAT (15%)</span>
-                    <span>R{((cart?.total || 0) * 0.15).toFixed(2)}</span>
-                  </div>
-                  <div className="flex justify-between font-bold text-xl text-[rgb(var(--foreground))] border-t border-[rgb(var(--border))] pt-3 mt-3">
+                  <div className="flex justify-between font-bold text-xl text-[rgb(var(--foreground))]">
                     <span>Total</span>
                     <span className="text-primary-dark">R{((cart?.total || 0) * 1.15).toFixed(2)}</span>
                   </div>
+                  <p className="text-xs text-[rgb(var(--muted-foreground))] text-center">
+                    All prices include 15% VAT
+                  </p>
                 </div>
               </div>
             </div>

@@ -194,11 +194,11 @@ export default function CartPage() {
             {/* Cart Items */}
             <div className="lg:col-span-2 space-y-4">
               {isGuest && (
-                <div className="flex items-start gap-3 p-4 rounded-xl bg-blue-50 dark:bg-blue-900/20 
-                              border border-blue-200 dark:border-blue-800">
-                  <HiInformationCircle className="w-5 h-5 text-blue-600 flex-shrink-0 mt-0.5" />
-                  <p className="text-sm text-blue-800 dark:text-blue-300">
-                    You&apos;re shopping as a guest. You can checkout without creating an account!
+                <div className="flex items-start gap-3 p-4 rounded-xl bg-amber-50 dark:bg-amber-900/20 
+                              border border-amber-200 dark:border-amber-800">
+                  <HiInformationCircle className="w-5 h-5 text-amber-600 flex-shrink-0 mt-0.5" />
+                  <p className="text-sm text-amber-800 dark:text-amber-300">
+                    Please <Link href="/login?redirect=/cart" className="underline font-semibold">login</Link> or <Link href="/register?redirect=/cart" className="underline font-semibold">create an account</Link> to proceed to checkout.
                   </p>
                 </div>
               )}
@@ -234,8 +234,9 @@ export default function CartPage() {
                       {item.product.name}
                     </Link>
                     <p className="text-primary-dark font-bold mt-1">
-                      R{toNumber(item.product.price).toFixed(2)} each
+                      R{(toNumber(item.product.price) * 1.15).toFixed(2)} each
                     </p>
+                    <span className="text-[10px] text-[rgb(var(--muted-foreground))]">incl. VAT</span>
                   </div>
 
                   {/* Quantity Controls */}
@@ -264,7 +265,7 @@ export default function CartPage() {
 
                     <div className="flex items-center gap-4">
                       <p className="text-lg font-bold text-[rgb(var(--foreground))]">
-                        R{item.subtotal.toFixed(2)}
+                        R{(item.subtotal * 1.15).toFixed(2)}
                       </p>
                       <button
                         onClick={() => removeItem(item.id)}
@@ -288,28 +289,22 @@ export default function CartPage() {
                 </h2>
                 
                 <div className="space-y-3 mb-6">
-                  <div className="flex justify-between text-[rgb(var(--muted-foreground))]">
-                    <span>Subtotal</span>
-                    <span className="font-medium text-[rgb(var(--foreground))]">
-                      R{cart.total.toFixed(2)}
-                    </span>
-                  </div>
-                  <div className="flex justify-between text-[rgb(var(--muted-foreground))]">
-                    <span>VAT (15%)</span>
-                    <span className="font-medium text-[rgb(var(--foreground))]">
-                      R{(cart.total * 0.15).toFixed(2)}
-                    </span>
-                  </div>
-                  <div className="border-t border-[rgb(var(--border))] pt-3 flex justify-between">
+                  <div className="flex justify-between">
                     <span className="text-lg font-bold text-[rgb(var(--foreground))]">Total</span>
                     <span className="text-lg font-bold text-primary-dark">
                       R{(cart.total * 1.15).toFixed(2)}
                     </span>
                   </div>
+                  <p className="text-xs text-[rgb(var(--muted-foreground))] text-center">
+                    All prices include 15% VAT
+                  </p>
                 </div>
 
-                <Link href="/checkout" className="btn-primary w-full justify-center">
-                  Proceed to Checkout
+                <Link 
+                  href={isGuest ? "/login?redirect=/checkout" : "/checkout"} 
+                  className="btn-primary w-full justify-center"
+                >
+                  {isGuest ? 'Login to Checkout' : 'Proceed to Checkout'}
                   <HiArrowRight className="w-5 h-5" />
                 </Link>
 

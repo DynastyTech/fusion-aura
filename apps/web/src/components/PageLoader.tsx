@@ -1,38 +1,20 @@
 'use client';
 
 import { useEffect, useState } from 'react';
-import { usePathname, useSearchParams } from 'next/navigation';
 import Image from 'next/image';
 import { motion, AnimatePresence } from 'framer-motion';
 
 export default function PageLoader() {
-  const pathname = usePathname();
-  const searchParams = useSearchParams();
-  const [isLoading, setIsLoading] = useState(false);
-  const [isInitialLoad, setIsInitialLoad] = useState(true);
+  const [isLoading, setIsLoading] = useState(true);
 
-  // Show loader on initial page load - 1 second duration
+  // Show loader on initial page load only - 1 second duration
+  // Subsequent page navigations do not show this loader
   useEffect(() => {
-    if (isInitialLoad) {
-      setIsLoading(true);
-      const timer = setTimeout(() => {
-        setIsLoading(false);
-        setIsInitialLoad(false);
-      }, 1000); // Reduced from 1500ms to 1000ms
-      return () => clearTimeout(timer);
-    }
-  }, [isInitialLoad]);
-
-  // Show loader on route changes - 1 second duration
-  useEffect(() => {
-    if (!isInitialLoad) {
-      setIsLoading(true);
-      const timer = setTimeout(() => {
-        setIsLoading(false);
-      }, 1000); // Reduced from 1500ms to 1000ms
-      return () => clearTimeout(timer);
-    }
-  }, [pathname, searchParams, isInitialLoad]);
+    const timer = setTimeout(() => {
+      setIsLoading(false);
+    }, 1000);
+    return () => clearTimeout(timer);
+  }, []);
 
   return (
     <AnimatePresence>

@@ -42,6 +42,8 @@ interface Order {
 
 function getStatusColor(status: string): string {
   switch (status) {
+    case 'AWAITING_PAYMENT':
+      return 'bg-orange-100 text-orange-800';
     case 'PENDING':
       return 'bg-yellow-100 text-yellow-800';
     case 'ACCEPTED':
@@ -61,20 +63,36 @@ function getStatusColor(status: string): string {
   }
 }
 
+// Delivery status order for timeline
+const deliverySteps = [
+  { status: 'PENDING', label: 'Payment Confirmed', icon: '✓' },
+  { status: 'ACCEPTED', label: 'Order Accepted', icon: '📦' },
+  { status: 'PENDING_DELIVERY', label: 'Preparing', icon: '🎁' },
+  { status: 'OUT_FOR_DELIVERY', label: 'Out for Delivery', icon: '🚚' },
+  { status: 'COMPLETED', label: 'Delivered', icon: '✅' },
+];
+
+function getStatusIndex(status: string): number {
+  const index = deliverySteps.findIndex((step) => step.status === status);
+  return index >= 0 ? index : -1;
+}
+
 function getStatusLabel(status: string): string {
   switch (status) {
+    case 'AWAITING_PAYMENT':
+      return 'Awaiting Payment';
     case 'PENDING':
-      return 'Pending Approval';
+      return 'Payment Confirmed';
     case 'ACCEPTED':
-      return 'Accepted';
+      return 'Order Accepted';
     case 'DECLINED':
-      return 'Declined';
+      return 'Order Declined';
     case 'PENDING_DELIVERY':
-      return 'Pending Delivery';
+      return 'Preparing for Delivery';
     case 'OUT_FOR_DELIVERY':
       return 'Out for Delivery';
     case 'COMPLETED':
-      return 'Completed';
+      return 'Delivered';
     case 'CANCELLED':
       return 'Cancelled';
     default:
@@ -156,6 +174,47 @@ export default function OrderDetailPage() {
             {getStatusLabel(order.status)}
           </span>
         </div>
+
+        {/* Delivery Timeline */}
+        {order.status !== 'DECLINED' && order.status !== 'CANCELLED' && order.status !== 'AWAITING_PAYMENT' && (
+          <div className="bg-white rounded-lg shadow p-6 mb-6">
+            <h3 className="text-lg font-semibold text-gray-700 mb-4">Delivery Progress</h3>
+            <div className="flex items-center justify-between overflow-x-auto pb-2">
+              {deliverySteps.map((step, index) => {
+                const currentIndex = getStatusIndex(order.status);
+                const isCompleted = currentIndex >= index;
+                const isCurrent = currentIndex === index;
+                
+                return (
+                  <div key={step.status} className="flex flex-col items-center min-w-[80px]">
+                    <div className="flex items-center w-full">
+                      {index > 0 && (
+                        <div 
+                          className={`flex-1 h-1 ${isCompleted ? 'bg-[#569330]' : 'bg-gray-200'}`}
+                        />
+                      )}
+                      <div 
+                        className={`w-10 h-10 rounded-full flex items-center justify-center text-lg
+                          ${isCompleted ? 'bg-[#569330] text-white' : 'bg-gray-200 text-gray-400'}
+                          ${isCurrent ? 'ring-4 ring-[#569330]/30' : ''}`}
+                      >
+                        {step.icon}
+                      </div>
+                      {index < deliverySteps.length - 1 && (
+                        <div 
+                          className={`flex-1 h-1 ${currentIndex > index ? 'bg-[#569330]' : 'bg-gray-200'}`}
+                        />
+                      )}
+                    </div>
+                    <span className={`text-xs mt-2 text-center ${isCurrent ? 'font-semibold text-[#569330]' : 'text-gray-500'}`}>
+                      {step.label}
+                    </span>
+                  </div>
+                );
+              })}
+            </div>
+          </div>
+        )}
 
         {/* Back to Home Button */}
         <div className="mb-6">

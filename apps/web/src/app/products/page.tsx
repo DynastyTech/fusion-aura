@@ -41,14 +41,15 @@ async function getProducts(params: SearchParams): Promise<Product[]> {
   const apiUrl = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:3001';
   const urlParams = new URLSearchParams();
   
+  // Set high limit to show all products
+  urlParams.set('limit', '500');
+  
   if (params.search) urlParams.set('search', params.search);
   if (params.category) urlParams.set('categoryId', params.category);
   if (params.sortBy) urlParams.set('sortBy', params.sortBy);
   
   const queryString = urlParams.toString();
-  const url = queryString 
-    ? `${apiUrl}/api/products?${queryString}`
-    : `${apiUrl}/api/products`;
+  const url = `${apiUrl}/api/products?${queryString}`;
   
   try {
     const res = await fetch(url, {

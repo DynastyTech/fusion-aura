@@ -340,8 +340,8 @@ export async function sendOrderConfirmationToCustomer(orderData: OrderEmailData)
             </div>
 
             <div class="payment-box">
-              <p style="margin: 0;"><strong>💳 Payment Method:</strong> Online Payment (iKhokha)</p>
-              <p style="margin: 5px 0 0 0; font-size: 14px; color: #666;">Please have R${orderData.total.toFixed(2)} ready when your order arrives.</p>
+              <p style="margin: 0;"><strong>💳 Payment:</strong> Paid via iKhokha</p>
+              <p style="margin: 5px 0 0 0; font-size: 14px; color: #666;">Your payment of R${orderData.total.toFixed(2)} has been received. No payment required on delivery.</p>
             </div>
 
             <div style="text-align: center;">

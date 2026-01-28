@@ -113,23 +113,24 @@ export default async function ProductDetailPage({
             </div>
             <h1 className="text-4xl font-bold text-[rgb(var(--foreground))] mb-4">{product.name}</h1>
 
-            {/* Price */}
+            {/* Price - Including VAT */}
             <div className="mb-6">
               <div className="flex items-baseline space-x-3">
                 <span className="text-4xl font-bold text-primary-dark">
-                  R{toNumber(product.price).toFixed(2)}
+                  R{(toNumber(product.price) * 1.15).toFixed(2)}
                 </span>
                 {product.compareAtPrice && toNumber(product.compareAtPrice) > toNumber(product.price) && (
                   <>
                     <span className="text-xl text-[rgb(var(--muted-foreground))] line-through">
-                      R{toNumber(product.compareAtPrice).toFixed(2)}
+                      R{(toNumber(product.compareAtPrice) * 1.15).toFixed(2)}
                     </span>
                     <span className="text-sm bg-red-100 text-red-800 px-2 py-1 rounded">
-                      Save R{(toNumber(product.compareAtPrice) - toNumber(product.price)).toFixed(2)}
+                      Save R{((toNumber(product.compareAtPrice) - toNumber(product.price)) * 1.15).toFixed(2)}
                     </span>
                   </>
                 )}
               </div>
+              <p className="text-sm text-[rgb(var(--muted-foreground))] mt-1">Price includes 15% VAT</p>
             </div>
 
             {/* Stock Status */}
