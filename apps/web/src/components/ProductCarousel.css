@@ -135,7 +135,7 @@
 }
 
 .product-info h3:hover {
-  color: rgb(34, 197, 94);
+  color: #569330;
 }
 
 .product-description {
@@ -158,7 +158,7 @@
 .product-price {
   font-size: 1.4875rem; /* Reduced by 15% from 1.75rem */
   font-weight: 700;
-  color: rgb(34, 197, 94);
+  color: #569330;
 }
 
 .product-category {
@@ -172,7 +172,7 @@
 /* Swiper Navigation */
 .product-swiper .swiper-button-next,
 .product-swiper .swiper-button-prev {
-  color: rgb(34, 197, 94);
+  color: #569330;
   background-color: rgb(var(--card));
   width: 50px;
   height: 50px;
@@ -183,7 +183,7 @@
 
 .product-swiper .swiper-button-next:hover,
 .product-swiper .swiper-button-prev:hover {
-  background-color: rgb(34, 197, 94);
+  background-color: #569330;
   color: white;
 }
 
@@ -200,7 +200,7 @@
 }
 
 .product-swiper .swiper-pagination-bullet-active {
-  background-color: rgb(34, 197, 94);
+  background-color: #569330;
   opacity: 1;
 }
 

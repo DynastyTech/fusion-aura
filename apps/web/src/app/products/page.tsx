@@ -1,7 +1,8 @@
 import Link from 'next/link';
-import { HiMagnifyingGlass, HiArrowLeft } from 'react-icons/hi2';
+import { HiMagnifyingGlass } from 'react-icons/hi2';
 import ProductsGrid from '@/components/ProductsGrid';
 import ProductFilters from '@/components/ProductFilters';
+import Pagination from '@/components/Pagination';
 
 interface Product {
   id: string;
@@ -33,14 +34,17 @@ interface SearchParams {
   search?: string;
   category?: string;
   sortBy?: string;
+  page?: string;
 }
+
+const ITEMS_PER_PAGE = 50;
 
 async function getProducts(params: SearchParams): Promise<Product[]> {
   const apiUrl = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:3001';
   const urlParams = new URLSearchParams();
   
-  // Set high limit to show all products
-  urlParams.set('limit', '500');
+  // Set high limit to get all products for filtering/pagination
+  urlParams.set('limit', '1000');
   
   if (params.search) urlParams.set('search', params.search);
   if (params.category) urlParams.set('categoryId', params.category);
@@ -96,10 +100,18 @@ interface PageProps {
 
 export default async function ProductsPage({ searchParams }: PageProps) {
   const params = await searchParams;
-  const [products, categories] = await Promise.all([
+  const [allProducts, categories] = await Promise.all([
     getProducts(params),
     getCategories(),
   ]);
+
+  // Pagination
+  const currentPage = parseInt(params.page || '1', 10);
+  const totalProducts = allProducts.length;
+  const totalPages = Math.ceil(totalProducts / ITEMS_PER_PAGE);
+  const startIndex = (currentPage - 1) * ITEMS_PER_PAGE;
+  const endIndex = startIndex + ITEMS_PER_PAGE;
+  const products = allProducts.slice(startIndex, endIndex);
 
   return (
     <div className="min-h-screen bg-[rgb(var(--background))]">
@@ -109,17 +121,6 @@ export default async function ProductsPage({ searchParams }: PageProps) {
         <div className="absolute inset-0 bg-gradient-to-br from-primary-light/10 via-transparent to-primary-dark/5" />
         
         <div className="container relative mx-auto px-4 sm:px-6 lg:px-8">
-          {/* Back Button */}
-          <Link 
-            href="/"
-            className="inline-flex items-center gap-2 px-4 py-2 rounded-xl mb-4
-                     text-[rgb(var(--muted-foreground))] hover:text-[rgb(var(--foreground))]
-                     hover:bg-[rgb(var(--muted))] transition-all duration-200 font-medium"
-          >
-            <HiArrowLeft className="w-5 h-5" />
-            Back
-          </Link>
-          
           <div className="text-center max-w-3xl mx-auto">
             <h1 className="text-3xl sm:text-4xl lg:text-5xl font-bold text-[rgb(var(--foreground))] 
                          mb-4 animate-fade-in-up">
@@ -136,11 +137,11 @@ export default async function ProductsPage({ searchParams }: PageProps) {
       <main className="container mx-auto px-4 sm:px-6 lg:px-8 pb-16">
         {/* Filters */}
         <div className="mb-8">
-          <ProductFilters categories={categories} totalProducts={products.length} />
+          <ProductFilters categories={categories} totalProducts={totalProducts} />
         </div>
 
         {/* Products */}
-        {products.length === 0 ? (
+        {allProducts.length === 0 ? (
           <div className="card p-12 text-center">
             <div className="w-16 h-16 mx-auto mb-4 rounded-full bg-[rgb(var(--muted))] 
                           flex items-center justify-center">
@@ -165,7 +166,15 @@ export default async function ProductsPage({ searchParams }: PageProps) {
             )}
           </div>
         ) : (
-          <ProductsGrid products={products} />
+          <>
+            <ProductsGrid products={products} />
+            <Pagination 
+              currentPage={currentPage}
+              totalPages={totalPages}
+              totalItems={totalProducts}
+              itemsPerPage={ITEMS_PER_PAGE}
+            />
+          </>
         )}
       </main>
     </div>

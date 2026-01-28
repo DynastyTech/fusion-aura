@@ -83,10 +83,10 @@ export default function WishlistPage() {
         <div className="absolute inset-0 bg-gradient-to-br from-red-500/5 via-transparent to-primary-dark/5" />
         
         <div className="container relative mx-auto px-4 sm:px-6 lg:px-8">
-          {/* Back Button */}
+          {/* Back Button - hidden on mobile, use floating button instead */}
           <Link 
             href="/products"
-            className="inline-flex items-center gap-2 px-4 py-2 rounded-xl mb-6
+            className="hidden md:inline-flex items-center gap-2 px-4 py-2 rounded-xl mb-6
                      text-[rgb(var(--muted-foreground))] hover:text-[rgb(var(--foreground))]
                      hover:bg-[rgb(var(--muted))] transition-all duration-200 font-medium"
           >

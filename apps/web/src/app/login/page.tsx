@@ -275,8 +275,8 @@ export default function LoginPage() {
             </button>
           </form>
 
-          {/* Back to Home */}
-          <div className="mt-6 text-center">
+          {/* Back to Home - hidden on mobile, use floating button instead */}
+          <div className="mt-6 text-center hidden md:block">
             <Link 
               href="/" 
               className="inline-flex items-center gap-2 text-[rgb(var(--muted-foreground))] 

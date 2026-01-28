@@ -10,6 +10,7 @@ import Header from '@/components/Header';
 import Footer from '@/components/Footer';
 import PageLoader from '@/components/PageLoader';
 import ScrollOptimizer from '@/components/ScrollOptimizer';
+import FloatingBackButton from '@/components/FloatingBackButton';
 
 const outfit = Outfit({ 
   subsets: ['latin'],
@@ -61,6 +62,7 @@ export default function RootLayout({
                   {children}
                 </main>
                 <Footer />
+                <FloatingBackButton />
               </div>
             </WishlistProvider>
             </CartProvider>

@@ -54,10 +54,16 @@ export default function ForgotPasswordPage() {
             </p>
             <Link
               href="/login"
-              className="btn-primary inline-flex items-center gap-2"
+              className="btn-primary hidden md:inline-flex items-center gap-2"
             >
               <HiArrowLeft className="w-4 h-4" />
               Back to Login
+            </Link>
+            <Link
+              href="/login"
+              className="btn-primary md:hidden"
+            >
+              Go to Login
             </Link>
           </div>
         </div>
@@ -112,7 +118,8 @@ export default function ForgotPasswordPage() {
             </button>
           </form>
 
-          <div className="mt-6 text-center">
+          {/* Back to Login - hidden on mobile, use floating button instead */}
+          <div className="mt-6 text-center hidden md:block">
             <Link
               href="/login"
               className="text-primary-dark hover:underline inline-flex items-center gap-1"
