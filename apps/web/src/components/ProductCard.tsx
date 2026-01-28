@@ -46,14 +46,11 @@ export default function ProductCard({ product, index = 0, showCategory = true, c
   const [addedToCart, setAddedToCart] = useState(false);
   const [togglingWishlist, setTogglingWishlist] = useState(false);
 
-  const basePrice = toNumber(product.price);
-  const baseCompareAtPrice = toNumber(product.compareAtPrice);
-  // Add 15% VAT to display price
-  const price = basePrice * 1.15;
-  const compareAtPrice = baseCompareAtPrice * 1.15;
+  const price = toNumber(product.price);
+  const compareAtPrice = toNumber(product.compareAtPrice);
   const inStock = product.inventory ? product.inventory.quantity > 0 : true;
-  const isOnSale = baseCompareAtPrice > 0 && baseCompareAtPrice > basePrice;
-  const discountPercentage = isOnSale ? Math.round(((baseCompareAtPrice - basePrice) / baseCompareAtPrice) * 100) : 0;
+  const isOnSale = compareAtPrice > 0 && compareAtPrice > price;
+  const discountPercentage = isOnSale ? Math.round(((compareAtPrice - price) / compareAtPrice) * 100) : 0;
   const inWishlist = isInWishlist(product.id);
 
   const handleAddToCart = async (e: React.MouseEvent) => {
@@ -174,18 +171,15 @@ export default function ProductCard({ product, index = 0, showCategory = true, c
                            group-hover:text-primary-dark transition-colors duration-200">
               {product.name}
             </h3>
-            <div className="flex flex-col gap-0.5 mb-2.5">
-              <div className="flex items-center gap-1.5">
-                <span className="text-[15px] font-bold text-primary-dark">
-                  R{price.toFixed(2)}
+            <div className="flex items-center gap-1.5 mb-2.5">
+              <span className="text-[15px] font-bold text-primary-dark">
+                R{price.toFixed(2)}
+              </span>
+              {isOnSale && (
+                <span className="text-[12px] text-[rgb(var(--muted-foreground))] line-through">
+                  R{compareAtPrice.toFixed(2)}
                 </span>
-                {isOnSale && (
-                  <span className="text-[12px] text-[rgb(var(--muted-foreground))] line-through">
-                    R{compareAtPrice.toFixed(2)}
-                  </span>
-                )}
-              </div>
-              <span className="text-[9px] text-[rgb(var(--muted-foreground))]">incl. VAT</span>
+              )}
             </div>
 
             {/* Action Buttons - Stacked vertically */}

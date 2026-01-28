@@ -102,6 +102,17 @@ export default function Footer() {
               </p>
             </div>
 
+            {/* Delivery Info */}
+            <div className="mt-4 p-3 rounded-xl bg-primary-dark/10 border border-primary-dark/20">
+              <p className="text-sm font-semibold text-primary-dark mb-1">🚚 Delivery Options</p>
+              <p className="text-xs text-[rgb(var(--muted-foreground))]">
+                Door-to-Door Courier: R80 throughout SA
+              </p>
+              <p className="text-xs text-[rgb(var(--muted-foreground))]">
+                Free Pick Up: Sunninghill, Sandton or Waterfall, Midrand
+              </p>
+            </div>
+
             {/* Social Links */}
             <div className="flex items-center gap-4 mt-6">
               {socialLinks.map((social) => (

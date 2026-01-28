@@ -264,7 +264,7 @@ export default function CheckoutPage() {
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
           {/* Shipping Form */}
           <div className="lg:col-span-2">
-            <form onSubmit={handleCheckout} className="card p-6 space-y-6">
+            <form id="checkout-form" onSubmit={handleCheckout} className="card p-6 space-y-6">
               {/* Payment Method - iKhokha Only */}
               <div>
                 <h2 className="text-xl font-bold text-[rgb(var(--foreground))] mb-4">Payment Method</h2>
@@ -282,6 +282,15 @@ export default function CheckoutPage() {
                     💳 You&apos;ll be redirected to iKhokha&apos;s secure payment page to complete your purchase.
                   </p>
                 </div>
+              </div>
+
+              {/* Delivery Options */}
+              <div className="p-4 rounded-xl bg-blue-50 dark:bg-blue-900/20 border border-blue-200 dark:border-blue-800">
+                <h3 className="font-semibold text-blue-800 dark:text-blue-300 mb-2">🚚 Delivery Options</h3>
+                <ul className="text-sm text-blue-700 dark:text-blue-400 space-y-1">
+                  <li>• <strong>Door-to-Door Courier:</strong> R80 throughout South Africa</li>
+                  <li>• <strong>Free Pick Up:</strong> Sunninghill, Sandton or Waterfall, Midrand</li>
+                </ul>
               </div>
 
               <h2 className="text-xl font-bold text-[rgb(var(--foreground))]">Delivery Information</h2>
@@ -393,39 +402,49 @@ export default function CheckoutPage() {
                 </div>
               </div>
 
-              <button
-                type="submit"
-                disabled={processing}
-                className="w-full py-4 text-lg font-semibold rounded-xl transition-all btn-primary"
-              >
-                {processing ? 'Processing...' : '💳 Proceed to Payment'}
-              </button>
-
             </form>
           </div>
 
           {/* Order Summary */}
           <div className="lg:col-span-1">
-            <div className="card p-6 sticky top-24">
+            <div className="card p-6 lg:sticky lg:top-24">
               <h2 className="text-xl font-bold text-[rgb(var(--foreground))] mb-4">Order Summary</h2>
               <div className="space-y-3 mb-4">
                 {cart?.items.map((item) => (
                   <div key={item.id} className="flex justify-between text-sm text-[rgb(var(--foreground))]">
                     <span className="flex-1">{item.product.name} x{item.quantity}</span>
-                    <span className="font-medium">R{(item.subtotal * 1.15).toFixed(2)}</span>
+                    <span className="font-medium">R{item.subtotal.toFixed(2)}</span>
                   </div>
                 ))}
-                <div className="border-t border-[rgb(var(--border))] pt-3 mt-3 space-y-2">
+                <div className="border-t border-[rgb(var(--border))] pt-3 mt-3">
                   <div className="flex justify-between font-bold text-xl text-[rgb(var(--foreground))]">
                     <span>Total</span>
-                    <span className="text-primary-dark">R{((cart?.total || 0) * 1.15).toFixed(2)}</span>
+                    <span className="text-primary-dark">R{(cart?.total || 0).toFixed(2)}</span>
                   </div>
-                  <p className="text-xs text-[rgb(var(--muted-foreground))] text-center">
-                    All prices include 15% VAT
-                  </p>
                 </div>
               </div>
             </div>
+          </div>
+        </div>
+
+        {/* Payment Button - Appears after order summary */}
+        <div className="mt-8 max-w-2xl mx-auto">
+          <div className="card p-6">
+            <div className="flex items-center justify-between mb-4">
+              <span className="text-lg font-semibold text-[rgb(var(--foreground))]">Amount to Pay</span>
+              <span className="text-2xl font-bold text-primary-dark">R{(cart?.total || 0).toFixed(2)}</span>
+            </div>
+            <button
+              type="submit"
+              form="checkout-form"
+              disabled={processing}
+              className="w-full py-4 text-lg font-semibold rounded-xl transition-all btn-primary"
+            >
+              {processing ? 'Processing...' : '💳 Proceed to Payment'}
+            </button>
+            <p className="text-xs text-[rgb(var(--muted-foreground))] text-center mt-3">
+              You will be redirected to iKhokha&apos;s secure payment page
+            </p>
           </div>
         </div>
       </main>

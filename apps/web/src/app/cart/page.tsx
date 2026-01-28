@@ -234,9 +234,8 @@ export default function CartPage() {
                       {item.product.name}
                     </Link>
                     <p className="text-primary-dark font-bold mt-1">
-                      R{(toNumber(item.product.price) * 1.15).toFixed(2)} each
+                      R{toNumber(item.product.price).toFixed(2)} each
                     </p>
-                    <span className="text-[10px] text-[rgb(var(--muted-foreground))]">incl. VAT</span>
                   </div>
 
                   {/* Quantity Controls */}
@@ -265,7 +264,7 @@ export default function CartPage() {
 
                     <div className="flex items-center gap-4">
                       <p className="text-lg font-bold text-[rgb(var(--foreground))]">
-                        R{(item.subtotal * 1.15).toFixed(2)}
+                        R{item.subtotal.toFixed(2)}
                       </p>
                       <button
                         onClick={() => removeItem(item.id)}
@@ -292,11 +291,15 @@ export default function CartPage() {
                   <div className="flex justify-between">
                     <span className="text-lg font-bold text-[rgb(var(--foreground))]">Total</span>
                     <span className="text-lg font-bold text-primary-dark">
-                      R{(cart.total * 1.15).toFixed(2)}
+                      R{cart.total.toFixed(2)}
                     </span>
                   </div>
-                  <p className="text-xs text-[rgb(var(--muted-foreground))] text-center">
-                    All prices include 15% VAT
+                </div>
+
+                {/* Delivery Info */}
+                <div className="p-3 rounded-xl bg-blue-50 dark:bg-blue-900/20 border border-blue-200 dark:border-blue-800 mb-4">
+                  <p className="text-xs text-blue-700 dark:text-blue-400">
+                    🚚 <strong>Delivery:</strong> R80 nationwide courier or free pick up in Sandton/Midrand
                   </p>
                 </div>
 

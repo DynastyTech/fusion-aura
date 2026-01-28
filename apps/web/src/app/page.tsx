@@ -1,12 +1,7 @@
 import Link from 'next/link';
 import Image from 'next/image';
 import ProductCarousel from '@/components/ProductCarousel';
-import { 
-  HiClock, 
-  HiShieldCheck,
-  HiArrowRight,
-} from 'react-icons/hi2';
-import { FaLeaf } from 'react-icons/fa';
+import { HiArrowRight } from 'react-icons/hi2';
 
 interface Product {
   id: string;
@@ -22,11 +17,6 @@ interface Product {
   inventory: {
     quantity: number;
   } | null;
-}
-
-function toNumber(value: number | string | null | undefined): number {
-  if (value === null || value === undefined) return 0;
-  return typeof value === 'string' ? parseFloat(value) : Number(value);
 }
 
 // Mark page as dynamic to allow no-store fetches
@@ -52,31 +42,6 @@ async function getFeaturedProducts(): Promise<Product[]> {
     return [];
   }
 }
-
-const features = [
-  {
-    icon: FaLeaf,
-    title: 'Sustainable',
-    description: 'Eco-friendly products for a better tomorrow',
-    gradient: 'from-[#7ab356] to-[#569330]',
-    bgColor: 'bg-[#569330]/10 dark:bg-[#569330]/20',
-  },
-  {
-    icon: HiClock,
-    title: 'Timeless',
-    description: 'Proven remedies that stand the test of time',
-    gradient: 'from-blue-400 to-indigo-500',
-    bgColor: 'bg-blue-50 dark:bg-blue-900/20',
-  },
-  {
-    icon: HiShieldCheck,
-    title: 'Trusted',
-    description: 'Quality care you can rely on',
-    gradient: 'from-purple-400 to-pink-500',
-    bgColor: 'bg-purple-50 dark:bg-purple-900/20',
-  },
-];
-
 
 export default async function Home() {
   const featuredProducts = await getFeaturedProducts();
@@ -168,69 +133,6 @@ export default async function Home() {
         </section>
       )}
 
-      {/* Features Section */}
-      <section className="py-16 lg:py-24 bg-[rgb(var(--muted))]/30">
-        <div className="container mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-6 lg:gap-8">
-            {features.map((feature, index) => (
-              <div
-                key={feature.title}
-                className="group relative card-hover p-8 text-center"
-                style={{ animationDelay: `${index * 0.2}s` }}
-              >
-                {/* Gradient Background on Hover */}
-                <div className={`absolute inset-0 rounded-2xl bg-gradient-to-br ${feature.gradient} 
-                                opacity-0 group-hover:opacity-5 transition-opacity duration-300`} />
-                
-                <div className="relative">
-                  <div className={`inline-flex p-4 rounded-2xl ${feature.bgColor} mb-6
-                                  group-hover:scale-110 transition-transform duration-300`}>
-                    <feature.icon className={`w-8 h-8 bg-gradient-to-r ${feature.gradient} 
-                                             bg-clip-text text-transparent`} 
-                                  style={{ color: 'inherit' }} />
-                  </div>
-                  
-                  <h3 className="text-xl font-bold text-[rgb(var(--foreground))] mb-3">
-                    {feature.title}
-                  </h3>
-                  <p className="text-[rgb(var(--muted-foreground))]">
-                    {feature.description}
-                  </p>
-                </div>
-              </div>
-            ))}
-          </div>
-        </div>
-      </section>
-
-      {/* CTA Section */}
-      <section className="py-16 lg:py-24">
-        <div className="container mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="relative overflow-hidden rounded-3xl bg-gradient-to-r from-primary-light to-primary-dark p-8 md:p-12 lg:p-16 text-center">
-            {/* Background Pattern */}
-            <div className="absolute inset-0 bg-[radial-gradient(circle_at_30%_50%,rgba(255,255,255,0.1),transparent_50%)]" />
-            <div className="absolute inset-0 bg-[radial-gradient(circle_at_70%_80%,rgba(255,255,255,0.1),transparent_50%)]" />
-            
-            <div className="relative z-10">
-              <h2 className="text-3xl sm:text-4xl lg:text-5xl font-bold text-white mb-6">
-                Ready to Transform Your Wellness?
-              </h2>
-              <p className="text-lg text-white/80 max-w-2xl mx-auto mb-8">
-                Join thousands of satisfied customers who have discovered the power of natural remedies
-              </p>
-              <Link
-                href="/products"
-                className="inline-flex items-center gap-2 px-8 py-4 bg-white text-primary-dark 
-                           font-semibold rounded-xl hover:bg-white/90 transition-all duration-200
-                           shadow-lg hover:shadow-xl hover:-translate-y-0.5"
-              >
-                Start Shopping
-                <HiArrowRight className="w-5 h-5" />
-              </Link>
-            </div>
-          </div>
-        </div>
-      </section>
     </main>
   );
 }
