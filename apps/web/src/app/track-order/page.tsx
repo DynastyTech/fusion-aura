@@ -27,11 +27,11 @@ interface Order {
 function getStatusColor(status: string): string {
   switch (status) {
     case 'PENDING':
-      return 'bg-yellow-100 text-yellow-800';
+      return 'bg-[rgb(var(--muted))] text-[rgb(var(--foreground))]';
     case 'ACCEPTED':
-      return 'bg-blue-100 text-blue-800';
+      return 'bg-[#569330]/10 text-[#569330]';
     case 'DECLINED':
-      return 'bg-red-100 text-red-800';
+      return 'bg-[rgb(var(--muted))] text-[rgb(var(--foreground))]';
     case 'PENDING_DELIVERY':
       return 'bg-purple-100 text-purple-800';
     case 'OUT_FOR_DELIVERY':

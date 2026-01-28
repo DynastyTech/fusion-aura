@@ -287,9 +287,9 @@ export default function CheckoutPage() {
               </div>
 
               {/* Delivery Options */}
-              <div className="p-4 rounded-xl bg-blue-50 dark:bg-blue-900/20 border border-blue-200 dark:border-blue-800">
-                <h3 className="font-semibold text-blue-800 dark:text-blue-300 mb-2">Delivery Options</h3>
-                <ul className="text-sm text-blue-700 dark:text-blue-400 space-y-1">
+              <div className="p-4 rounded-xl bg-[rgb(var(--muted))]/50 border border-[rgb(var(--border))]">
+                <h3 className="font-semibold text-[rgb(var(--foreground))] mb-2">Delivery Options</h3>
+                <ul className="text-sm text-[rgb(var(--muted-foreground))] space-y-1">
                   <li>• <strong>Door-to-Door Courier:</strong> R80 throughout South Africa</li>
                   <li>• <strong>Free Pick Up:</strong> Sunninghill, Sandton or Waterfall, Midrand</li>
                 </ul>

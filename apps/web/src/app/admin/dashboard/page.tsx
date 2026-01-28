@@ -173,8 +173,8 @@ export default function AdminDashboard() {
 
           <div className="card p-4 lg:p-6">
             <div className="flex items-center gap-3 mb-2">
-              <div className="p-2 rounded-xl bg-blue-100 dark:bg-blue-900/20">
-                <FaLeaf className="w-5 h-5 text-blue-600" />
+              <div className="p-2 rounded-xl bg-primary-dark/10">
+                <FaLeaf className="w-5 h-5 text-primary-dark" />
               </div>
               <span className="text-xs lg:text-sm text-[rgb(var(--muted-foreground))]">
                 Featured
@@ -187,8 +187,8 @@ export default function AdminDashboard() {
 
           <div className="card p-4 lg:p-6">
             <div className="flex items-center gap-3 mb-2">
-              <div className="p-2 rounded-xl bg-orange-100 dark:bg-orange-900/20">
-                <HiXCircle className="w-5 h-5 text-orange-600" />
+              <div className="p-2 rounded-xl bg-[rgb(var(--muted))]">
+                <HiXCircle className="w-5 h-5 text-[rgb(var(--muted-foreground))]" />
               </div>
               <span className="text-xs lg:text-sm text-[rgb(var(--muted-foreground))]">
                 Low Stock
@@ -317,7 +317,7 @@ export default function AdminDashboard() {
                           </span>
                           {product.isFeatured && (
                             <span className="px-2.5 py-1 rounded-full text-xs font-semibold 
-                                           bg-blue-100 text-blue-700 dark:bg-blue-900/30 dark:text-blue-400">
+                                           bg-primary-dark/10 text-primary-dark">
                               Featured
                             </span>
                           )}
@@ -413,7 +413,7 @@ export default function AdminDashboard() {
                       </span>
                       {product.isFeatured && (
                         <span className="px-2 py-0.5 rounded-full text-xs font-semibold 
-                                       bg-blue-100 text-blue-700 dark:bg-blue-900/30 dark:text-blue-400">
+                                       bg-primary-dark/10 text-primary-dark">
                           ★
                         </span>
                       )}

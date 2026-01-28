@@ -47,14 +47,14 @@ export async function apiRequest<T>(
     const data = await response.json();
 
     if (!response.ok) {
-      // If 401 on auth endpoints, clear token and user
-      // Don't clear on other endpoints to avoid race conditions
-      if (response.status === 401 && endpoint.includes('/api/auth/')) {
+      // Only clear auth on explicit 401 from login endpoint (wrong credentials)
+      // Don't clear on other 401s as they might be temporary or due to network issues
+      if (response.status === 401 && endpoint === '/api/auth/login') {
         if (typeof window !== 'undefined') {
-          console.log('🚫 Clearing auth due to 401 on auth endpoint:', endpoint);
+          console.log('Clearing auth due to failed login attempt');
           localStorage.removeItem('token');
           localStorage.removeItem('user');
-          // Trigger storage event to update auth context
+          localStorage.removeItem('lastActivity');
           window.dispatchEvent(new Event('storage'));
         }
       }

@@ -45,11 +45,11 @@ function getStatusColor(status: string): string {
     case 'AWAITING_PAYMENT':
       return 'bg-orange-100 text-orange-800';
     case 'PENDING':
-      return 'bg-yellow-100 text-yellow-800';
+      return 'bg-[rgb(var(--muted))] text-[rgb(var(--foreground))]';
     case 'ACCEPTED':
-      return 'bg-blue-100 text-blue-800';
+      return 'bg-[#569330]/10 text-[#569330]';
     case 'DECLINED':
-      return 'bg-red-100 text-red-800';
+      return 'bg-[rgb(var(--muted))] text-[rgb(var(--foreground))]';
     case 'PENDING_DELIVERY':
       return 'bg-purple-100 text-purple-800';
     case 'OUT_FOR_DELIVERY':
@@ -303,13 +303,13 @@ export default function OrderDetailPage() {
                   <span className="text-primary-dark">R{toNumber(order.total).toFixed(2)}</span>
                 </div>
               </div>
-              <div className="bg-blue-50 border border-blue-200 rounded-lg p-4">
+              <div className="bg-[rgb(var(--muted))]/30 border border-[rgb(var(--border))] rounded-lg p-4">
                 <div className="flex items-center gap-2">
-                  <HiCurrencyDollar className="w-4 h-4 text-blue-800" />
-                  <p className="text-blue-800 font-semibold text-sm">Online Payment</p>
+                  <HiCurrencyDollar className="w-4 h-4 text-primary-dark" />
+                  <p className="text-[rgb(var(--foreground))] font-semibold text-sm">Online Payment</p>
                 </div>
-                <p className="text-blue-700 text-xs mt-1">
-                  Pay when your order is delivered
+                <p className="text-[rgb(var(--muted-foreground))] text-xs mt-1">
+                  Paid via iKhokha
                 </p>
               </div>
             </div>

@@ -66,9 +66,9 @@ interface Order {
 function getStatusColor(status: string): string {
   switch (status) {
     case 'PENDING':
-      return 'bg-yellow-100 text-yellow-700 dark:bg-yellow-900/30 dark:text-yellow-400';
+      return 'bg-[rgb(var(--muted))] text-[rgb(var(--foreground))]';
     case 'ACCEPTED':
-      return 'bg-blue-100 text-blue-700 dark:bg-blue-900/30 dark:text-blue-400';
+      return 'bg-[#569330]/10 text-[#569330]';
     case 'DECLINED':
       return 'bg-red-100 text-red-700 dark:bg-red-900/30 dark:text-red-400';
     case 'PENDING_DELIVERY':
@@ -677,9 +677,9 @@ export default function AdminOrderDetailPage() {
                 </div>
               </div>
               
-              <div className="mt-6 p-4 rounded-xl bg-blue-50 dark:bg-blue-900/20 border border-blue-200 dark:border-blue-800">
-                <p className="text-blue-700 dark:text-blue-400 font-semibold text-sm flex items-center gap-2">
-                  <HiCurrencyDollar className="w-5 h-5" />
+              <div className="mt-6 p-4 rounded-xl bg-[rgb(var(--muted))]/30 border border-[rgb(var(--border))]">
+                <p className="text-[rgb(var(--foreground))] font-semibold text-sm flex items-center gap-2">
+                  <HiCurrencyDollar className="w-5 h-5 text-primary-dark" />
                   Online Payment
                 </p>
               </div>

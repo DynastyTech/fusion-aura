@@ -194,11 +194,11 @@ export default function CartPage() {
             {/* Cart Items */}
             <div className="lg:col-span-2 space-y-4">
               {isGuest && (
-                <div className="flex items-start gap-3 p-4 rounded-xl bg-amber-50 dark:bg-amber-900/20 
-                              border border-amber-200 dark:border-amber-800">
-                  <HiInformationCircle className="w-5 h-5 text-amber-600 flex-shrink-0 mt-0.5" />
-                  <p className="text-sm text-amber-800 dark:text-amber-300">
-                    Please <Link href="/login?redirect=/cart" className="underline font-semibold">login</Link> or <Link href="/register?redirect=/cart" className="underline font-semibold">create an account</Link> to proceed to checkout.
+                <div className="flex items-start gap-3 p-4 rounded-xl bg-[rgb(var(--muted))]/50 
+                              border border-[rgb(var(--border))]">
+                  <HiInformationCircle className="w-5 h-5 text-[rgb(var(--muted-foreground))] flex-shrink-0 mt-0.5" />
+                  <p className="text-sm text-[rgb(var(--foreground))]">
+                    Please <Link href="/login?redirect=/cart" className="underline font-semibold text-primary-dark">login</Link> or <Link href="/register?redirect=/cart" className="underline font-semibold text-primary-dark">create an account</Link> to proceed to checkout.
                   </p>
                 </div>
               )}
@@ -297,8 +297,8 @@ export default function CartPage() {
                 </div>
 
                 {/* Delivery Info */}
-                <div className="p-3 rounded-xl bg-blue-50 dark:bg-blue-900/20 border border-blue-200 dark:border-blue-800 mb-4">
-                  <p className="text-xs text-blue-700 dark:text-blue-400">
+                <div className="p-3 rounded-xl bg-[rgb(var(--muted))]/50 border border-[rgb(var(--border))] mb-4">
+                  <p className="text-xs text-[rgb(var(--muted-foreground))]">
                     <strong>Delivery:</strong> R80 nationwide courier or free pick up in Sandton/Midrand
                   </p>
                 </div>

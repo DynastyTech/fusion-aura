@@ -45,11 +45,11 @@ function getStatusColor(status: string): string {
     case 'AWAITING_PAYMENT':
       return 'bg-orange-100 text-orange-800';
     case 'PENDING':
-      return 'bg-yellow-100 text-yellow-800';
+      return 'bg-[rgb(var(--muted))] text-[rgb(var(--foreground))]';
     case 'ACCEPTED':
-      return 'bg-blue-100 text-blue-800';
+      return 'bg-[#569330]/10 text-[#569330]';
     case 'DECLINED':
-      return 'bg-red-100 text-red-800';
+      return 'bg-[rgb(var(--muted))] text-[rgb(var(--foreground))]';
     case 'PENDING_DELIVERY':
       return 'bg-purple-100 text-purple-800';
     case 'OUT_FOR_DELIVERY':
@@ -325,9 +325,9 @@ export default function OrderConfirmationPage() {
         </div>
 
         {/* Next Steps */}
-        <div className="bg-blue-50 border border-blue-200 rounded-lg p-6 mb-6">
-          <h3 className="text-lg font-semibold text-blue-800 mb-2">What&apos;s Next?</h3>
-          <ul className="text-blue-700 space-y-1 text-sm">
+        <div className="bg-[rgb(var(--muted))]/30 border border-[rgb(var(--border))] rounded-lg p-6 mb-6">
+          <h3 className="text-lg font-semibold text-[rgb(var(--foreground))] mb-2">What&apos;s Next?</h3>
+          <ul className="text-[rgb(var(--muted-foreground))] space-y-1 text-sm">
             <li>• Your order is being reviewed by our team</li>
             <li>• You&apos;ll receive email updates when your order status changes</li>
             <li>• Our delivery team will contact you before delivery</li>

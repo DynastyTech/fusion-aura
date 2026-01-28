@@ -13,8 +13,8 @@ export default function PaymentCancelledPage() {
       <div className="max-w-md w-full text-center">
         {/* Cancelled Icon */}
         <div className="relative mb-8">
-          <div className="w-24 h-24 mx-auto bg-red-500/20 rounded-full flex items-center justify-center">
-            <HiXCircle className="w-16 h-16 text-red-500" />
+          <div className="w-24 h-24 mx-auto bg-[rgb(var(--muted))] rounded-full flex items-center justify-center">
+            <HiXCircle className="w-16 h-16 text-[rgb(var(--muted-foreground))]" />
           </div>
         </div>
 
@@ -51,8 +51,8 @@ export default function PaymentCancelledPage() {
           </Link>
         </div>
 
-        <div className="mt-8 p-4 bg-amber-500/10 border border-amber-500/30 rounded-xl">
-          <p className="text-amber-400 text-sm">
+        <div className="mt-8 p-4 bg-[rgb(var(--muted))]/50 border border-[rgb(var(--border))] rounded-xl">
+          <p className="text-[rgb(var(--muted-foreground))] text-sm">
             <strong>Tip:</strong> If you&apos;re having trouble with online payment, 
             please try again or contact support for assistance.
           </p>
