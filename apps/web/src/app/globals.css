@@ -128,8 +128,10 @@
   }
 
   .gradient-text {
-    @apply bg-gradient-to-r from-primary-light via-primary to-primary-dark 
-           bg-clip-text text-transparent;
+    background: linear-gradient(135deg, #7ab356, #569330);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
   }
 
   /* Staggered animations */
@@ -263,7 +265,10 @@
 
   /* Text gradients */
   .text-gradient-primary {
-    @apply bg-gradient-to-r from-primary-light to-primary-dark bg-clip-text text-transparent;
+    background: linear-gradient(135deg, #7ab356, #569330);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
   }
 
   /* Backdrop blur utilities */
