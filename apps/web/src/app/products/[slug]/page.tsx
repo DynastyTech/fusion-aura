@@ -169,9 +169,7 @@ export default async function ProductDetailPage({
               </ul>
             </div>
             
-            <p className="text-sm text-[rgb(var(--muted-foreground))] text-center mt-4">
-              Secure online payment via iKhokha
-            </p>
+
           </div>
         </div>
 

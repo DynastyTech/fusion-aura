@@ -121,15 +121,7 @@ export default async function ProductsPage({ searchParams }: PageProps) {
         <div className="absolute inset-0 bg-gradient-to-br from-primary-light/10 via-transparent to-primary-dark/5" />
         
         <div className="container relative mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="text-center max-w-3xl mx-auto">
-            <h1 className="text-3xl sm:text-4xl lg:text-5xl font-bold text-[rgb(var(--foreground))] 
-                         mb-4 animate-fade-in-up">
-              Our Products
-            </h1>
-            <p className="text-[rgb(var(--muted-foreground))] text-lg">
-              Browse our collection of premium products
-            </p>
-          </div>
+
         </div>
       </section>
 
