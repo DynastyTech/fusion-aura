@@ -1,7 +1,7 @@
 'use client';
 
 import { useEffect, useState } from 'react';
-import { motion } from 'framer-motion';
+import { motion, Variants } from 'framer-motion';
 
 interface AnimatedTextProps {
   text: string;
@@ -19,7 +19,7 @@ export default function AnimatedText({ text, className = '', delay = 0 }: Animat
 
   const letters = text.split('');
 
-  const container = {
+  const container: Variants = {
     hidden: { opacity: 0 },
     visible: {
       opacity: 1,
@@ -30,7 +30,7 @@ export default function AnimatedText({ text, className = '', delay = 0 }: Animat
     },
   };
 
-  const letterAnimation = {
+  const letterAnimation: Variants = {
     hidden: { 
       opacity: 0, 
       y: 50,
@@ -41,7 +41,7 @@ export default function AnimatedText({ text, className = '', delay = 0 }: Animat
       y: 0,
       rotateX: 0,
       transition: {
-        type: 'spring',
+        type: 'spring' as const,
         damping: 12,
         stiffness: 200,
       },
