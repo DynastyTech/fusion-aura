@@ -65,11 +65,11 @@ function getStatusColor(status: string): string {
 
 // Delivery status order for timeline
 const deliverySteps = [
-  { status: 'PENDING', label: 'Payment Confirmed', icon: '✓' },
-  { status: 'ACCEPTED', label: 'Order Accepted', icon: '📦' },
-  { status: 'PENDING_DELIVERY', label: 'Preparing', icon: '🎁' },
-  { status: 'OUT_FOR_DELIVERY', label: 'Out for Delivery', icon: '🚚' },
-  { status: 'COMPLETED', label: 'Delivered', icon: '✅' },
+  { status: 'PENDING', label: 'Payment Confirmed', icon: '1' },
+  { status: 'ACCEPTED', label: 'Order Accepted', icon: '2' },
+  { status: 'PENDING_DELIVERY', label: 'Preparing', icon: '3' },
+  { status: 'OUT_FOR_DELIVERY', label: 'Out for Delivery', icon: '4' },
+  { status: 'COMPLETED', label: 'Delivered', icon: '5' },
 ];
 
 function getStatusIndex(status: string): number {
@@ -222,7 +222,7 @@ export default function OrderDetailPage() {
             href="/"
             className="inline-flex items-center px-4 py-2 bg-primary-dark text-white rounded-lg hover:bg-primary-dark/90"
           >
-            🏠 Back to Home
+            Back to Home
           </Link>
         </div>
 

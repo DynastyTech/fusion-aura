@@ -291,7 +291,7 @@ export default function AddressAutocomplete({
             className="w-full h-48"
           />
           <div className="p-2 bg-[rgb(var(--muted))] text-xs text-[rgb(var(--muted-foreground))]">
-            📍 Drag the pin to adjust your exact location
+            Drag the pin to adjust your exact location
           </div>
         </div>
       )}

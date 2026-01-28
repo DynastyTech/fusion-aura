@@ -53,7 +53,7 @@ export default function PaymentCancelledPage() {
 
         <div className="mt-8 p-4 bg-amber-500/10 border border-amber-500/30 rounded-xl">
           <p className="text-amber-400 text-sm">
-            💡 <strong>Tip:</strong> If you&apos;re having trouble with online payment, 
+            <strong>Tip:</strong> If you&apos;re having trouble with online payment, 
             please try again or contact support for assistance.
           </p>
         </div>

@@ -33,9 +33,9 @@ export async function apiRequest<T>(
 
   if (token) {
     headers['Authorization'] = `Bearer ${token}`;
-    console.log('🔐 API Request - Token included for:', endpoint);
+    console.log('API Request - Token included for:', endpoint);
   } else {
-    console.log('⚠️  API Request - No token for:', endpoint);
+    console.log('API Request - No token for:', endpoint);
   }
 
   try {
@@ -60,11 +60,11 @@ export async function apiRequest<T>(
       }
       // Log rate limiting errors
       if (response.status === 429) {
-        console.warn('⚠️ Rate limited on:', endpoint);
+        console.warn('Rate limited on:', endpoint);
       }
       // If 403, log detailed error
       if (response.status === 403) {
-        console.error('❌ 403 Forbidden:', data);
+        console.error('403 Forbidden:', data);
         const userStr = typeof window !== 'undefined' ? localStorage.getItem('user') : null;
         if (userStr) {
           const userData = JSON.parse(userStr);

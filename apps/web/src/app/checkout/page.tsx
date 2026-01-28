@@ -279,14 +279,14 @@ export default function CheckoutPage() {
                 </div>
                 <div className="mt-4 bg-primary-dark/10 border border-primary-dark/30 rounded-xl p-4">
                   <p className="text-[rgb(var(--foreground))] text-sm">
-                    💳 You&apos;ll be redirected to iKhokha&apos;s secure payment page to complete your purchase.
+                    You&apos;ll be redirected to iKhokha&apos;s secure payment page to complete your purchase.
                   </p>
                 </div>
               </div>
 
               {/* Delivery Options */}
               <div className="p-4 rounded-xl bg-blue-50 dark:bg-blue-900/20 border border-blue-200 dark:border-blue-800">
-                <h3 className="font-semibold text-blue-800 dark:text-blue-300 mb-2">🚚 Delivery Options</h3>
+                <h3 className="font-semibold text-blue-800 dark:text-blue-300 mb-2">Delivery Options</h3>
                 <ul className="text-sm text-blue-700 dark:text-blue-400 space-y-1">
                   <li>• <strong>Door-to-Door Courier:</strong> R80 throughout South Africa</li>
                   <li>• <strong>Free Pick Up:</strong> Sunninghill, Sandton or Waterfall, Midrand</li>
@@ -440,7 +440,7 @@ export default function CheckoutPage() {
               disabled={processing}
               className="w-full py-4 text-lg font-semibold rounded-xl transition-all btn-primary"
             >
-              {processing ? 'Processing...' : '💳 Proceed to Payment'}
+              {processing ? 'Processing...' : 'Proceed to Payment'}
             </button>
             <p className="text-xs text-[rgb(var(--muted-foreground))] text-center mt-3">
               You will be redirected to iKhokha&apos;s secure payment page

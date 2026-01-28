@@ -104,7 +104,7 @@ export default function Footer() {
 
             {/* Delivery Info */}
             <div className="mt-4 p-3 rounded-xl bg-primary-dark/10 border border-primary-dark/20">
-              <p className="text-sm font-semibold text-primary-dark mb-1">🚚 Delivery Options</p>
+              <p className="text-sm font-semibold text-primary-dark mb-1">Delivery Options</p>
               <p className="text-xs text-[rgb(var(--muted-foreground))]">
                 Door-to-Door Courier: R80 throughout SA
               </p>

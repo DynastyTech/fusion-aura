@@ -55,7 +55,7 @@ export async function sendPasswordResetEmail(data: PasswordResetEmailData): Prom
       <body>
         <div class="container">
           <div class="header">
-            <h1>🔐 Password Reset</h1>
+            <h1>Password Reset</h1>
           </div>
           <div class="content">
             <p>Hi ${data.name},</p>
@@ -66,7 +66,7 @@ export async function sendPasswordResetEmail(data: PasswordResetEmailData): Prom
             </p>
 
             <div class="warning">
-              <p><strong>⏰ This link expires in 1 hour.</strong></p>
+              <p><strong>This link expires in 1 hour.</strong></p>
               <p>If you didn't request this password reset, you can safely ignore this email. Your password will remain unchanged.</p>
             </div>
 
@@ -175,11 +175,11 @@ export async function sendOrderEmail(orderData: OrderEmailData): Promise<void> {
       <body>
         <div class="container">
           <div class="header">
-            <h1>🛒 New Order Received</h1>
+            <h1>New Order Received</h1>
           </div>
           <div class="content">
             <div class="urgent">
-              <p><strong>⚡ Action Required:</strong> A new order has been placed and requires your attention.</p>
+              <p><strong>Action Required:</strong> A new order has been placed and requires your attention.</p>
             </div>
 
             <h2>Order #${orderData.orderNumber}</h2>
@@ -214,7 +214,7 @@ export async function sendOrderEmail(orderData: OrderEmailData): Promise<void> {
             </div>
 
             <div class="address">
-              <h3>📍 Delivery Address</h3>
+              <h3>Delivery Address</h3>
               <p>${orderData.shippingAddress.name}</p>
               <p>${orderData.shippingAddress.addressLine1}</p>
               ${orderData.shippingAddress.addressLine2 ? `<p>${orderData.shippingAddress.addressLine2}</p>` : ''}
@@ -223,7 +223,7 @@ export async function sendOrderEmail(orderData: OrderEmailData): Promise<void> {
             </div>
 
             <p style="margin-top: 30px; padding: 15px; background: #fff3cd; border-radius: 5px;">
-              <strong>💳 Payment Method:</strong> Online Payment (iKhokha)
+              <strong>Payment Method:</strong> Online Payment (iKhokha)
             </p>
 
             <p style="margin-top: 20px; text-align: center;">
@@ -241,7 +241,7 @@ export async function sendOrderEmail(orderData: OrderEmailData): Promise<void> {
       const result = await resend.emails.send({
         from: getFromEmail(),
         to: adminEmail,
-        subject: `🛒 New Order #${orderData.orderNumber} - FusionAura`,
+        subject: `New Order #${orderData.orderNumber} - FusionAura`,
         html,
       });
 
@@ -302,7 +302,7 @@ export async function sendOrderConfirmationToCustomer(orderData: OrderEmailData)
       <body>
         <div class="container">
           <div class="header">
-            <div class="success-icon">✅</div>
+            <div class="success-icon" style="font-size: 48px; color: #569330;">&#10003;</div>
             <h1>Order Confirmed!</h1>
             <p>Thank you for your order, ${orderData.customerName}!</p>
           </div>
@@ -332,7 +332,7 @@ export async function sendOrderConfirmationToCustomer(orderData: OrderEmailData)
             </div>
 
             <div class="address-box">
-              <h3 style="margin-top: 0; color: #2e7d32;">📍 Delivery Address</h3>
+              <h3 style="margin-top: 0; color: #2e7d32;">Delivery Address</h3>
               <p style="margin: 0;">${orderData.shippingAddress.name}</p>
               <p style="margin: 0;">${orderData.shippingAddress.addressLine1}</p>
               ${orderData.shippingAddress.addressLine2 ? `<p style="margin: 0;">${orderData.shippingAddress.addressLine2}</p>` : ''}
@@ -340,7 +340,7 @@ export async function sendOrderConfirmationToCustomer(orderData: OrderEmailData)
             </div>
 
             <div class="payment-box">
-              <p style="margin: 0;"><strong>💳 Payment:</strong> Paid via iKhokha</p>
+              <p style="margin: 0;"><strong>Payment:</strong> Paid via iKhokha</p>
               <p style="margin: 5px 0 0 0; font-size: 14px; color: #666;">Your payment of R${orderData.total.toFixed(2)} has been received. No payment required on delivery.</p>
             </div>
 
@@ -362,7 +362,7 @@ export async function sendOrderConfirmationToCustomer(orderData: OrderEmailData)
     const result = await resend.emails.send({
       from: getFromEmail(),
       to: orderData.customerEmail,
-      subject: `✅ Order Confirmed - #${orderData.orderNumber}`,
+      subject: `Order Confirmed - #${orderData.orderNumber}`,
       html,
     });
 

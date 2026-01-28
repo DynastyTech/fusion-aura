@@ -143,8 +143,8 @@ export default async function ProductDetailPage({
                   }`}
                 >
                   {product.inventory.quantity > 0
-                    ? `✓ In Stock (${product.inventory.quantity} available)`
-                    : '✗ Out of Stock'}
+                    ? `In Stock (${product.inventory.quantity} available)`
+                    : 'Out of Stock'}
                 </span>
               </div>
             )}
@@ -162,7 +162,7 @@ export default async function ProductDetailPage({
             
             {/* Delivery Info */}
             <div className="mt-6 p-4 rounded-xl bg-blue-50 dark:bg-blue-900/20 border border-blue-200 dark:border-blue-800">
-              <h4 className="font-semibold text-blue-800 dark:text-blue-300 mb-2">🚚 Delivery Options</h4>
+              <h4 className="font-semibold text-blue-800 dark:text-blue-300 mb-2">Delivery Options</h4>
               <ul className="text-sm text-blue-700 dark:text-blue-400 space-y-1">
                 <li>• <strong>Door-to-Door Courier:</strong> R80 throughout South Africa</li>
                 <li>• <strong>Free Pick Up:</strong> Sunninghill, Sandton or Waterfall, Midrand</li>

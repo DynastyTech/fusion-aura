@@ -299,7 +299,7 @@ export default function CartPage() {
                 {/* Delivery Info */}
                 <div className="p-3 rounded-xl bg-blue-50 dark:bg-blue-900/20 border border-blue-200 dark:border-blue-800 mb-4">
                   <p className="text-xs text-blue-700 dark:text-blue-400">
-                    🚚 <strong>Delivery:</strong> R80 nationwide courier or free pick up in Sandton/Midrand
+                    <strong>Delivery:</strong> R80 nationwide courier or free pick up in Sandton/Midrand
                   </p>
                 </div>
 
