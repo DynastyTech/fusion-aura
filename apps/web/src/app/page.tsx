@@ -84,22 +84,22 @@ export default async function Home() {
             <AnimatedText 
               text="Sustainable Life" 
               className="text-[#569330]"
-              delay={0.3}
+              delay={0.2}
             />
             <br />
             <AnimatedText 
               text="Timeless Remedies" 
               className="text-[rgb(var(--foreground))]"
-              delay={0.8}
+              delay={1.0}
             />
           </h1>
 
-          <p className="text-lg sm:text-xl text-[rgb(var(--muted-foreground))] max-w-2xl mx-auto mb-10 animate-fade-in-up" style={{ animationDelay: '1.2s' }}>
+          <p className="text-lg sm:text-xl text-[rgb(var(--muted-foreground))] max-w-2xl mx-auto mb-10 animate-fade-in-up" style={{ animationDelay: '1.8s' }}>
             
           </p>
 
           {/* CTA Buttons */}
-          <div className="flex flex-col sm:flex-row items-center justify-center gap-4 animate-fade-in-up" style={{ animationDelay: '1.4s' }}>
+          <div className="flex flex-col sm:flex-row items-center justify-center gap-4 animate-fade-in-up" style={{ animationDelay: '2.0s' }}>
             <Link
               href="/products"
               className="group btn-primary px-8 py-4 text-lg animate-pulse-glow"

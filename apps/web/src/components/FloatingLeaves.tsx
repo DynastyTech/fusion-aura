@@ -107,8 +107,8 @@ export default function FloatingLeaves() {
         y: Math.random() * 100,
         size: 20 + Math.random() * 30,
         rotation: Math.random() * 360,
-        duration: 15 + Math.random() * 20,
-        delay: Math.random() * 5,
+        duration: 4 + Math.random() * 5, // 4x faster (was 15-35, now 4-9 seconds)
+        delay: Math.random() * 1.5, // Shorter initial delay
         type: Math.floor(Math.random() * 5),
       });
     }
