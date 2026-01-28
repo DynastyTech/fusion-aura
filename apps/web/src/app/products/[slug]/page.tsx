@@ -93,12 +93,12 @@ export default async function ProductDetailPage({
     <div className="min-h-screen bg-[rgb(var(--background))]">
       {/* Product Detail */}
       <main className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
-        <Link
+        {/* <Link
           href="/products"
           className="text-primary-dark hover:text-primary-dark/80 mb-6 inline-block"
         >
           ← Back to Products
-        </Link>
+        </Link> */}
 
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-12">
           {/* Product Images Gallery */}
