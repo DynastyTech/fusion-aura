@@ -59,9 +59,10 @@ export default function AdminDashboard() {
   const fetchProducts = async (search?: string) => {
     try {
       setLoading(true);
-      const url = search
-        ? `/api/products?search=${encodeURIComponent(search)}`
-        : '/api/products';
+      const params = new URLSearchParams();
+      params.set('limit', '1000'); // High limit so admin sees all products
+      if (search) params.set('search', search);
+      const url = `/api/products?${params.toString()}`;
       const response = await apiRequest<{ data: Product[]; pagination?: any }>(url);
       if (response.success && response.data) {
         const productsArray = Array.isArray(response.data) ? response.data : [];

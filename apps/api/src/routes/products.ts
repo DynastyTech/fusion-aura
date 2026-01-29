@@ -35,7 +35,7 @@ export async function productRoutes(fastify: FastifyInstance) {
     };
 
     const page = parseInt(query.page || '1', 10);
-    const limit = Math.min(parseInt(query.limit || '20', 10), 100);
+    const limit = Math.min(parseInt(query.limit || '20', 10), 200);
     const skip = (page - 1) * limit;
 
     // Determine sort order
